@@ -1,0 +1,17 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (go):
+         <<sauron in kitchen>>
+
+  checkpoint 2 (approach):
+         <<sauron near david>>
+
+  checkpoint 3 (stop):
+         <<sauron in home>>
+
+  t: 0 -> 1
+  t: 1 -[guard=GoalSat.SUCCESS]> 2
+  t: 1 -[guard=GoalSat.FAILURE]> 3

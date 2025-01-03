@@ -1,0 +1,12 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (go):
+         <<sauron in kitchen>>
+
+  t: 0 -[guard=go]> 1
+
+labeled formula "go":
+       <<sauron in kitchen>>

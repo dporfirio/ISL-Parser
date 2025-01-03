@@ -1,0 +1,13 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (moving):
+         <<sauron in kitchen>>
+
+  checkpoint 2 (opening):
+         <<fridge is open>>
+
+  t: 0 -> 1
+  t: 1 -> 2

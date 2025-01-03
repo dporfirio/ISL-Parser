@@ -1,0 +1,17 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (one):
+         <<sauron near plate>>
+
+  checkpoint 2 (two):
+         <<sauron is carrying plate>>
+
+  checkpoint 3 (three):
+         <<plate at kitchen_table>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3

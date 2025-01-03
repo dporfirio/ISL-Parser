@@ -1,0 +1,10 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (go):
+         <<sauron in kitchen>>
+         <<sauron in home>>
+
+  t: 0 -> 1

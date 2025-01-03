@@ -1,0 +1,16 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (go):
+         <<sauron in kitchen>>
+
+  checkpoint 2 (approach):
+         <<sauron near david>>
+
+  t: 0 -> 1
+  t: 1 -[guard=someone_home]> 2
+
+labeled formula "someone_home":
+       <<david in kitchen>>

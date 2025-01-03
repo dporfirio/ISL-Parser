@@ -1,0 +1,28 @@
+# Simple test with a loop.
+
+import general
+
+labels
+
+	go: [
+		  predicate: entity_in,
+		  params: [sauron, kitchen]
+		 ]
+
+
+endlabels
+
+module
+
+	st: [0: init, 1: go];
+
+	[] 0 -> 1;
+	[] 1 -> 1;
+
+endmodule
+
+options
+
+	conditional_effects;
+
+endoptions

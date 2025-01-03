@@ -1,0 +1,25 @@
+# Simple test with a nonexecutable automaton.
+
+import general
+
+labels
+
+	go: [
+		  predicate: entity_in,
+		  params: [sauron, kitchen]
+		 ]
+
+
+endlabels
+
+module
+
+	st: [0: init, 1: go];
+
+endmodule
+
+options
+
+	conditional_effects;
+
+endoptions

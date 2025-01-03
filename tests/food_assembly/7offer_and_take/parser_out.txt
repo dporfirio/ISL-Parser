@@ -1,0 +1,33 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (move_countertop):
+         <<sauron near countertop>>
+
+  checkpoint 2 (grabs):
+         <<sauron is carrying bread>>
+
+  checkpoint 3 (move_person):
+         <<sauron near david>>
+
+  checkpoint 5 (takes):
+         <<david is carrying bread>>
+
+  checkpoint 7 (takes_back):
+         <<sauron is carrying bread>>
+
+  checkpoint 8 (move_table):
+         <<sauron near table>>
+
+  checkpoint 9 (dropoff):
+         <<bread at table>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 5
+  t: 5 -> 7
+  t: 7 -> 8
+  t: 8 -> 9

@@ -1,0 +1,17 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (moving):
+         <<sauron near table>>
+
+  checkpoint 2 (carry):
+         <<sauron is carrying apple>>
+
+  checkpoint 3 (come_back):
+         <<sauron in home>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3

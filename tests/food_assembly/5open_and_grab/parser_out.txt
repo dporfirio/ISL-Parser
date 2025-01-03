@@ -1,0 +1,25 @@
+Automata.
+
+  checkpoint 0 (init):
+    -->  SAURON idles
+
+  checkpoint 1 (moving):
+         <<sauron in kitchen>>
+
+  checkpoint 2 (opening):
+         <<fridge is open>>
+
+  checkpoint 3 (grabs):
+         <<sauron is carrying apple>>
+
+  checkpoint 4 (moving_final):
+         <<sauron near table>>
+
+  checkpoint 5 (drop_off):
+         <<apple at table>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5

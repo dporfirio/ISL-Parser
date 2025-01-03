@@ -1,0 +1,38 @@
+[run]
+branch = False
+source =
+    main
+    model.state
+    model.transition
+    model.automata
+    model.conditionals
+    parser.lexer_and_parser
+    model.isl_problem
+    util.logger
+    util.options
+    util.componentidentifier
+
+[report]
+exclude_lines =
+    import
+    from
+
+; Regexes for lines to exclude from consideration
+exclude_also =
+    def __repr__
+    if self.debug:
+    if settings.DEBUG
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    class .*\bProtocol\):
+    @(abc\.)?abstractmethod
+    @app.route
+
+ignore_errors = True
+
+
+[html]
+directory = htmlcov

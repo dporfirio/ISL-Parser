@@ -1,0 +1,5 @@
+unified_planning == 1.1.0
+coverage
+ply
+inflect
+typing-extensions

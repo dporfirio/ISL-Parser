@@ -1,0 +1,40 @@
+# Simple test with one goal.
+import waterbot
+labels
+
+	ready: [
+		  predicate: agent_has,
+		  params: [sauron, cup]
+		  &
+		  predicate: is_full,
+		  params: [cup]
+		 ],
+
+	delivered: [
+		  predicate: agent_has,
+		  params: [passenger, cup]
+	],
+
+	athome: [
+		  predicate: entity_in,
+		  params: [sauron, charging]
+	]
+
+
+endlabels
+
+module
+
+	st: [0: init, 1: ready, 2: delivered, 3: athome];
+
+	[] 0 -> 1;
+	[] 1 -> 2;
+	[] 2 -> 3;
+
+endmodule
+
+options
+
+	conditional_effects;
+
+endoptions
