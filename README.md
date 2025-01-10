@@ -1,32 +1,45 @@
-### Installation
+# Interaction Specification Language (ISL)
 
-Make sure build and python3-venv is installed, in which X is your python version:
+This is the ISL, which serves various purposes:
+
+1. Provide flexibility to robot application developers via representing programs as goal automata
+2. provide standardization to the robot application development community
+3. facilitate test-driven development of robot application development tools
+4. facilitate analysis of robot application development tools
+
+## Requirements
+
+The ISL requires a Python version between 3.8 to 3.12.
+The ISL has not been tested on versions below 3.8 or above 3.12.
+To run the ISL, you must have access to a command line.
+The ISL has been tested on Ubuntu and Windows.
+
+## Installation
+
+From this directory, run the following in a command line:
 
 ```
-python -m pip install build
-apt-get install python3-venv
+pip install -r requirements.txt
 ```
 
-Clone the code. In the top directory, setup as normal.
+If that doesn't work, try:
 
 ```
-python -m build
-pip install .
+python -m pip install -r requirements.txt
 ```
 
-### Running a single test case
+## Parsing an ISL program
 
 ```
-python3 main.py -d tests/<group_name>/<test_name> -v 'test'
+python3 isl.py tests/<group_name>/<test_name>
 ```
 
-### Running all test cases
+## Running all test cases
 
 All tests can be run by typing the following into a command line:
 
 ```
-cd src
 python test.py
 ```
 
-For details about creating tests, visit the tests directory.
+For details about creating tests, visit the `tests` directory.

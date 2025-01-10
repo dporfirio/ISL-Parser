@@ -1,0 +1,3 @@
+parser error: no such label 'goto'
+parser error: no such label 'someone_is_home'
+parser error: guard '0' not assigned

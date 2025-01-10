@@ -61,15 +61,14 @@ class Automaton:
     def initialize(self) -> None:
         """Create an empty automaton"""
         self.reset()
-        idle = self.problem.get_action("idle")
-        robot = self.problem.get_object("sauron")
-        idle_instance = ActionInstance(idle, (robot,))
+        '''
         self.states.append(CheckpointFactory.make(_id=0,
                                                   name="init",
                                                   predicates=[],
-                                                  action=idle_instance,
+                                                  action=None,
                                                   )
                            )
+        '''
 
     def build(self) -> None:
         '''

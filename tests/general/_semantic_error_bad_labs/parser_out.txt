@@ -1,0 +1,6 @@
+parser error: no such predicate: 'entity_is_in'
+parser error: no such entity: 'davi'
+parser error: no such predicate: 'agent_is_near'
+parser error: no such predicate: 'entity_in_here'
+parser error: no such entity: 'kitchen_counter'
+parser error: no such action: 'moveto'

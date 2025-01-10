@@ -1,16 +1,15 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (moving):
-         <<sauron near table>>
+         <<stretch near table>>
 
   checkpoint 2 (carry):
-         <<sauron is carrying apple>>
+         <<stretch is carrying apple>>
 
   checkpoint 3 (moving_final):
-         <<sauron near countertop>>
+         <<stretch near countertop>>
 
   checkpoint 4 (dropping_off):
          <<apple at countertop>>

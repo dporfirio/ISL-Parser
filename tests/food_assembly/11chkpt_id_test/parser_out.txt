@@ -1,13 +1,12 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (one):
-         <<sauron near plate>>
+         <<stretch near plate>>
 
   checkpoint 2 (two):
-         <<sauron is carrying plate>>
+         <<stretch is carrying plate>>
 
   checkpoint 3 (three):
          <<plate at kitchen_table>>

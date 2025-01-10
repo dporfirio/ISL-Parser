@@ -1,13 +1,12 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (delivered):
          <<passenger has cup>>
 
   checkpoint 2 (athome):
-         <<sauron in charging>>
+         <<stretch in charging>>
 
   t: 0 -> 1
   t: 1 -> 2

@@ -5,104 +5,108 @@ Grammar
 Rule 0     S' -> program
 Rule 1     program -> import labels module options
 Rule 2     nil -> <empty>
-Rule 3     import -> IMPORT ID
-Rule 4     labels -> LABELS labellist ENDLABELS
-Rule 5     module -> MODULE automata ENDMODULE
-Rule 6     options -> OPTIONS optionlist ENDOPTIONS
-Rule 7     options -> nil
-Rule 8     optionlist -> option
-Rule 9     optionlist -> option optionlist
-Rule 10    optionlist -> nil
-Rule 11    option -> OPTCONDEFFECTS SEMICOLON
-Rule 12    labellist -> cmd
-Rule 13    labellist -> cmd COMMA labellist
-Rule 14    labellist -> nil
-Rule 15    cmd -> ID COLON OPENLIST act_or_pred_list CLOSELIST
-Rule 16    act_or_pred_list -> act_or_pred
-Rule 17    act_or_pred_list -> act_or_pred AND act_or_pred_list
-Rule 18    act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-Rule 19    act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-Rule 20    act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-Rule 21    param_dec -> ID
-Rule 22    param_dec -> ID COMMA param_dec
-Rule 23    param_dec -> nil
-Rule 24    automata -> state_dec_wrapper cond_dec_wrapper trel
-Rule 25    automata -> state_dec_wrapper trel
-Rule 26    automata -> nil
-Rule 27    cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON
-Rule 28    cond_dec -> INT COLON ID
-Rule 29    cond_dec -> INT COLON INIT
-Rule 30    cond_dec -> INT COLON ID COMMA cond_dec
-Rule 31    cond_dec -> INT COLON INIT COMMA cond_dec
-Rule 32    cond_dec -> nil
-Rule 33    state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON
-Rule 34    state_dec -> INT COLON ID
-Rule 35    state_dec -> INT COLON INIT
-Rule 36    state_dec -> INT COLON ID COMMA state_dec
-Rule 37    state_dec -> INT COLON INIT COMMA state_dec
-Rule 38    state_dec -> nil
-Rule 39    trel -> event boolexp ARROW boolexp SEMICOLON trel
-Rule 40    trel -> nil
-Rule 41    event -> OPENLIST CLOSELIST
-Rule 42    event -> OPENLIST ID CLOSELIST
-Rule 43    boolexp -> boolexp AND boolexp
-Rule 44    boolexp -> GUARD EQUAL ID
-Rule 45    boolexp -> GUARD EQUAL INT
-Rule 46    boolexp -> INT
-Rule 47    boolexp -> nil
+Rule 3     import -> IMPORT path
+Rule 4     path -> ID path
+Rule 5     path -> DOT path
+Rule 6     path -> nil
+Rule 7     labels -> LABELS labellist ENDLABELS
+Rule 8     module -> MODULE automata ENDMODULE
+Rule 9     options -> OPTIONS optionlist ENDOPTIONS
+Rule 10    options -> OPTIONS ENDOPTIONS
+Rule 11    options -> nil
+Rule 12    optionlist -> option
+Rule 13    optionlist -> option optionlist
+Rule 14    option -> OPTCONDEFFECTS SEMICOLON
+Rule 15    labellist -> label
+Rule 16    labellist -> label COMMA labellist
+Rule 17    labellist -> nil
+Rule 18    label -> ID COLON OPENLIST act_or_pred_list CLOSELIST
+Rule 19    act_or_pred_list -> act_or_pred
+Rule 20    act_or_pred_list -> act_or_pred AND act_or_pred_list
+Rule 21    act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+Rule 22    act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+Rule 23    act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+Rule 24    act_or_pred -> nil
+Rule 25    param_dec -> ID
+Rule 26    param_dec -> ID COMMA param_dec
+Rule 27    param_dec -> nil
+Rule 28    automata -> state_dec_wrapper cond_dec_wrapper trel
+Rule 29    automata -> state_dec_wrapper trel
+Rule 30    automata -> nil
+Rule 31    cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON
+Rule 32    cond_dec -> INT COLON ID
+Rule 33    cond_dec -> INT COLON INIT
+Rule 34    cond_dec -> INT COLON ID COMMA cond_dec
+Rule 35    cond_dec -> INT COLON INIT COMMA cond_dec
+Rule 36    cond_dec -> nil
+Rule 37    state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON
+Rule 38    state_dec -> INT COLON ID
+Rule 39    state_dec -> INT COLON INIT
+Rule 40    state_dec -> INT COLON ID COMMA state_dec
+Rule 41    state_dec -> INT COLON INIT COMMA state_dec
+Rule 42    state_dec -> nil
+Rule 43    trel -> event boolexp ARROW INT SEMICOLON trel
+Rule 44    trel -> nil
+Rule 45    event -> OPENLIST CLOSELIST
+Rule 46    event -> OPENLIST ID CLOSELIST
+Rule 47    boolexp -> INT AND GUARD EQUAL ID
+Rule 48    boolexp -> INT AND GUARD EQUAL INT
+Rule 49    boolexp -> INT
 
 Terminals, with rules where they appear
 
-ACTION               : 18
-AND                  : 17 43
-ARROW                : 39
-CLOSELIST            : 15 18 19 20 27 33 41 42
-COLON                : 15 18 18 19 19 20 20 27 28 29 30 31 33 34 35 36 37
-COMMA                : 13 18 19 20 22 30 31 36 37
-ENDLABELS            : 4
-ENDMODULE            : 5
-ENDOPTIONS           : 6
-EQUAL                : 44 45
-GUARD                : 27 44 45
-ID                   : 3 15 18 19 20 21 22 28 30 34 36 42 44
+ACTION               : 21
+AND                  : 20 47 48
+ARROW                : 43
+CLOSELIST            : 18 21 22 23 31 37 45 46
+COLON                : 18 21 21 22 22 23 23 31 32 33 34 35 37 38 39 40 41
+COMMA                : 16 21 22 23 26 34 35 40 41
+DOT                  : 5
+ENDLABELS            : 7
+ENDMODULE            : 8
+ENDOPTIONS           : 9 10
+EQUAL                : 47 48
+GUARD                : 31 47 48
+ID                   : 4 18 21 22 23 25 26 32 34 38 40 46 47
 IMPORT               : 3
-INIT                 : 29 31 35 37
-INT                  : 28 29 30 31 34 35 36 37 45 46
-LABELS               : 4
-MODULE               : 5
-NOT                  : 20
-OPENLIST             : 15 18 19 20 27 33 41 42
-OPTCONDEFFECTS       : 11
-OPTIONS              : 6
-PARAMS               : 18 19 20
-PREDICATE            : 19 20
-SEMICOLON            : 11 27 33 39
-ST                   : 33
+INIT                 : 33 35 39 41
+INT                  : 32 33 34 35 38 39 40 41 43 47 48 48 49
+LABELS               : 7
+MODULE               : 8
+NOT                  : 23
+OPENLIST             : 18 21 22 23 31 37 45 46
+OPTCONDEFFECTS       : 14
+OPTIONS              : 9 10
+PARAMS               : 21 22 23
+PREDICATE            : 22 23
+SEMICOLON            : 14 31 37 43
+ST                   : 37
 error                : 
 
 Nonterminals, with rules where they appear
 
-act_or_pred          : 16 17
-act_or_pred_list     : 15 17
-automata             : 5
-boolexp              : 39 39 43 43
-cmd                  : 12 13
-cond_dec             : 27 30 31
-cond_dec_wrapper     : 24
-event                : 39
+act_or_pred          : 19 20
+act_or_pred_list     : 18 20
+automata             : 8
+boolexp              : 43
+cond_dec             : 31 34 35
+cond_dec_wrapper     : 28
+event                : 43
 import               : 1
-labellist            : 4 13
+label                : 15 16
+labellist            : 7 16
 labels               : 1
 module               : 1
-nil                  : 7 10 14 23 26 32 38 40 47
-option               : 8 9
-optionlist           : 6 9
+nil                  : 6 11 17 24 27 30 36 42 44
+option               : 12 13
+optionlist           : 9 13
 options              : 1
-param_dec            : 18 19 20 22
+param_dec            : 21 22 23 26
+path                 : 3 4 5
 program              : 0
-state_dec            : 33 36 37
-state_dec_wrapper    : 24 25
-trel                 : 24 25 39
+state_dec            : 37 40 41
+state_dec_wrapper    : 28 29
+trel                 : 28 29 43
 
 Parsing method: LALR
 
@@ -110,7 +114,7 @@ state 0
 
     (0) S' -> . program
     (1) program -> . import labels module options
-    (3) import -> . IMPORT ID
+    (3) import -> . IMPORT path
 
     IMPORT          shift and go to state 3
 
@@ -126,7 +130,7 @@ state 1
 state 2
 
     (1) program -> import . labels module options
-    (4) labels -> . LABELS labellist ENDLABELS
+    (7) labels -> . LABELS labellist ENDLABELS
 
     LABELS          shift and go to state 5
 
@@ -134,1108 +138,1107 @@ state 2
 
 state 3
 
-    (3) import -> IMPORT . ID
+    (3) import -> IMPORT . path
+    (4) path -> . ID path
+    (5) path -> . DOT path
+    (6) path -> . nil
+    (2) nil -> .
 
-    ID              shift and go to state 6
+    ID              shift and go to state 7
+    DOT             shift and go to state 8
+    LABELS          reduce using rule 2 (nil -> .)
 
+    path                           shift and go to state 6
+    nil                            shift and go to state 9
 
 state 4
 
     (1) program -> import labels . module options
-    (5) module -> . MODULE automata ENDMODULE
+    (8) module -> . MODULE automata ENDMODULE
 
-    MODULE          shift and go to state 8
+    MODULE          shift and go to state 11
 
-    module                         shift and go to state 7
+    module                         shift and go to state 10
 
 state 5
 
-    (4) labels -> LABELS . labellist ENDLABELS
-    (12) labellist -> . cmd
-    (13) labellist -> . cmd COMMA labellist
-    (14) labellist -> . nil
-    (15) cmd -> . ID COLON OPENLIST act_or_pred_list CLOSELIST
+    (7) labels -> LABELS . labellist ENDLABELS
+    (15) labellist -> . label
+    (16) labellist -> . label COMMA labellist
+    (17) labellist -> . nil
+    (18) label -> . ID COLON OPENLIST act_or_pred_list CLOSELIST
     (2) nil -> .
 
-    ID              shift and go to state 12
+    ID              shift and go to state 15
     ENDLABELS       reduce using rule 2 (nil -> .)
 
-    labellist                      shift and go to state 9
-    cmd                            shift and go to state 10
-    nil                            shift and go to state 11
+    labellist                      shift and go to state 12
+    label                          shift and go to state 13
+    nil                            shift and go to state 14
 
 state 6
 
-    (3) import -> IMPORT ID .
+    (3) import -> IMPORT path .
 
-    LABELS          reduce using rule 3 (import -> IMPORT ID .)
+    LABELS          reduce using rule 3 (import -> IMPORT path .)
 
 
 state 7
 
-    (1) program -> import labels module . options
-    (6) options -> . OPTIONS optionlist ENDOPTIONS
-    (7) options -> . nil
+    (4) path -> ID . path
+    (4) path -> . ID path
+    (5) path -> . DOT path
+    (6) path -> . nil
     (2) nil -> .
 
-    OPTIONS         shift and go to state 14
-    $end            reduce using rule 2 (nil -> .)
+    ID              shift and go to state 7
+    DOT             shift and go to state 8
+    LABELS          reduce using rule 2 (nil -> .)
 
-    options                        shift and go to state 13
-    nil                            shift and go to state 15
+    path                           shift and go to state 16
+    nil                            shift and go to state 9
 
 state 8
 
-    (5) module -> MODULE . automata ENDMODULE
-    (24) automata -> . state_dec_wrapper cond_dec_wrapper trel
-    (25) automata -> . state_dec_wrapper trel
-    (26) automata -> . nil
-    (33) state_dec_wrapper -> . ST COLON OPENLIST state_dec CLOSELIST SEMICOLON
+    (5) path -> DOT . path
+    (4) path -> . ID path
+    (5) path -> . DOT path
+    (6) path -> . nil
     (2) nil -> .
 
-    ST              shift and go to state 19
-    ENDMODULE       reduce using rule 2 (nil -> .)
+    ID              shift and go to state 7
+    DOT             shift and go to state 8
+    LABELS          reduce using rule 2 (nil -> .)
 
-    automata                       shift and go to state 16
-    state_dec_wrapper              shift and go to state 17
-    nil                            shift and go to state 18
+    path                           shift and go to state 17
+    nil                            shift and go to state 9
 
 state 9
 
-    (4) labels -> LABELS labellist . ENDLABELS
+    (6) path -> nil .
 
-    ENDLABELS       shift and go to state 20
+    LABELS          reduce using rule 6 (path -> nil .)
 
 
 state 10
 
-    (12) labellist -> cmd .
-    (13) labellist -> cmd . COMMA labellist
+    (1) program -> import labels module . options
+    (9) options -> . OPTIONS optionlist ENDOPTIONS
+    (10) options -> . OPTIONS ENDOPTIONS
+    (11) options -> . nil
+    (2) nil -> .
 
-    ENDLABELS       reduce using rule 12 (labellist -> cmd .)
-    COMMA           shift and go to state 21
+    OPTIONS         shift and go to state 19
+    $end            reduce using rule 2 (nil -> .)
 
+    options                        shift and go to state 18
+    nil                            shift and go to state 20
 
 state 11
 
-    (14) labellist -> nil .
+    (8) module -> MODULE . automata ENDMODULE
+    (28) automata -> . state_dec_wrapper cond_dec_wrapper trel
+    (29) automata -> . state_dec_wrapper trel
+    (30) automata -> . nil
+    (37) state_dec_wrapper -> . ST COLON OPENLIST state_dec CLOSELIST SEMICOLON
+    (2) nil -> .
 
-    ENDLABELS       reduce using rule 14 (labellist -> nil .)
+    ST              shift and go to state 24
+    ENDMODULE       reduce using rule 2 (nil -> .)
 
+    automata                       shift and go to state 21
+    state_dec_wrapper              shift and go to state 22
+    nil                            shift and go to state 23
 
 state 12
 
-    (15) cmd -> ID . COLON OPENLIST act_or_pred_list CLOSELIST
+    (7) labels -> LABELS labellist . ENDLABELS
 
-    COLON           shift and go to state 22
+    ENDLABELS       shift and go to state 25
 
 
 state 13
+
+    (15) labellist -> label .
+    (16) labellist -> label . COMMA labellist
+
+    ENDLABELS       reduce using rule 15 (labellist -> label .)
+    COMMA           shift and go to state 26
+
+
+state 14
+
+    (17) labellist -> nil .
+
+    ENDLABELS       reduce using rule 17 (labellist -> nil .)
+
+
+state 15
+
+    (18) label -> ID . COLON OPENLIST act_or_pred_list CLOSELIST
+
+    COLON           shift and go to state 27
+
+
+state 16
+
+    (4) path -> ID path .
+
+    LABELS          reduce using rule 4 (path -> ID path .)
+
+
+state 17
+
+    (5) path -> DOT path .
+
+    LABELS          reduce using rule 5 (path -> DOT path .)
+
+
+state 18
 
     (1) program -> import labels module options .
 
     $end            reduce using rule 1 (program -> import labels module options .)
 
 
-state 14
-
-    (6) options -> OPTIONS . optionlist ENDOPTIONS
-    (8) optionlist -> . option
-    (9) optionlist -> . option optionlist
-    (10) optionlist -> . nil
-    (11) option -> . OPTCONDEFFECTS SEMICOLON
-    (2) nil -> .
-
-    OPTCONDEFFECTS  shift and go to state 26
-    ENDOPTIONS      reduce using rule 2 (nil -> .)
-
-    optionlist                     shift and go to state 23
-    option                         shift and go to state 24
-    nil                            shift and go to state 25
-
-state 15
-
-    (7) options -> nil .
-
-    $end            reduce using rule 7 (options -> nil .)
-
-
-state 16
-
-    (5) module -> MODULE automata . ENDMODULE
-
-    ENDMODULE       shift and go to state 27
-
-
-state 17
-
-    (24) automata -> state_dec_wrapper . cond_dec_wrapper trel
-    (25) automata -> state_dec_wrapper . trel
-    (27) cond_dec_wrapper -> . GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON
-    (39) trel -> . event boolexp ARROW boolexp SEMICOLON trel
-    (40) trel -> . nil
-    (41) event -> . OPENLIST CLOSELIST
-    (42) event -> . OPENLIST ID CLOSELIST
-    (2) nil -> .
-
-    GUARD           shift and go to state 30
-    OPENLIST        shift and go to state 31
-    ENDMODULE       reduce using rule 2 (nil -> .)
-
-    cond_dec_wrapper               shift and go to state 28
-    trel                           shift and go to state 29
-    event                          shift and go to state 32
-    nil                            shift and go to state 33
-
-state 18
-
-    (26) automata -> nil .
-
-    ENDMODULE       reduce using rule 26 (automata -> nil .)
-
-
 state 19
 
-    (33) state_dec_wrapper -> ST . COLON OPENLIST state_dec CLOSELIST SEMICOLON
+    (9) options -> OPTIONS . optionlist ENDOPTIONS
+    (10) options -> OPTIONS . ENDOPTIONS
+    (12) optionlist -> . option
+    (13) optionlist -> . option optionlist
+    (14) option -> . OPTCONDEFFECTS SEMICOLON
 
-    COLON           shift and go to state 34
+    ENDOPTIONS      shift and go to state 29
+    OPTCONDEFFECTS  shift and go to state 31
 
+    optionlist                     shift and go to state 28
+    option                         shift and go to state 30
 
 state 20
 
-    (4) labels -> LABELS labellist ENDLABELS .
+    (11) options -> nil .
 
-    MODULE          reduce using rule 4 (labels -> LABELS labellist ENDLABELS .)
+    $end            reduce using rule 11 (options -> nil .)
 
 
 state 21
 
-    (13) labellist -> cmd COMMA . labellist
-    (12) labellist -> . cmd
-    (13) labellist -> . cmd COMMA labellist
-    (14) labellist -> . nil
-    (15) cmd -> . ID COLON OPENLIST act_or_pred_list CLOSELIST
-    (2) nil -> .
+    (8) module -> MODULE automata . ENDMODULE
 
-    ID              shift and go to state 12
-    ENDLABELS       reduce using rule 2 (nil -> .)
+    ENDMODULE       shift and go to state 32
 
-    cmd                            shift and go to state 10
-    labellist                      shift and go to state 35
-    nil                            shift and go to state 11
 
 state 22
 
-    (15) cmd -> ID COLON . OPENLIST act_or_pred_list CLOSELIST
+    (28) automata -> state_dec_wrapper . cond_dec_wrapper trel
+    (29) automata -> state_dec_wrapper . trel
+    (31) cond_dec_wrapper -> . GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON
+    (43) trel -> . event boolexp ARROW INT SEMICOLON trel
+    (44) trel -> . nil
+    (45) event -> . OPENLIST CLOSELIST
+    (46) event -> . OPENLIST ID CLOSELIST
+    (2) nil -> .
 
+    GUARD           shift and go to state 35
     OPENLIST        shift and go to state 36
+    ENDMODULE       reduce using rule 2 (nil -> .)
 
+    cond_dec_wrapper               shift and go to state 33
+    trel                           shift and go to state 34
+    event                          shift and go to state 37
+    nil                            shift and go to state 38
 
 state 23
 
-    (6) options -> OPTIONS optionlist . ENDOPTIONS
+    (30) automata -> nil .
 
-    ENDOPTIONS      shift and go to state 37
+    ENDMODULE       reduce using rule 30 (automata -> nil .)
 
 
 state 24
 
-    (8) optionlist -> option .
-    (9) optionlist -> option . optionlist
-    (8) optionlist -> . option
-    (9) optionlist -> . option optionlist
-    (10) optionlist -> . nil
-    (11) option -> . OPTCONDEFFECTS SEMICOLON
-    (2) nil -> .
+    (37) state_dec_wrapper -> ST . COLON OPENLIST state_dec CLOSELIST SEMICOLON
 
-  ! reduce/reduce conflict for ENDOPTIONS resolved using rule 2 (nil -> .)
-    OPTCONDEFFECTS  shift and go to state 26
-    ENDOPTIONS      reduce using rule 2 (nil -> .)
+    COLON           shift and go to state 39
 
-  ! ENDOPTIONS      [ reduce using rule 8 (optionlist -> option .) ]
-
-    option                         shift and go to state 24
-    optionlist                     shift and go to state 38
-    nil                            shift and go to state 25
 
 state 25
 
-    (10) optionlist -> nil .
+    (7) labels -> LABELS labellist ENDLABELS .
 
-    ENDOPTIONS      reduce using rule 10 (optionlist -> nil .)
+    MODULE          reduce using rule 7 (labels -> LABELS labellist ENDLABELS .)
 
 
 state 26
 
-    (11) option -> OPTCONDEFFECTS . SEMICOLON
+    (16) labellist -> label COMMA . labellist
+    (15) labellist -> . label
+    (16) labellist -> . label COMMA labellist
+    (17) labellist -> . nil
+    (18) label -> . ID COLON OPENLIST act_or_pred_list CLOSELIST
+    (2) nil -> .
 
-    SEMICOLON       shift and go to state 39
+    ID              shift and go to state 15
+    ENDLABELS       reduce using rule 2 (nil -> .)
 
+    label                          shift and go to state 13
+    labellist                      shift and go to state 40
+    nil                            shift and go to state 14
 
 state 27
 
-    (5) module -> MODULE automata ENDMODULE .
+    (18) label -> ID COLON . OPENLIST act_or_pred_list CLOSELIST
 
-    OPTIONS         reduce using rule 5 (module -> MODULE automata ENDMODULE .)
-    $end            reduce using rule 5 (module -> MODULE automata ENDMODULE .)
+    OPENLIST        shift and go to state 41
 
 
 state 28
 
-    (24) automata -> state_dec_wrapper cond_dec_wrapper . trel
-    (39) trel -> . event boolexp ARROW boolexp SEMICOLON trel
-    (40) trel -> . nil
-    (41) event -> . OPENLIST CLOSELIST
-    (42) event -> . OPENLIST ID CLOSELIST
-    (2) nil -> .
+    (9) options -> OPTIONS optionlist . ENDOPTIONS
 
-    OPENLIST        shift and go to state 31
-    ENDMODULE       reduce using rule 2 (nil -> .)
+    ENDOPTIONS      shift and go to state 42
 
-    trel                           shift and go to state 40
-    event                          shift and go to state 32
-    nil                            shift and go to state 33
 
 state 29
 
-    (25) automata -> state_dec_wrapper trel .
+    (10) options -> OPTIONS ENDOPTIONS .
 
-    ENDMODULE       reduce using rule 25 (automata -> state_dec_wrapper trel .)
+    $end            reduce using rule 10 (options -> OPTIONS ENDOPTIONS .)
 
 
 state 30
 
-    (27) cond_dec_wrapper -> GUARD . COLON OPENLIST cond_dec CLOSELIST SEMICOLON
+    (12) optionlist -> option .
+    (13) optionlist -> option . optionlist
+    (12) optionlist -> . option
+    (13) optionlist -> . option optionlist
+    (14) option -> . OPTCONDEFFECTS SEMICOLON
 
-    COLON           shift and go to state 41
+    ENDOPTIONS      reduce using rule 12 (optionlist -> option .)
+    OPTCONDEFFECTS  shift and go to state 31
 
+    option                         shift and go to state 30
+    optionlist                     shift and go to state 43
 
 state 31
 
-    (41) event -> OPENLIST . CLOSELIST
-    (42) event -> OPENLIST . ID CLOSELIST
+    (14) option -> OPTCONDEFFECTS . SEMICOLON
 
-    CLOSELIST       shift and go to state 42
-    ID              shift and go to state 43
+    SEMICOLON       shift and go to state 44
 
 
 state 32
 
-    (39) trel -> event . boolexp ARROW boolexp SEMICOLON trel
-    (43) boolexp -> . boolexp AND boolexp
-    (44) boolexp -> . GUARD EQUAL ID
-    (45) boolexp -> . GUARD EQUAL INT
-    (46) boolexp -> . INT
-    (47) boolexp -> . nil
-    (2) nil -> .
+    (8) module -> MODULE automata ENDMODULE .
 
-    GUARD           shift and go to state 45
-    INT             shift and go to state 46
-    ARROW           reduce using rule 2 (nil -> .)
-    AND             reduce using rule 2 (nil -> .)
+    OPTIONS         reduce using rule 8 (module -> MODULE automata ENDMODULE .)
+    $end            reduce using rule 8 (module -> MODULE automata ENDMODULE .)
 
-    boolexp                        shift and go to state 44
-    nil                            shift and go to state 47
 
 state 33
 
-    (40) trel -> nil .
+    (28) automata -> state_dec_wrapper cond_dec_wrapper . trel
+    (43) trel -> . event boolexp ARROW INT SEMICOLON trel
+    (44) trel -> . nil
+    (45) event -> . OPENLIST CLOSELIST
+    (46) event -> . OPENLIST ID CLOSELIST
+    (2) nil -> .
 
-    ENDMODULE       reduce using rule 40 (trel -> nil .)
+    OPENLIST        shift and go to state 36
+    ENDMODULE       reduce using rule 2 (nil -> .)
 
+    trel                           shift and go to state 45
+    event                          shift and go to state 37
+    nil                            shift and go to state 38
 
 state 34
 
-    (33) state_dec_wrapper -> ST COLON . OPENLIST state_dec CLOSELIST SEMICOLON
+    (29) automata -> state_dec_wrapper trel .
 
-    OPENLIST        shift and go to state 48
+    ENDMODULE       reduce using rule 29 (automata -> state_dec_wrapper trel .)
 
 
 state 35
 
-    (13) labellist -> cmd COMMA labellist .
+    (31) cond_dec_wrapper -> GUARD . COLON OPENLIST cond_dec CLOSELIST SEMICOLON
 
-    ENDLABELS       reduce using rule 13 (labellist -> cmd COMMA labellist .)
+    COLON           shift and go to state 46
 
 
 state 36
 
-    (15) cmd -> ID COLON OPENLIST . act_or_pred_list CLOSELIST
-    (16) act_or_pred_list -> . act_or_pred
-    (17) act_or_pred_list -> . act_or_pred AND act_or_pred_list
-    (18) act_or_pred -> . ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-    (19) act_or_pred -> . PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-    (20) act_or_pred -> . PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (45) event -> OPENLIST . CLOSELIST
+    (46) event -> OPENLIST . ID CLOSELIST
 
-    ACTION          shift and go to state 51
-    PREDICATE       shift and go to state 52
+    CLOSELIST       shift and go to state 47
+    ID              shift and go to state 48
 
-    act_or_pred_list               shift and go to state 49
-    act_or_pred                    shift and go to state 50
 
 state 37
 
-    (6) options -> OPTIONS optionlist ENDOPTIONS .
+    (43) trel -> event . boolexp ARROW INT SEMICOLON trel
+    (47) boolexp -> . INT AND GUARD EQUAL ID
+    (48) boolexp -> . INT AND GUARD EQUAL INT
+    (49) boolexp -> . INT
 
-    $end            reduce using rule 6 (options -> OPTIONS optionlist ENDOPTIONS .)
+    INT             shift and go to state 50
 
+    boolexp                        shift and go to state 49
 
 state 38
 
-    (9) optionlist -> option optionlist .
+    (44) trel -> nil .
 
-    ENDOPTIONS      reduce using rule 9 (optionlist -> option optionlist .)
+    ENDMODULE       reduce using rule 44 (trel -> nil .)
 
 
 state 39
 
-    (11) option -> OPTCONDEFFECTS SEMICOLON .
+    (37) state_dec_wrapper -> ST COLON . OPENLIST state_dec CLOSELIST SEMICOLON
 
-    OPTCONDEFFECTS  reduce using rule 11 (option -> OPTCONDEFFECTS SEMICOLON .)
-    ENDOPTIONS      reduce using rule 11 (option -> OPTCONDEFFECTS SEMICOLON .)
+    OPENLIST        shift and go to state 51
 
 
 state 40
 
-    (24) automata -> state_dec_wrapper cond_dec_wrapper trel .
+    (16) labellist -> label COMMA labellist .
 
-    ENDMODULE       reduce using rule 24 (automata -> state_dec_wrapper cond_dec_wrapper trel .)
+    ENDLABELS       reduce using rule 16 (labellist -> label COMMA labellist .)
 
 
 state 41
 
-    (27) cond_dec_wrapper -> GUARD COLON . OPENLIST cond_dec CLOSELIST SEMICOLON
+    (18) label -> ID COLON OPENLIST . act_or_pred_list CLOSELIST
+    (19) act_or_pred_list -> . act_or_pred
+    (20) act_or_pred_list -> . act_or_pred AND act_or_pred_list
+    (21) act_or_pred -> . ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (22) act_or_pred -> . PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (23) act_or_pred -> . PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (24) act_or_pred -> . nil
+    (2) nil -> .
 
-    OPENLIST        shift and go to state 53
+    ACTION          shift and go to state 54
+    PREDICATE       shift and go to state 55
+    AND             reduce using rule 2 (nil -> .)
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    act_or_pred_list               shift and go to state 52
+    act_or_pred                    shift and go to state 53
+    nil                            shift and go to state 56
 
 state 42
 
-    (41) event -> OPENLIST CLOSELIST .
+    (9) options -> OPTIONS optionlist ENDOPTIONS .
 
-    GUARD           reduce using rule 41 (event -> OPENLIST CLOSELIST .)
-    INT             reduce using rule 41 (event -> OPENLIST CLOSELIST .)
-    ARROW           reduce using rule 41 (event -> OPENLIST CLOSELIST .)
-    AND             reduce using rule 41 (event -> OPENLIST CLOSELIST .)
+    $end            reduce using rule 9 (options -> OPTIONS optionlist ENDOPTIONS .)
 
 
 state 43
 
-    (42) event -> OPENLIST ID . CLOSELIST
+    (13) optionlist -> option optionlist .
 
-    CLOSELIST       shift and go to state 54
+    ENDOPTIONS      reduce using rule 13 (optionlist -> option optionlist .)
 
 
 state 44
 
-    (39) trel -> event boolexp . ARROW boolexp SEMICOLON trel
-    (43) boolexp -> boolexp . AND boolexp
+    (14) option -> OPTCONDEFFECTS SEMICOLON .
 
-    ARROW           shift and go to state 55
-    AND             shift and go to state 56
+    OPTCONDEFFECTS  reduce using rule 14 (option -> OPTCONDEFFECTS SEMICOLON .)
+    ENDOPTIONS      reduce using rule 14 (option -> OPTCONDEFFECTS SEMICOLON .)
 
 
 state 45
 
-    (44) boolexp -> GUARD . EQUAL ID
-    (45) boolexp -> GUARD . EQUAL INT
+    (28) automata -> state_dec_wrapper cond_dec_wrapper trel .
 
-    EQUAL           shift and go to state 57
+    ENDMODULE       reduce using rule 28 (automata -> state_dec_wrapper cond_dec_wrapper trel .)
 
 
 state 46
 
-    (46) boolexp -> INT .
+    (31) cond_dec_wrapper -> GUARD COLON . OPENLIST cond_dec CLOSELIST SEMICOLON
 
-    ARROW           reduce using rule 46 (boolexp -> INT .)
-    AND             reduce using rule 46 (boolexp -> INT .)
-    SEMICOLON       reduce using rule 46 (boolexp -> INT .)
+    OPENLIST        shift and go to state 57
 
 
 state 47
 
-    (47) boolexp -> nil .
+    (45) event -> OPENLIST CLOSELIST .
 
-    ARROW           reduce using rule 47 (boolexp -> nil .)
-    AND             reduce using rule 47 (boolexp -> nil .)
-    SEMICOLON       reduce using rule 47 (boolexp -> nil .)
+    INT             reduce using rule 45 (event -> OPENLIST CLOSELIST .)
 
 
 state 48
 
-    (33) state_dec_wrapper -> ST COLON OPENLIST . state_dec CLOSELIST SEMICOLON
-    (34) state_dec -> . INT COLON ID
-    (35) state_dec -> . INT COLON INIT
-    (36) state_dec -> . INT COLON ID COMMA state_dec
-    (37) state_dec -> . INT COLON INIT COMMA state_dec
-    (38) state_dec -> . nil
-    (2) nil -> .
+    (46) event -> OPENLIST ID . CLOSELIST
 
-    INT             shift and go to state 59
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    CLOSELIST       shift and go to state 58
 
-    state_dec                      shift and go to state 58
-    nil                            shift and go to state 60
 
 state 49
 
-    (15) cmd -> ID COLON OPENLIST act_or_pred_list . CLOSELIST
+    (43) trel -> event boolexp . ARROW INT SEMICOLON trel
 
-    CLOSELIST       shift and go to state 61
+    ARROW           shift and go to state 59
 
 
 state 50
 
-    (16) act_or_pred_list -> act_or_pred .
-    (17) act_or_pred_list -> act_or_pred . AND act_or_pred_list
+    (47) boolexp -> INT . AND GUARD EQUAL ID
+    (48) boolexp -> INT . AND GUARD EQUAL INT
+    (49) boolexp -> INT .
 
-    CLOSELIST       reduce using rule 16 (act_or_pred_list -> act_or_pred .)
-    AND             shift and go to state 62
+    AND             shift and go to state 60
+    ARROW           reduce using rule 49 (boolexp -> INT .)
 
 
 state 51
 
-    (18) act_or_pred -> ACTION . COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (37) state_dec_wrapper -> ST COLON OPENLIST . state_dec CLOSELIST SEMICOLON
+    (38) state_dec -> . INT COLON ID
+    (39) state_dec -> . INT COLON INIT
+    (40) state_dec -> . INT COLON ID COMMA state_dec
+    (41) state_dec -> . INT COLON INIT COMMA state_dec
+    (42) state_dec -> . nil
+    (2) nil -> .
 
-    COLON           shift and go to state 63
+    INT             shift and go to state 62
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    state_dec                      shift and go to state 61
+    nil                            shift and go to state 63
 
 state 52
 
-    (19) act_or_pred -> PREDICATE . COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-    (20) act_or_pred -> PREDICATE . COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (18) label -> ID COLON OPENLIST act_or_pred_list . CLOSELIST
 
-    COLON           shift and go to state 64
+    CLOSELIST       shift and go to state 64
 
 
 state 53
 
-    (27) cond_dec_wrapper -> GUARD COLON OPENLIST . cond_dec CLOSELIST SEMICOLON
-    (28) cond_dec -> . INT COLON ID
-    (29) cond_dec -> . INT COLON INIT
-    (30) cond_dec -> . INT COLON ID COMMA cond_dec
-    (31) cond_dec -> . INT COLON INIT COMMA cond_dec
-    (32) cond_dec -> . nil
-    (2) nil -> .
+    (19) act_or_pred_list -> act_or_pred .
+    (20) act_or_pred_list -> act_or_pred . AND act_or_pred_list
 
-    INT             shift and go to state 66
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    CLOSELIST       reduce using rule 19 (act_or_pred_list -> act_or_pred .)
+    AND             shift and go to state 65
 
-    cond_dec                       shift and go to state 65
-    nil                            shift and go to state 67
 
 state 54
 
-    (42) event -> OPENLIST ID CLOSELIST .
+    (21) act_or_pred -> ACTION . COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    GUARD           reduce using rule 42 (event -> OPENLIST ID CLOSELIST .)
-    INT             reduce using rule 42 (event -> OPENLIST ID CLOSELIST .)
-    ARROW           reduce using rule 42 (event -> OPENLIST ID CLOSELIST .)
-    AND             reduce using rule 42 (event -> OPENLIST ID CLOSELIST .)
+    COLON           shift and go to state 66
 
 
 state 55
 
-    (39) trel -> event boolexp ARROW . boolexp SEMICOLON trel
-    (43) boolexp -> . boolexp AND boolexp
-    (44) boolexp -> . GUARD EQUAL ID
-    (45) boolexp -> . GUARD EQUAL INT
-    (46) boolexp -> . INT
-    (47) boolexp -> . nil
-    (2) nil -> .
+    (22) act_or_pred -> PREDICATE . COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (23) act_or_pred -> PREDICATE . COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    GUARD           shift and go to state 45
-    INT             shift and go to state 46
-    SEMICOLON       reduce using rule 2 (nil -> .)
-    AND             reduce using rule 2 (nil -> .)
+    COLON           shift and go to state 67
 
-    boolexp                        shift and go to state 68
-    nil                            shift and go to state 47
 
 state 56
 
-    (43) boolexp -> boolexp AND . boolexp
-    (43) boolexp -> . boolexp AND boolexp
-    (44) boolexp -> . GUARD EQUAL ID
-    (45) boolexp -> . GUARD EQUAL INT
-    (46) boolexp -> . INT
-    (47) boolexp -> . nil
-    (2) nil -> .
+    (24) act_or_pred -> nil .
 
-    GUARD           shift and go to state 45
-    INT             shift and go to state 46
-    AND             reduce using rule 2 (nil -> .)
-    ARROW           reduce using rule 2 (nil -> .)
-    SEMICOLON       reduce using rule 2 (nil -> .)
+    AND             reduce using rule 24 (act_or_pred -> nil .)
+    CLOSELIST       reduce using rule 24 (act_or_pred -> nil .)
 
-    boolexp                        shift and go to state 69
-    nil                            shift and go to state 47
 
 state 57
 
-    (44) boolexp -> GUARD EQUAL . ID
-    (45) boolexp -> GUARD EQUAL . INT
+    (31) cond_dec_wrapper -> GUARD COLON OPENLIST . cond_dec CLOSELIST SEMICOLON
+    (32) cond_dec -> . INT COLON ID
+    (33) cond_dec -> . INT COLON INIT
+    (34) cond_dec -> . INT COLON ID COMMA cond_dec
+    (35) cond_dec -> . INT COLON INIT COMMA cond_dec
+    (36) cond_dec -> . nil
+    (2) nil -> .
 
-    ID              shift and go to state 70
-    INT             shift and go to state 71
+    INT             shift and go to state 69
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    cond_dec                       shift and go to state 68
+    nil                            shift and go to state 70
 
 state 58
 
-    (33) state_dec_wrapper -> ST COLON OPENLIST state_dec . CLOSELIST SEMICOLON
+    (46) event -> OPENLIST ID CLOSELIST .
 
-    CLOSELIST       shift and go to state 72
+    INT             reduce using rule 46 (event -> OPENLIST ID CLOSELIST .)
 
 
 state 59
 
-    (34) state_dec -> INT . COLON ID
-    (35) state_dec -> INT . COLON INIT
-    (36) state_dec -> INT . COLON ID COMMA state_dec
-    (37) state_dec -> INT . COLON INIT COMMA state_dec
+    (43) trel -> event boolexp ARROW . INT SEMICOLON trel
 
-    COLON           shift and go to state 73
+    INT             shift and go to state 71
 
 
 state 60
 
-    (38) state_dec -> nil .
+    (47) boolexp -> INT AND . GUARD EQUAL ID
+    (48) boolexp -> INT AND . GUARD EQUAL INT
 
-    CLOSELIST       reduce using rule 38 (state_dec -> nil .)
+    GUARD           shift and go to state 72
 
 
 state 61
 
-    (15) cmd -> ID COLON OPENLIST act_or_pred_list CLOSELIST .
+    (37) state_dec_wrapper -> ST COLON OPENLIST state_dec . CLOSELIST SEMICOLON
 
-    COMMA           reduce using rule 15 (cmd -> ID COLON OPENLIST act_or_pred_list CLOSELIST .)
-    ENDLABELS       reduce using rule 15 (cmd -> ID COLON OPENLIST act_or_pred_list CLOSELIST .)
+    CLOSELIST       shift and go to state 73
 
 
 state 62
 
-    (17) act_or_pred_list -> act_or_pred AND . act_or_pred_list
-    (16) act_or_pred_list -> . act_or_pred
-    (17) act_or_pred_list -> . act_or_pred AND act_or_pred_list
-    (18) act_or_pred -> . ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-    (19) act_or_pred -> . PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-    (20) act_or_pred -> . PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (38) state_dec -> INT . COLON ID
+    (39) state_dec -> INT . COLON INIT
+    (40) state_dec -> INT . COLON ID COMMA state_dec
+    (41) state_dec -> INT . COLON INIT COMMA state_dec
 
-    ACTION          shift and go to state 51
-    PREDICATE       shift and go to state 52
+    COLON           shift and go to state 74
 
-    act_or_pred                    shift and go to state 50
-    act_or_pred_list               shift and go to state 74
 
 state 63
 
-    (18) act_or_pred -> ACTION COLON . ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (42) state_dec -> nil .
 
-    ID              shift and go to state 75
+    CLOSELIST       reduce using rule 42 (state_dec -> nil .)
 
 
 state 64
 
-    (19) act_or_pred -> PREDICATE COLON . ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
-    (20) act_or_pred -> PREDICATE COLON . NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (18) label -> ID COLON OPENLIST act_or_pred_list CLOSELIST .
 
-    ID              shift and go to state 76
-    NOT             shift and go to state 77
+    COMMA           reduce using rule 18 (label -> ID COLON OPENLIST act_or_pred_list CLOSELIST .)
+    ENDLABELS       reduce using rule 18 (label -> ID COLON OPENLIST act_or_pred_list CLOSELIST .)
 
 
 state 65
 
-    (27) cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec . CLOSELIST SEMICOLON
+    (20) act_or_pred_list -> act_or_pred AND . act_or_pred_list
+    (19) act_or_pred_list -> . act_or_pred
+    (20) act_or_pred_list -> . act_or_pred AND act_or_pred_list
+    (21) act_or_pred -> . ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (22) act_or_pred -> . PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (23) act_or_pred -> . PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (24) act_or_pred -> . nil
+    (2) nil -> .
 
-    CLOSELIST       shift and go to state 78
+    ACTION          shift and go to state 54
+    PREDICATE       shift and go to state 55
+    AND             reduce using rule 2 (nil -> .)
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    act_or_pred                    shift and go to state 53
+    act_or_pred_list               shift and go to state 75
+    nil                            shift and go to state 56
 
 state 66
 
-    (28) cond_dec -> INT . COLON ID
-    (29) cond_dec -> INT . COLON INIT
-    (30) cond_dec -> INT . COLON ID COMMA cond_dec
-    (31) cond_dec -> INT . COLON INIT COMMA cond_dec
+    (21) act_or_pred -> ACTION COLON . ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    COLON           shift and go to state 79
+    ID              shift and go to state 76
 
 
 state 67
 
-    (32) cond_dec -> nil .
+    (22) act_or_pred -> PREDICATE COLON . ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (23) act_or_pred -> PREDICATE COLON . NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    CLOSELIST       reduce using rule 32 (cond_dec -> nil .)
+    ID              shift and go to state 77
+    NOT             shift and go to state 78
 
 
 state 68
 
-    (39) trel -> event boolexp ARROW boolexp . SEMICOLON trel
-    (43) boolexp -> boolexp . AND boolexp
+    (31) cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec . CLOSELIST SEMICOLON
 
-    SEMICOLON       shift and go to state 80
-    AND             shift and go to state 56
+    CLOSELIST       shift and go to state 79
 
 
 state 69
 
-    (43) boolexp -> boolexp AND boolexp .
-    (43) boolexp -> boolexp . AND boolexp
+    (32) cond_dec -> INT . COLON ID
+    (33) cond_dec -> INT . COLON INIT
+    (34) cond_dec -> INT . COLON ID COMMA cond_dec
+    (35) cond_dec -> INT . COLON INIT COMMA cond_dec
 
-  ! shift/reduce conflict for AND resolved as shift
-    ARROW           reduce using rule 43 (boolexp -> boolexp AND boolexp .)
-    SEMICOLON       reduce using rule 43 (boolexp -> boolexp AND boolexp .)
-    AND             shift and go to state 56
-
-  ! AND             [ reduce using rule 43 (boolexp -> boolexp AND boolexp .) ]
+    COLON           shift and go to state 80
 
 
 state 70
 
-    (44) boolexp -> GUARD EQUAL ID .
+    (36) cond_dec -> nil .
 
-    ARROW           reduce using rule 44 (boolexp -> GUARD EQUAL ID .)
-    AND             reduce using rule 44 (boolexp -> GUARD EQUAL ID .)
-    SEMICOLON       reduce using rule 44 (boolexp -> GUARD EQUAL ID .)
+    CLOSELIST       reduce using rule 36 (cond_dec -> nil .)
 
 
 state 71
 
-    (45) boolexp -> GUARD EQUAL INT .
-
-    ARROW           reduce using rule 45 (boolexp -> GUARD EQUAL INT .)
-    AND             reduce using rule 45 (boolexp -> GUARD EQUAL INT .)
-    SEMICOLON       reduce using rule 45 (boolexp -> GUARD EQUAL INT .)
-
-
-state 72
-
-    (33) state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST . SEMICOLON
+    (43) trel -> event boolexp ARROW INT . SEMICOLON trel
 
     SEMICOLON       shift and go to state 81
 
 
+state 72
+
+    (47) boolexp -> INT AND GUARD . EQUAL ID
+    (48) boolexp -> INT AND GUARD . EQUAL INT
+
+    EQUAL           shift and go to state 82
+
+
 state 73
 
-    (34) state_dec -> INT COLON . ID
-    (35) state_dec -> INT COLON . INIT
-    (36) state_dec -> INT COLON . ID COMMA state_dec
-    (37) state_dec -> INT COLON . INIT COMMA state_dec
+    (37) state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST . SEMICOLON
 
-    ID              shift and go to state 82
-    INIT            shift and go to state 83
+    SEMICOLON       shift and go to state 83
 
 
 state 74
 
-    (17) act_or_pred_list -> act_or_pred AND act_or_pred_list .
+    (38) state_dec -> INT COLON . ID
+    (39) state_dec -> INT COLON . INIT
+    (40) state_dec -> INT COLON . ID COMMA state_dec
+    (41) state_dec -> INT COLON . INIT COMMA state_dec
 
-    CLOSELIST       reduce using rule 17 (act_or_pred_list -> act_or_pred AND act_or_pred_list .)
+    ID              shift and go to state 84
+    INIT            shift and go to state 85
 
 
 state 75
 
-    (18) act_or_pred -> ACTION COLON ID . COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (20) act_or_pred_list -> act_or_pred AND act_or_pred_list .
 
-    COMMA           shift and go to state 84
+    CLOSELIST       reduce using rule 20 (act_or_pred_list -> act_or_pred AND act_or_pred_list .)
 
 
 state 76
 
-    (19) act_or_pred -> PREDICATE COLON ID . COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (21) act_or_pred -> ACTION COLON ID . COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    COMMA           shift and go to state 85
+    COMMA           shift and go to state 86
 
 
 state 77
 
-    (20) act_or_pred -> PREDICATE COLON NOT . ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (22) act_or_pred -> PREDICATE COLON ID . COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    ID              shift and go to state 86
+    COMMA           shift and go to state 87
 
 
 state 78
 
-    (27) cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST . SEMICOLON
+    (23) act_or_pred -> PREDICATE COLON NOT . ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    SEMICOLON       shift and go to state 87
+    ID              shift and go to state 88
 
 
 state 79
 
-    (28) cond_dec -> INT COLON . ID
-    (29) cond_dec -> INT COLON . INIT
-    (30) cond_dec -> INT COLON . ID COMMA cond_dec
-    (31) cond_dec -> INT COLON . INIT COMMA cond_dec
+    (31) cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST . SEMICOLON
 
-    ID              shift and go to state 88
-    INIT            shift and go to state 89
+    SEMICOLON       shift and go to state 89
 
 
 state 80
 
-    (39) trel -> event boolexp ARROW boolexp SEMICOLON . trel
-    (39) trel -> . event boolexp ARROW boolexp SEMICOLON trel
-    (40) trel -> . nil
-    (41) event -> . OPENLIST CLOSELIST
-    (42) event -> . OPENLIST ID CLOSELIST
-    (2) nil -> .
+    (32) cond_dec -> INT COLON . ID
+    (33) cond_dec -> INT COLON . INIT
+    (34) cond_dec -> INT COLON . ID COMMA cond_dec
+    (35) cond_dec -> INT COLON . INIT COMMA cond_dec
 
-    OPENLIST        shift and go to state 31
-    ENDMODULE       reduce using rule 2 (nil -> .)
+    ID              shift and go to state 90
+    INIT            shift and go to state 91
 
-    event                          shift and go to state 32
-    trel                           shift and go to state 90
-    nil                            shift and go to state 33
 
 state 81
 
-    (33) state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .
+    (43) trel -> event boolexp ARROW INT SEMICOLON . trel
+    (43) trel -> . event boolexp ARROW INT SEMICOLON trel
+    (44) trel -> . nil
+    (45) event -> . OPENLIST CLOSELIST
+    (46) event -> . OPENLIST ID CLOSELIST
+    (2) nil -> .
 
-    GUARD           reduce using rule 33 (state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .)
-    OPENLIST        reduce using rule 33 (state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .)
-    ENDMODULE       reduce using rule 33 (state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .)
+    OPENLIST        shift and go to state 36
+    ENDMODULE       reduce using rule 2 (nil -> .)
 
+    event                          shift and go to state 37
+    trel                           shift and go to state 92
+    nil                            shift and go to state 38
 
 state 82
 
-    (34) state_dec -> INT COLON ID .
-    (36) state_dec -> INT COLON ID . COMMA state_dec
+    (47) boolexp -> INT AND GUARD EQUAL . ID
+    (48) boolexp -> INT AND GUARD EQUAL . INT
 
-    CLOSELIST       reduce using rule 34 (state_dec -> INT COLON ID .)
-    COMMA           shift and go to state 91
+    ID              shift and go to state 94
+    INT             shift and go to state 93
 
 
 state 83
 
-    (35) state_dec -> INT COLON INIT .
-    (37) state_dec -> INT COLON INIT . COMMA state_dec
+    (37) state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .
 
-    CLOSELIST       reduce using rule 35 (state_dec -> INT COLON INIT .)
-    COMMA           shift and go to state 92
+    GUARD           reduce using rule 37 (state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .)
+    OPENLIST        reduce using rule 37 (state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .)
+    ENDMODULE       reduce using rule 37 (state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON .)
 
 
 state 84
 
-    (18) act_or_pred -> ACTION COLON ID COMMA . PARAMS COLON OPENLIST param_dec CLOSELIST
+    (38) state_dec -> INT COLON ID .
+    (40) state_dec -> INT COLON ID . COMMA state_dec
 
-    PARAMS          shift and go to state 93
+    CLOSELIST       reduce using rule 38 (state_dec -> INT COLON ID .)
+    COMMA           shift and go to state 95
 
 
 state 85
 
-    (19) act_or_pred -> PREDICATE COLON ID COMMA . PARAMS COLON OPENLIST param_dec CLOSELIST
+    (39) state_dec -> INT COLON INIT .
+    (41) state_dec -> INT COLON INIT . COMMA state_dec
 
-    PARAMS          shift and go to state 94
+    CLOSELIST       reduce using rule 39 (state_dec -> INT COLON INIT .)
+    COMMA           shift and go to state 96
 
 
 state 86
 
-    (20) act_or_pred -> PREDICATE COLON NOT ID . COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
+    (21) act_or_pred -> ACTION COLON ID COMMA . PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    COMMA           shift and go to state 95
+    PARAMS          shift and go to state 97
 
 
 state 87
 
-    (27) cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON .
+    (22) act_or_pred -> PREDICATE COLON ID COMMA . PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    OPENLIST        reduce using rule 27 (cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON .)
-    ENDMODULE       reduce using rule 27 (cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON .)
+    PARAMS          shift and go to state 98
 
 
 state 88
 
-    (28) cond_dec -> INT COLON ID .
-    (30) cond_dec -> INT COLON ID . COMMA cond_dec
+    (23) act_or_pred -> PREDICATE COLON NOT ID . COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    CLOSELIST       reduce using rule 28 (cond_dec -> INT COLON ID .)
-    COMMA           shift and go to state 96
+    COMMA           shift and go to state 99
 
 
 state 89
 
-    (29) cond_dec -> INT COLON INIT .
-    (31) cond_dec -> INT COLON INIT . COMMA cond_dec
+    (31) cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON .
 
-    CLOSELIST       reduce using rule 29 (cond_dec -> INT COLON INIT .)
-    COMMA           shift and go to state 97
+    OPENLIST        reduce using rule 31 (cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON .)
+    ENDMODULE       reduce using rule 31 (cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON .)
 
 
 state 90
 
-    (39) trel -> event boolexp ARROW boolexp SEMICOLON trel .
+    (32) cond_dec -> INT COLON ID .
+    (34) cond_dec -> INT COLON ID . COMMA cond_dec
 
-    ENDMODULE       reduce using rule 39 (trel -> event boolexp ARROW boolexp SEMICOLON trel .)
+    CLOSELIST       reduce using rule 32 (cond_dec -> INT COLON ID .)
+    COMMA           shift and go to state 100
 
 
 state 91
 
-    (36) state_dec -> INT COLON ID COMMA . state_dec
-    (34) state_dec -> . INT COLON ID
-    (35) state_dec -> . INT COLON INIT
-    (36) state_dec -> . INT COLON ID COMMA state_dec
-    (37) state_dec -> . INT COLON INIT COMMA state_dec
-    (38) state_dec -> . nil
-    (2) nil -> .
+    (33) cond_dec -> INT COLON INIT .
+    (35) cond_dec -> INT COLON INIT . COMMA cond_dec
 
-    INT             shift and go to state 59
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    CLOSELIST       reduce using rule 33 (cond_dec -> INT COLON INIT .)
+    COMMA           shift and go to state 101
 
-    state_dec                      shift and go to state 98
-    nil                            shift and go to state 60
 
 state 92
 
-    (37) state_dec -> INT COLON INIT COMMA . state_dec
-    (34) state_dec -> . INT COLON ID
-    (35) state_dec -> . INT COLON INIT
-    (36) state_dec -> . INT COLON ID COMMA state_dec
-    (37) state_dec -> . INT COLON INIT COMMA state_dec
-    (38) state_dec -> . nil
-    (2) nil -> .
+    (43) trel -> event boolexp ARROW INT SEMICOLON trel .
 
-    INT             shift and go to state 59
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    ENDMODULE       reduce using rule 43 (trel -> event boolexp ARROW INT SEMICOLON trel .)
 
-    state_dec                      shift and go to state 99
-    nil                            shift and go to state 60
 
 state 93
 
-    (18) act_or_pred -> ACTION COLON ID COMMA PARAMS . COLON OPENLIST param_dec CLOSELIST
+    (48) boolexp -> INT AND GUARD EQUAL INT .
 
-    COLON           shift and go to state 100
+    ARROW           reduce using rule 48 (boolexp -> INT AND GUARD EQUAL INT .)
 
 
 state 94
 
-    (19) act_or_pred -> PREDICATE COLON ID COMMA PARAMS . COLON OPENLIST param_dec CLOSELIST
+    (47) boolexp -> INT AND GUARD EQUAL ID .
 
-    COLON           shift and go to state 101
+    ARROW           reduce using rule 47 (boolexp -> INT AND GUARD EQUAL ID .)
 
 
 state 95
 
-    (20) act_or_pred -> PREDICATE COLON NOT ID COMMA . PARAMS COLON OPENLIST param_dec CLOSELIST
+    (40) state_dec -> INT COLON ID COMMA . state_dec
+    (38) state_dec -> . INT COLON ID
+    (39) state_dec -> . INT COLON INIT
+    (40) state_dec -> . INT COLON ID COMMA state_dec
+    (41) state_dec -> . INT COLON INIT COMMA state_dec
+    (42) state_dec -> . nil
+    (2) nil -> .
 
-    PARAMS          shift and go to state 102
+    INT             shift and go to state 62
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    state_dec                      shift and go to state 102
+    nil                            shift and go to state 63
 
 state 96
 
-    (30) cond_dec -> INT COLON ID COMMA . cond_dec
-    (28) cond_dec -> . INT COLON ID
-    (29) cond_dec -> . INT COLON INIT
-    (30) cond_dec -> . INT COLON ID COMMA cond_dec
-    (31) cond_dec -> . INT COLON INIT COMMA cond_dec
-    (32) cond_dec -> . nil
+    (41) state_dec -> INT COLON INIT COMMA . state_dec
+    (38) state_dec -> . INT COLON ID
+    (39) state_dec -> . INT COLON INIT
+    (40) state_dec -> . INT COLON ID COMMA state_dec
+    (41) state_dec -> . INT COLON INIT COMMA state_dec
+    (42) state_dec -> . nil
     (2) nil -> .
 
-    INT             shift and go to state 66
+    INT             shift and go to state 62
     CLOSELIST       reduce using rule 2 (nil -> .)
 
-    cond_dec                       shift and go to state 103
-    nil                            shift and go to state 67
+    state_dec                      shift and go to state 103
+    nil                            shift and go to state 63
 
 state 97
 
-    (31) cond_dec -> INT COLON INIT COMMA . cond_dec
-    (28) cond_dec -> . INT COLON ID
-    (29) cond_dec -> . INT COLON INIT
-    (30) cond_dec -> . INT COLON ID COMMA cond_dec
-    (31) cond_dec -> . INT COLON INIT COMMA cond_dec
-    (32) cond_dec -> . nil
-    (2) nil -> .
+    (21) act_or_pred -> ACTION COLON ID COMMA PARAMS . COLON OPENLIST param_dec CLOSELIST
 
-    INT             shift and go to state 66
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    COLON           shift and go to state 104
 
-    cond_dec                       shift and go to state 104
-    nil                            shift and go to state 67
 
 state 98
 
-    (36) state_dec -> INT COLON ID COMMA state_dec .
+    (22) act_or_pred -> PREDICATE COLON ID COMMA PARAMS . COLON OPENLIST param_dec CLOSELIST
 
-    CLOSELIST       reduce using rule 36 (state_dec -> INT COLON ID COMMA state_dec .)
+    COLON           shift and go to state 105
 
 
 state 99
 
-    (37) state_dec -> INT COLON INIT COMMA state_dec .
+    (23) act_or_pred -> PREDICATE COLON NOT ID COMMA . PARAMS COLON OPENLIST param_dec CLOSELIST
 
-    CLOSELIST       reduce using rule 37 (state_dec -> INT COLON INIT COMMA state_dec .)
+    PARAMS          shift and go to state 106
 
 
 state 100
 
-    (18) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON . OPENLIST param_dec CLOSELIST
+    (34) cond_dec -> INT COLON ID COMMA . cond_dec
+    (32) cond_dec -> . INT COLON ID
+    (33) cond_dec -> . INT COLON INIT
+    (34) cond_dec -> . INT COLON ID COMMA cond_dec
+    (35) cond_dec -> . INT COLON INIT COMMA cond_dec
+    (36) cond_dec -> . nil
+    (2) nil -> .
 
-    OPENLIST        shift and go to state 105
+    INT             shift and go to state 69
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    cond_dec                       shift and go to state 107
+    nil                            shift and go to state 70
 
 state 101
 
-    (19) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON . OPENLIST param_dec CLOSELIST
+    (35) cond_dec -> INT COLON INIT COMMA . cond_dec
+    (32) cond_dec -> . INT COLON ID
+    (33) cond_dec -> . INT COLON INIT
+    (34) cond_dec -> . INT COLON ID COMMA cond_dec
+    (35) cond_dec -> . INT COLON INIT COMMA cond_dec
+    (36) cond_dec -> . nil
+    (2) nil -> .
 
-    OPENLIST        shift and go to state 106
+    INT             shift and go to state 69
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    cond_dec                       shift and go to state 108
+    nil                            shift and go to state 70
 
 state 102
 
-    (20) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS . COLON OPENLIST param_dec CLOSELIST
+    (40) state_dec -> INT COLON ID COMMA state_dec .
 
-    COLON           shift and go to state 107
+    CLOSELIST       reduce using rule 40 (state_dec -> INT COLON ID COMMA state_dec .)
 
 
 state 103
 
-    (30) cond_dec -> INT COLON ID COMMA cond_dec .
+    (41) state_dec -> INT COLON INIT COMMA state_dec .
 
-    CLOSELIST       reduce using rule 30 (cond_dec -> INT COLON ID COMMA cond_dec .)
+    CLOSELIST       reduce using rule 41 (state_dec -> INT COLON INIT COMMA state_dec .)
 
 
 state 104
 
-    (31) cond_dec -> INT COLON INIT COMMA cond_dec .
+    (21) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON . OPENLIST param_dec CLOSELIST
 
-    CLOSELIST       reduce using rule 31 (cond_dec -> INT COLON INIT COMMA cond_dec .)
+    OPENLIST        shift and go to state 109
 
 
 state 105
 
-    (18) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST . param_dec CLOSELIST
-    (21) param_dec -> . ID
-    (22) param_dec -> . ID COMMA param_dec
-    (23) param_dec -> . nil
-    (2) nil -> .
+    (22) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON . OPENLIST param_dec CLOSELIST
 
-    ID              shift and go to state 108
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    OPENLIST        shift and go to state 110
 
-    param_dec                      shift and go to state 109
-    nil                            shift and go to state 110
 
 state 106
 
-    (19) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST . param_dec CLOSELIST
-    (21) param_dec -> . ID
-    (22) param_dec -> . ID COMMA param_dec
-    (23) param_dec -> . nil
-    (2) nil -> .
+    (23) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS . COLON OPENLIST param_dec CLOSELIST
 
-    ID              shift and go to state 108
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    COLON           shift and go to state 111
 
-    param_dec                      shift and go to state 111
-    nil                            shift and go to state 110
 
 state 107
 
-    (20) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON . OPENLIST param_dec CLOSELIST
+    (34) cond_dec -> INT COLON ID COMMA cond_dec .
 
-    OPENLIST        shift and go to state 112
+    CLOSELIST       reduce using rule 34 (cond_dec -> INT COLON ID COMMA cond_dec .)
 
 
 state 108
 
-    (21) param_dec -> ID .
-    (22) param_dec -> ID . COMMA param_dec
+    (35) cond_dec -> INT COLON INIT COMMA cond_dec .
 
-    CLOSELIST       reduce using rule 21 (param_dec -> ID .)
-    COMMA           shift and go to state 113
+    CLOSELIST       reduce using rule 35 (cond_dec -> INT COLON INIT COMMA cond_dec .)
 
 
 state 109
 
-    (18) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec . CLOSELIST
+    (21) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST . param_dec CLOSELIST
+    (25) param_dec -> . ID
+    (26) param_dec -> . ID COMMA param_dec
+    (27) param_dec -> . nil
+    (2) nil -> .
 
-    CLOSELIST       shift and go to state 114
+    ID              shift and go to state 112
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    param_dec                      shift and go to state 113
+    nil                            shift and go to state 114
 
 state 110
 
-    (23) param_dec -> nil .
+    (22) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST . param_dec CLOSELIST
+    (25) param_dec -> . ID
+    (26) param_dec -> . ID COMMA param_dec
+    (27) param_dec -> . nil
+    (2) nil -> .
 
-    CLOSELIST       reduce using rule 23 (param_dec -> nil .)
+    ID              shift and go to state 112
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    param_dec                      shift and go to state 115
+    nil                            shift and go to state 114
 
 state 111
 
-    (19) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec . CLOSELIST
+    (23) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON . OPENLIST param_dec CLOSELIST
 
-    CLOSELIST       shift and go to state 115
+    OPENLIST        shift and go to state 116
 
 
 state 112
 
-    (20) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST . param_dec CLOSELIST
-    (21) param_dec -> . ID
-    (22) param_dec -> . ID COMMA param_dec
-    (23) param_dec -> . nil
-    (2) nil -> .
+    (25) param_dec -> ID .
+    (26) param_dec -> ID . COMMA param_dec
 
-    ID              shift and go to state 108
-    CLOSELIST       reduce using rule 2 (nil -> .)
+    CLOSELIST       reduce using rule 25 (param_dec -> ID .)
+    COMMA           shift and go to state 117
 
-    param_dec                      shift and go to state 116
-    nil                            shift and go to state 110
 
 state 113
 
-    (22) param_dec -> ID COMMA . param_dec
-    (21) param_dec -> . ID
-    (22) param_dec -> . ID COMMA param_dec
-    (23) param_dec -> . nil
-    (2) nil -> .
-
-    ID              shift and go to state 108
-    CLOSELIST       reduce using rule 2 (nil -> .)
-
-    param_dec                      shift and go to state 117
-    nil                            shift and go to state 110
-
-state 114
-
-    (18) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .
-
-    AND             reduce using rule 18 (act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
-    CLOSELIST       reduce using rule 18 (act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
-
-
-state 115
-
-    (19) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .
-
-    AND             reduce using rule 19 (act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
-    CLOSELIST       reduce using rule 19 (act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
-
-
-state 116
-
-    (20) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec . CLOSELIST
+    (21) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec . CLOSELIST
 
     CLOSELIST       shift and go to state 118
 
 
+state 114
+
+    (27) param_dec -> nil .
+
+    CLOSELIST       reduce using rule 27 (param_dec -> nil .)
+
+
+state 115
+
+    (22) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec . CLOSELIST
+
+    CLOSELIST       shift and go to state 119
+
+
+state 116
+
+    (23) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST . param_dec CLOSELIST
+    (25) param_dec -> . ID
+    (26) param_dec -> . ID COMMA param_dec
+    (27) param_dec -> . nil
+    (2) nil -> .
+
+    ID              shift and go to state 112
+    CLOSELIST       reduce using rule 2 (nil -> .)
+
+    param_dec                      shift and go to state 120
+    nil                            shift and go to state 114
+
 state 117
 
-    (22) param_dec -> ID COMMA param_dec .
+    (26) param_dec -> ID COMMA . param_dec
+    (25) param_dec -> . ID
+    (26) param_dec -> . ID COMMA param_dec
+    (27) param_dec -> . nil
+    (2) nil -> .
 
-    CLOSELIST       reduce using rule 22 (param_dec -> ID COMMA param_dec .)
+    ID              shift and go to state 112
+    CLOSELIST       reduce using rule 2 (nil -> .)
 
+    param_dec                      shift and go to state 121
+    nil                            shift and go to state 114
 
 state 118
 
-    (20) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .
+    (21) act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .
 
-    AND             reduce using rule 20 (act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
-    CLOSELIST       reduce using rule 20 (act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
+    AND             reduce using rule 21 (act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
+    CLOSELIST       reduce using rule 21 (act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for AND in state 69 resolved as shift
-WARNING: reduce/reduce conflict in state 24 resolved using rule (nil -> <empty>)
-WARNING: rejected rule (optionlist -> option) in state 24
-WARNING: Rule (optionlist -> option) is never reduced
+
+state 119
+
+    (22) act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .
+
+    AND             reduce using rule 22 (act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
+    CLOSELIST       reduce using rule 22 (act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
+
+
+state 120
+
+    (23) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec . CLOSELIST
+
+    CLOSELIST       shift and go to state 122
+
+
+state 121
+
+    (26) param_dec -> ID COMMA param_dec .
+
+    CLOSELIST       reduce using rule 26 (param_dec -> ID COMMA param_dec .)
+
+
+state 122
+
+    (23) act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .
+
+    AND             reduce using rule 23 (act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
+    CLOSELIST       reduce using rule 23 (act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST .)
+

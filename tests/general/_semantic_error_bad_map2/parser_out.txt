@@ -1,0 +1,2 @@
+parser error: duplicate state '0'
+parser error: duplicate state '2'

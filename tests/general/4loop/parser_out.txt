@@ -1,0 +1,20 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (go):
+         <<stretch in kitchen>>
+
+  checkpoint 2 (approach):
+         <<stretch near david>>
+
+  checkpoint 3 (stop):
+         <<stretch in home>>
+
+  t: 0 -> 1
+  t: 1 -[guard=someone_home]> 2
+  t: 2 -[guard=someone_home]> 2
+  t: 2 -[guard=GuardEnum.DEFAULT]> 3
+
+labeled formula "someone_home":
+       <<david in kitchen>>

@@ -1,10 +1,9 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (ready):
-         <<sauron has cup>>
+         <<stretch has cup>>
 
   checkpoint 2 (delivered):
          <<passenger has cup>>

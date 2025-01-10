@@ -1,7 +1,6 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (plate):
          <<plate at kitchen_table>>

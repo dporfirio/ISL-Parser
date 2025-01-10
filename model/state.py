@@ -7,8 +7,7 @@ from typing import (
 )
 from unified_planning.model import (  # type: ignore[import-untyped]
     FNode,
-    Problem,
-    Fluent
+    Problem
 )
 from unified_planning.plans import (  # type: ignore[import-untyped]
     ActionInstance
@@ -156,4 +155,3 @@ class Predicate:
 
     def __init__(self, fnode: FNode):
         self.fnode = fnode
-

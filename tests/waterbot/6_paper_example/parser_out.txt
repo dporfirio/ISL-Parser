@@ -1,15 +1,14 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (ready):
-         <<sauron has cup>>
+         <<stretch has cup>>
          <<cup is full>>
-         <<sauron near passenger>>
+         <<stretch near passenger>>
 
   checkpoint 2 (athome):
-    -->  SAURON moves to CHARGING
+    -->  STRETCH moves to CHARGING
 
   t: 0 -> 1
   t: 1 -[guard=delivered]> 2

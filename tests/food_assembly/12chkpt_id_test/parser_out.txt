@@ -1,10 +1,9 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (one):
-         <<sauron near cup>>
+         <<stretch near cup>>
 
   checkpoint 2 (two):
          <<cup at kitchen_table>>

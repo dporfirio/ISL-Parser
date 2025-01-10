@@ -1,17 +1,16 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (go):
-         <<sauron in kitchen>>
+         <<stretch in kitchen>>
 
   checkpoint 2 (approach):
-         <<sauron near david>>
+         <<stretch near david>>
 
   checkpoint 3 (stop):
-         <<sauron in home>>
-         <<sauron in kitchen>>
+         <<stretch in home>>
+         <<stretch in kitchen>>
 
   t: 0 -> 1
   t: 1 -[guard=someone_home]> 2

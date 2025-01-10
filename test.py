@@ -6,8 +6,8 @@ import argparse
 
 class Args:
 
-    def __init__(self, domain) -> None:
-        self.testcase = domain
+    def __init__(self, file) -> None:
+        self.file = file
         self.verbosity = 'silent'
 
 
@@ -34,7 +34,7 @@ print("\nISL lexing + parsing tests\n")
 # start coverage
 cov = coverage.Coverage()
 cov.start()
-import main  # noqa: E402
+import isl  # noqa: E402
 
 # track memory profiling
 maxmem: float = 0.0
@@ -66,11 +66,14 @@ for app_scenario in os.listdir("tests"):
 
     for _folder in folders:
         _dir = fullpath + "/" + _folder
+        _file = _dir + "/program.isl"
         if not os.path.isdir(_dir):
+            continue
+        if not os.path.isfile(_file):
             continue
 
         start = time.time()
-        result = main.main(Args(_dir))
+        result = isl.main(Args(_file))
         end = time.time()
         runtime = "(" + "%.5f" % (end - start) + " seconds)"
         result_str = _folder

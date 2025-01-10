@@ -1,19 +1,18 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (moving):
-         <<sauron in kitchen>>
+         <<stretch in kitchen>>
 
   checkpoint 2 (opening):
          <<fridge is open>>
 
   checkpoint 3 (grabs):
-         <<sauron is carrying apple>>
+         <<stretch is carrying apple>>
 
   checkpoint 4 (moving_final):
-         <<sauron near table>>
+         <<stretch near table>>
 
   checkpoint 5 (drop_off):
          <<apple at table>>

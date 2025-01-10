@@ -1,13 +1,12 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (go):
-    -->  SAURON moves to KITCHEN
+    -->  STRETCH moves to KITCHEN
 
   checkpoint 2 (come_back):
-    -->  SAURON moves to HOME
+    -->  STRETCH moves to HOME
 
   t: 0 -> 1
   t: 1 -> 2

@@ -1,10 +1,9 @@
 Automata.
 
   checkpoint 0 (init):
-    -->  SAURON idles
 
   checkpoint 1 (go):
-         <<sauron in kitchen>>
+         <<stretch in kitchen>>
 
   t: 0 -> 1
   t: 1 -> 1

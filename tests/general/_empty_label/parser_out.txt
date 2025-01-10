@@ -1,0 +1,7 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (empty):
+
+  t: 0 -> 1
