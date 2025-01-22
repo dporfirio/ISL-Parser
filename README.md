@@ -43,3 +43,16 @@ python test.py
 ```
 
 For details about creating tests, visit the `tests` directory.
+
+## Citing the ISL
+
+If you use the ISL in any publication, please cite as follows:
+
+```
+@inproceedings{porfirio25isl,
+  author={Porfirio, David and Roberts, Mark and Hiatt, Laura M.},
+  booktitle={Proceedings of the 2024 ACM/IEEE International Conference on Human-Robot Interaction}, 
+  title={An Interaction Specification Language for Robot Application Development}, 
+  year={2025}
+}
+```
