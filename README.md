@@ -12,7 +12,7 @@ This is the ISL, which serves various purposes:
 The ISL requires a Python version between 3.8 to 3.12.
 The ISL has not been tested on versions below 3.8 or above 3.12.
 To run the ISL, you must have access to a command line.
-The ISL has been tested on Ubuntu and Windows.
+The ISL has been tested on Ubuntu, Mac, and Windows.
 
 ## Installation
 
