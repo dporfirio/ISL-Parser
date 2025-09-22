@@ -114,6 +114,13 @@ class Automaton:
                "State query must have valid name."
         return to_return
 
+    def get_branches(self) -> List[State]:
+        branches: List[State] = []
+        for state in self.states:
+            if len(state.out_trans) > 1:
+                branches.append(state)
+        return branches
+
     def contains_branches(self) -> bool:
         '''
         Returns True if the automaton is branching.
