@@ -1,4 +1,4 @@
-unified_planning == 1.1.0
+unified_planning == 1.2.0
 coverage
 ply
 inflect
