@@ -114,6 +114,15 @@ class Automaton:
                "State query must have valid name."
         return to_return
 
+    def query_state_by_id(self, _id: int) -> State:
+        to_return: State | None = None
+        for state in self.states:
+            if state._id == _id:
+                to_return = state
+        assert to_return is not None, \
+               "State query must have valid ID."
+        return to_return
+
     def get_branches(self) -> List[State]:
         branches: List[State] = []
         for state in self.states:
