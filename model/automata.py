@@ -128,6 +128,29 @@ class Automaton:
         '''
         return len(self.get_branches()) > 0
 
+    def contains_loops(self, curr: State = None, seen: List[State] = []) -> bool:
+        if not self.contains_branches():
+            return False
+        else:
+            if curr is None:
+                curr = self.init
+            for out_trans in curr.out_trans:
+                out = out_trans.target
+                if out in seen:
+                    return True
+                seen.append(out)
+                if self.contains_loops(out, seen):
+                    return True
+            return False
+
+    def contains_goals(self) -> bool:
+        to_return: bool = False
+        for state in self.states:
+            if len(state.predicates) > 0:
+                to_return = True
+                break
+        return to_return
+
     def is_executable(self) -> bool:
         '''
         Returns True if the automaton can progress beyond the init state.
