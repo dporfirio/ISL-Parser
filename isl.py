@@ -1,5 +1,7 @@
 import argparse
 import parser.lexer_and_parser as aut_reader
+import planner.classical as classical
+from planner.plan_result import PlanResult
 from parser.lexer_and_parser import (  # type: ignore[import-untyped]
     ParseResult,
     ParseResultStatus
@@ -15,8 +17,9 @@ class TestOutput:
     parser: str
     planner: str
 
-    def __init__(self, parse_out) -> None:
+    def __init__(self, parse_out, plan_out="") -> None:
         self.parse_out = parse_out
+        self.plan_out = plan_out
 
     def print_parse_out(self) -> None:
         Logger.test("\n{}{}".format(
@@ -24,6 +27,14 @@ class TestOutput:
                     "-------------------------------------------")
                     )
         Logger.test(self.parse_out)
+        Logger.test("-------------------------------------------")
+
+    def print_plan_out(self) -> None:
+        Logger.test("\n{}{}".format(
+                    "Planner output\n",
+                    "-------------------------------------------")
+                    )
+        Logger.test(self.plan_out)
         Logger.test("-------------------------------------------")
 
 
@@ -49,8 +60,19 @@ def main(args) -> TestOutput:
     # parser output
     str_aut = str(aut).strip()
     parse_out += str_aut
-    out = TestOutput(parse_out)
+
+    # planner output
+    pr: PlanResult = classical.plan(aut)
+    plan_out: str = ""
+    if pr.sat:
+        str_aut = str(pr.plan).strip()
+        plan_out += str_aut
+
+    # assemble result
+    out = TestOutput(parse_out, plan_out)
     out.print_parse_out()
+    if len(plan_out) > 0:
+        out.print_plan_out()
     return out
 
 

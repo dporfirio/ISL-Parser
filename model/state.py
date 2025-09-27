@@ -13,6 +13,7 @@ from unified_planning.plans import (  # type: ignore[import-untyped]
     ActionInstance
 )
 import model.transition as transition
+import model.isl_problem as isl_problem
 
 
 class LabeledFormula:
@@ -38,7 +39,7 @@ class LabeledFormula:
                               self.action)
 
     def pretty_stringify_params(self,
-                                domain: Problem,
+                                domain: isl_problem.ISLProblem,
                                 s: str,
                                 predicates: List[Predicate],
                                 negate: bool = False) -> str:
@@ -53,7 +54,7 @@ class LabeledFormula:
                  ("\n" if i < len(predicates) - 1 else "")
         return s
 
-    def pretty_str(self, problem: Problem) -> str:
+    def pretty_str(self, problem: isl_problem.ISLProblem) -> str:
         s = "labeled formula \"{}\":\n".format(self.name)
         s = self.pretty_stringify_params(problem, s, self.predicates)
         return s.strip() + "\n"
