@@ -21,6 +21,7 @@ args = parser.parse_args()
 RED = '\033[0;31m'
 YELLOW = '\033[1;33m'
 GREEN = '\033[0;32m'
+GRAY = '\033[90m'
 NC = '\033[0m'
 
 # counts of correct tests
@@ -52,11 +53,11 @@ for app_scenario in os.listdir("tests"):
         continue
 
     print("\nBATCH NAME: {}".format(app_scenario))
-    print("-----------------------------------------------------------------")
-    print("{: <24}|  {: <7}  |     {: <20}".format("", "", ""))
-    print("{: <24}|  {: <7}  |     {: <20}".format("test id", "parser", "test duration"))
-    print("{: <24}|  {: <7}  |     {: <20}".format("", "", ""))
-    print("-----------------------------------------------------------------")
+    print("------------------------------------------------------------------------")
+    print("{: <24}|  {: <7}  |  {: <7}  |     {: <20}".format("", "", "", ""))
+    print("{: <24}|  {: <7}  |  {: <7}  |     {: <20}".format("test id", "parser", "planner", "test duration"))
+    print("{: <24}|  {: <7}  |  {: <7}  |     {: <20}".format("", "", "", ""))
+    print("------------------------------------------------------------------------")
 
     folders = os.listdir(fullpath)
     folders.sort()
@@ -96,15 +97,36 @@ for app_scenario in os.listdir("tests"):
             msg += " parser output written to {}.".format(outfile_name)
             parser_result_str = "FAIL"
             parser_color = RED
-        print("{: <24}|  {}{: <7}{}  |     {: <20}{}".format(
+        if os.path.exists(_dir + "/planner_out.txt"):
+            planned_oracle = "".join(open(_dir + "/planner_out.txt")
+                                     .readlines()).strip()
+            if planned_oracle == result.plan_out:
+                planner_result_str = "PASS"
+                planner_color = GREEN
+                planner_count += 1
+            else:
+                outfile_name = "{}.{}.plan.txt".format(app_scenario,
+                                                       _folder.rstrip('/'))
+                with open("tests/{}".format(outfile_name), "w") as outfile:
+                    outfile.write(result.plan_out)
+                msg += " planner output written to {}.".format(outfile_name)
+                planner_result_str = "FAIL"
+                planner_color = RED
+        else:
+            planner_result_str = "no test"
+            planner_color = GRAY
+        print("{: <24}|  {}{: <7}{}  |  {}{: <7}{}  |     {: <20}{}".format(
                 result_str,
                 parser_color,
                 parser_result_str,
                 NC,
+                planner_color,
+                planner_result_str,
+                NC,
                 runtime,
                 "{}".format(" <" + msg if len(msg) > 0 else ""))
               )
-    print("-----------------------------------------------------------------\n\n")
+    print("------------------------------------------------------------------------\n\n")
 
 cov.stop()
 cov.save()
