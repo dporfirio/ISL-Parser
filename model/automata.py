@@ -162,9 +162,11 @@ class Automaton:
 
     def contains_empty_states(self) -> bool:
         to_return: bool = False
+        # TODO: unclear if init should be special case
         for state in self.states:
             if len(state.predicates) == 0 and\
-               state.action is None:
+               state.action is None and\
+               state != self.init:
                 to_return = True
                 break
         return to_return
