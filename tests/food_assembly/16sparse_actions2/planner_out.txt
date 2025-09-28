@@ -1,0 +1,36 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  labeled formula "step_1":
+    -->  STRETCH approaches DAVID
+
+  labeled formula "step_2":
+    -->  STRETCH approaches BREAD
+
+  labeled formula "step_3":
+    -->  STRETCH grabs BREAD
+
+  labeled formula "step_4":
+    -->  STRETCH approaches DAVID
+
+  checkpoint 5 (person_get):
+    -->  STRETCH offers BREAD to DAVID
+
+  labeled formula "step_6":
+    -->  DAVID takes BREAD from STRETCH
+
+  labeled formula "step_7":
+    -->  STRETCH approaches APPLE
+
+  checkpoint 8 (robot_get):
+    -->  STRETCH grabs APPLE
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8

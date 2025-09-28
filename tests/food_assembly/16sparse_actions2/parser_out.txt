@@ -1,0 +1,12 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (person_get):
+    -->  STRETCH offers BREAD to DAVID
+
+  checkpoint 2 (robot_get):
+    -->  STRETCH grabs APPLE
+
+  t: 0 -> 1
+  t: 1 -> 2
