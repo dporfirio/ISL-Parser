@@ -1,4 +1,4 @@
-# Interaction Specification Language (ISL)
+# Interaction Specification Language (ISL) Version 1.1
 
 This is the ISL, which serves various purposes:
 
@@ -43,6 +43,13 @@ python test.py
 ```
 
 For details about creating tests, visit the `tests` directory.
+
+## Changes in Version 1.1
+
+Version 1.1 is backwards compatible in that ISL script written for 1.0 will still work.
+
+- Added classical planner for linear traces comprised of actions
+- Bug fixes
 
 ## Citing the ISL
 
