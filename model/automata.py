@@ -169,17 +169,6 @@ class Automaton:
                 break
         return to_return
 
-    def contains_empty_states(self) -> bool:
-        to_return: bool = False
-        # TODO: unclear if init should be special case
-        for state in self.states:
-            if len(state.predicates) == 0 and\
-               state.action is None and\
-               state != self.init:
-                to_return = True
-                break
-        return to_return
-
     def is_executable(self) -> bool:
         '''
         Returns True if the automaton can progress beyond the init state.
