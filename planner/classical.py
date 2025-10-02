@@ -32,10 +32,6 @@ def plan(aut: Automaton) -> PlanResult:
     if aut.contains_goals():
         return PlanResult.nosat()
 
-    # TODO: allow empties
-    if aut.contains_empty_states():
-        return PlanResult.nosat()
-
     # add a sequencing fluent
     problem = aut.problem.problem
     curr_step = 0
@@ -55,6 +51,8 @@ def plan(aut: Automaton) -> PlanResult:
     curr: Checkpoint = aut.init
     while len(curr.out_trans):
         curr = curr.out_trans[0].target
+        if curr.action is None:
+            continue
         name = curr.action.action.name
         params = [param.object().name
                   for param in curr.action.actual_parameters]
