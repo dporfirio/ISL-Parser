@@ -95,10 +95,8 @@ def plan(aut: Automaton) -> PlanResult:
             return PlanResult.nosat()
 
         # Assemble the plan
-        # TODO: make adding init state more straightforward
         plan = Automaton(aut.problem)
-        plan.init = aut.init.copy()
-        plan.states.append(plan.init)
+        plan.add_init()
         for i, act in enumerate(result.plan.actions):
             name = act.action.name
             state: State

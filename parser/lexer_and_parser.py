@@ -567,13 +567,7 @@ def parse_assg(ast: Tuple,
             if automaton.init is not None:
                 throw_semantic_error("module contains more than one \'init\'")
                 return
-            state = CheckpointFactory.make(_id=0,
-                                           name="init",
-                                           predicates=[],
-                                           action=None,
-                                           )
-            automaton.states.append(state)
-            automaton.init = state
+            automaton.add_init()
         else:
             if _id in [state._id for state in automaton.states]:
                 throw_semantic_error("duplicate state \'{}\'".format(_id))

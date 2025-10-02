@@ -95,6 +95,15 @@ class Automaton:
         self.id_to_state = ComponentIdentifier(State)
         self.transitions = []
 
+    def add_init(self) -> None:
+        state = CheckpointFactory.make(_id=0,
+                                       name="init",
+                                       predicates=[],
+                                       action=None,
+                                       )
+        self.states.append(state)
+        self.init = state
+
     def get_predicate_id(self, predicate: Predicate) -> int:
         return self.predicate_key.get_predicate_id(predicate)
 
