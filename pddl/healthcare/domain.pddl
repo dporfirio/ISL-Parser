@@ -154,26 +154,22 @@
                      (forall (?e - entity) (not (agent_near ?agent ?e)))) ; when the robot moves it is not near anything
     )
 
-    ; ----- ACTION #2: APPROACH -----
-    
-    ; -- Description: The agent approaches an object.
-    ; -- Pre-condition: The agent can access an object.
-    ; -- Post-condition:
-            ; (1) An agent is near the entity of interest.
-            ; (2) For all other entities, the agent is not near those entities.
-            ; (3) For all regions:
-                    ; If the entity of interest is not in the region, then the agent is also not in the region.
-                    ; If the entity of interest is in the region, then the agent is also in the region.
-    
-    ;  The robot can "approach" entities in the world.
-    ;  the robot can only focus on one entity at a time.
-    (:action approach ; NL: [0] approaches [1] within [2]
-        :parameters (?agent - agent ?to - entity ?in - region)
-        :precondition (and (accessible ?to)
-                       (entity_in ?agent ?in)
-                       (entity_in ?to ?in)
-                       (forall (?nr - entity) (not (agent_near ?agent ?nr))))
-        :effect (agent_near ?agent ?to)
+    (:action move_from_region_to_entity ; NL: [0] moves from [1] to [2] in [3]
+        :parameters (?agent - agent ?from - region ?to - entity ?in - region)
+        :precondition (and (entity_in ?agent ?from)
+                           (forall (?e - entity) (not (agent_near ?agent ?e))))
+        :effect (and (entity_in ?agent ?in)
+                     (not (entity_in ?agent ?from))
+                     (agent_near ?agent ?to))
+    )
+
+    (:action move_from_entity_to_entity ; NL: [0] moves from [1] in [2] to [3] in [4]
+        :parameters (?agent - agent ?from - entity ?from_in - region ?to - entity ?to_in - region)
+        :precondition (and (entity_in ?agent ?from_in)
+                           (agent_near ?agent ?from))
+        :effect (and (entity_in ?agent ?to_in)
+                     (agent_near ?agent ?to)
+                     (not (agent_near ?agent ?from)))
     )
 
     (:action grab_from_floor ; NL: [0] grabs [1] from [2]
@@ -221,24 +217,4 @@
                  (entity_in ?item ?region)
                  (object_at ?item ?surface))
     )
-
-    ; =============================
-    ; USER: Add custom actions here
-    ;  |
-    ;  v
-    ; move to
-    ; approach
-    ; find
-    ; say
-    ; ask
-    ; tell
-    ; grab
-    ; put
-    ; vacuum
-    ; wipe
-    ; deliver (bring)
-    ; receive (get)
-    ; open
-    ; close
-
 )
