@@ -132,7 +132,7 @@ class Checkpoint(State):
 
     def __str__(self) -> str:
         s = "checkpoint {} ({}):\n".format(self._id, self.name)
-        s = self.stringify_params(s, self.predicates)
+        # s = self.stringify_params(s, self.predicates)
         return s.strip() + "\n"
 
 
