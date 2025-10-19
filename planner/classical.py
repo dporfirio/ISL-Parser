@@ -4,10 +4,16 @@ from model.transition import Transition
 from planner.plan_result import PlanResult
 import unified_planning as up  # type: ignore
 from unified_planning.shortcuts import (  # type: ignore
-    OneshotPlanner, Fluent, BoolType, InstantaneousAction
+    OneshotPlanner,
+    Fluent,
+    BoolType,
+    InstantaneousAction,
+    SequentialSimulator
 )
+from unified_planning.model.problem_kind import ProblemKind
 from unified_planning.engines import CompilationKind  # type: ignore
 from unified_planning.engines.compilers import Grounder  # type: ignore
+from typing import List
 
 
 def plan(aut: Automaton) -> PlanResult:
@@ -33,6 +39,11 @@ def plan(aut: Automaton) -> PlanResult:
         return PlanResult.nosat()
 
     # add a sequencing fluent
+    # TODO: this needs to be copied. We need an aut copy function
+    # aut_temp = aut.copy()  # this will also copy the problem
+    # then set aut_temp.problem to be the original problem
+    aut_orig = aut
+    aut = aut.copy()
     problem = aut.problem.problem
     curr_step = 0
     step = Fluent("step_{}".format(curr_step), BoolType())
@@ -58,7 +69,7 @@ def plan(aut: Automaton) -> PlanResult:
                   for param in curr.action.actual_parameters]
 
         # find the ground action that matches the aut action
-        new_act: InstantaneousAction
+        new_act: InstantaneousAction = None
         for act in grounded_problem.actions:
             if len(name) <= len(act.name) and act.name[:len(name)] == name:
                 candidate_param_str = act.name[len(name)+1:]
@@ -85,15 +96,20 @@ def plan(aut: Automaton) -> PlanResult:
     problem.add_goal(step)
 
     # invoke the planner
+    planner_name: str = "fast-downward-opt"
+    pk: ProblemKind = aut.problem.problem.kind
+    if 'CONDITIONAL_EFFECTS' in pk.features or\
+       'FORALL_EFFECTS' in pk.features:
+        planner_name = "fast-downward"
     pr: PlanResult = PlanResult()
     up.shortcuts.get_environment().credits_stream = None
-    with OneshotPlanner(name="fast-downward") as planner:
+    with OneshotPlanner(name=planner_name) as planner:
         result = planner.solve(aut.problem.problem)
         if len(result.plan.actions) == 0:
             return PlanResult.nosat()
 
         # Assemble the plan
-        plan = Automaton(aut.problem)
+        plan = Automaton(aut_orig.problem)
         plan.add_init()
         for i, act in enumerate(result.plan.actions):
             name = act.action.name
