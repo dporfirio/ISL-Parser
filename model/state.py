@@ -98,6 +98,15 @@ class State(LabeledFormula):
         self.final_state = None
         self.is_action = True
 
+    def copy(self) -> State:
+        '''
+        Create a new deep-copied version of this State object.
+        '''
+        return StateFactory.make(_id=self._id,
+                                 name=self.name,
+                                 predicates=copy.copy(self.predicates),
+                                 action=self.action)
+
     def pretty_str(self, problem: isl_problem.ISLProblem) -> str:
         s = "state \"{}\":\n".format(self.name)
         s = self.pretty_stringify_params(problem, s, self.predicates)
