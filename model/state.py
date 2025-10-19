@@ -98,6 +98,11 @@ class State(LabeledFormula):
         self.final_state = None
         self.is_action = True
 
+    def pretty_str(self, problem: isl_problem.ISLProblem) -> str:
+        s = "state \"{}\":\n".format(self.name)
+        s = self.pretty_stringify_params(problem, s, self.predicates)
+        return s.strip() + "\n"
+
 
 class Checkpoint(State):
     '''

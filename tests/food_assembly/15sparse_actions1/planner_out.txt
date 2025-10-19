@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  labeled formula "step_1":
+  state "step_1":
     -->  STRETCH approaches FRIDGE
 
   checkpoint 2 (opening):
