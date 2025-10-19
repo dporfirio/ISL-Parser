@@ -33,6 +33,12 @@ class Transition:
         # conditionals
         self.condition = condition
 
+    def copy(self) -> Transition:
+        return Transition(self.source_id,
+                          self.target_id,
+                          self.event,
+                          self.condition)
+
     def __str__(self):
         condition = str(self.condition)
         if condition == "None" or condition == "True":
