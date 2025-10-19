@@ -2,12 +2,14 @@ import os
 import coverage
 import time
 import argparse
+from typing import List
 
 
 class Args:
 
-    def __init__(self, file) -> None:
+    def __init__(self, file, task=['parse']) -> None:
         self.file = file
+        self.task = task
         self.verbosity = 'silent'
 
 
@@ -73,8 +75,14 @@ for app_scenario in os.listdir("tests"):
         if not os.path.isfile(_file):
             continue
 
+        # decide on ISL tasks
+        tasks: List[str] = []
+        if os.path.exists(_dir + "/planner_out.txt"):
+            tasks.append('plan')
+
+        # execute the ISL tasks
         start = time.time()
-        result = isl.main(Args(_file))
+        result = isl.main(Args(_file, tasks))
         end = time.time()
         runtime = "(" + "%.5f" % (end - start) + " seconds)"
         result_str = _folder
@@ -97,7 +105,7 @@ for app_scenario in os.listdir("tests"):
             msg += " parser output written to {}.".format(outfile_name)
             parser_result_str = "FAIL"
             parser_color = RED
-        if os.path.exists(_dir + "/planner_out.txt"):
+        if 'plan' in tasks:
             planned_oracle = "".join(open(_dir + "/planner_out.txt")
                                      .readlines()).strip()
             if planned_oracle == result.plan_out:

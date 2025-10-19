@@ -9,7 +9,7 @@ from parser.lexer_and_parser import (  # type: ignore[import-untyped]
 from model.automata import Automaton, PredicateKey
 from util.logger import Logger
 from util.options import Options
-from typing import cast
+from typing import List, cast
 
 
 class TestOutput:
@@ -40,8 +40,13 @@ class TestOutput:
 
 def main(args) -> TestOutput:
     arg_file: str = args.file
+    arg_task: List[str] = args.task
     arg_verbosity: str = args.verbosity
     Logger.instance(arg_verbosity)
+
+    # outputs
+    parse_out: str = ""
+    plan_out: str = ""
 
     # parse
     Options.instance().clearopt()
@@ -62,11 +67,11 @@ def main(args) -> TestOutput:
     parse_out += str_aut
 
     # planner output
-    pr: PlanResult = classical.plan(aut)
-    plan_out: str = ""
-    if pr.sat:
-        str_aut = str(pr.plan).strip()
-        plan_out += str_aut
+    if 'plan' in arg_task:
+        pr: PlanResult = classical.plan(aut)
+        if pr.sat:
+            str_aut = str(pr.plan).strip()
+            plan_out += str_aut
 
     # assemble result
     out = TestOutput(parse_out, plan_out)
@@ -79,11 +84,15 @@ def main(args) -> TestOutput:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("file", nargs="?", default=None)
+    parser.add_argument("-t", "--task",
+                        help="ISL task: \'plan\', or \'distill\'",
+                        type=str,)
     parser.add_argument("-v", "--verbosity",
                         help="Set the level of information to \'silent\'," +
                              "\'test\', or \'debug\'",
                         type=str,
-                        default='test')
+                        nargs='+',
+                        default=['parse'])
     args = parser.parse_args()
     if args.file is None and args.testcase is None:
         parser.print_usage()
