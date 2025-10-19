@@ -10,7 +10,7 @@ from unified_planning.shortcuts import (  # type: ignore
     InstantaneousAction,
     SequentialSimulator
 )
-from unified_planning.model.problem_kind import ProblemKind
+from unified_planning.model.problem_kind import ProblemKind  # type: ignore
 from unified_planning.engines import CompilationKind  # type: ignore
 from unified_planning.engines.compilers import Grounder  # type: ignore
 from typing import List
@@ -128,4 +128,125 @@ def plan(aut: Automaton) -> PlanResult:
         plan.build()
         pr.add_plan(plan)
 
+    return pr
+
+
+def distill(aut: Automaton) -> PlanResult:
+    """
+    Checks aut for if plan can be distilled to its underlying checkpoints.
+    If so, returns a goal automaton.
+    """
+
+    # Automata cannot be empty
+    if not aut.is_executable():
+        return PlanResult.nosat()
+
+    # Distilled plans cannot be created if automaton loops
+    if aut.contains_loops():
+        return PlanResult.nosat()
+
+    # TODO: extend to branching automaton
+    if aut.contains_branches():
+        return PlanResult.nosat()
+
+    # TODO: extend to dealing with goals
+    if aut.contains_goals():
+        return PlanResult.nosat()
+
+    # Automata must have at least 2 non-init checkpoints
+    if len(aut) < 3:
+        pr: PlanResult = PlanResult()
+        pr.add_plan(aut)
+        return pr
+
+    initial_st = aut.problem.problem.initial_values
+    initial_chkpt = aut.init
+    curr: State = aut.init.out_trans[0].target
+    curr = curr.out_trans[0].target
+    while True:
+        # set the initial and final states
+        temp_aut = Automaton(aut.problem.clone())
+        temp_aut.problem.replace_initial_state(initial_st)
+        temp_init: State = initial_chkpt.copy()
+        temp_init.name = "temp_" + temp_init.name
+        temp_aut.init = temp_init
+        temp_curr: State = curr.copy()
+        temp_curr.name = "temp_" + temp_curr.name
+        temp_trans: Transition = Transition(temp_init._id, temp_curr._id)
+        temp_aut.states.append(temp_init)
+        temp_aut.states.append(temp_curr)
+        temp_aut.transitions.append(temp_trans)
+        temp_aut.build()
+
+        # plan and extract to a list
+        pr: PlanResult = plan(temp_aut)
+        plan_list: List[State] = []
+        plan_curr = pr.plan.init
+        while len(plan_curr.out_trans) > 0:
+            plan_list.append(plan_curr)
+            plan_curr = plan_curr.out_trans[0].target
+        plan_list.reverse()
+        plan_list_with_prev_st = [st for st in plan_list]
+
+        # extract the original plan to a list
+        orig_list: List[State] = []
+        orig_curr = initial_chkpt
+        while orig_curr != curr:
+            orig_list.append(orig_curr)
+            orig_curr = orig_curr.out_trans[0].target
+        orig_list.reverse()
+
+        # 1. remove as much as we can, starting from the final action and moving backwards
+        # 2. stop removing when we get to an action that can't be removed
+        # 3. actually do the removal
+        # 4. if anything was removed, set init to the head and add another state
+        # 5. else just add another state
+        plan_idx = 0
+        flagged_for_removal: List[State] = []
+        for orig_st in orig_list:
+            if orig_st == aut.init:
+                continue
+            found = False
+            for i in range(plan_idx, len(plan_list_with_prev_st)):
+                plan_st = plan_list_with_prev_st[i]
+                if str(plan_st.action) == str(orig_st.action):
+                    flagged_for_removal.append(orig_st)
+                    plan_idx = i
+                    found = True
+                    break
+            if not found:
+                break
+
+        # 3.
+        for flagged in flagged_for_removal:
+            source: State = flagged.in_trans[0].source
+            target: State = flagged.out_trans[0].target
+            new_trans: Transition = Transition(source._id, target._id)
+            aut.states.remove(flagged)
+            aut.transitions.remove(flagged.in_trans[0])
+            aut.transitions.remove(flagged.out_trans[0])
+            aut.transitions.append(new_trans)
+            aut.build()
+
+        # 4.
+        if len(curr.out_trans) == 0:
+            break
+        elif len(flagged_for_removal) > 0:
+            curr = curr.out_trans[0].target
+            simulator = SequentialSimulator(temp_aut.problem.problem)
+            curr_st = simulator.get_initial_state()
+            plan_list.reverse()
+            plan_list.append(plan_curr)
+            for st in plan_list:
+                if st.action is None:
+                    continue
+                curr_st = simulator.apply(curr_st, st.action)
+            curr_st._condense_state()
+            initial_st = curr_st._values
+        # 5.
+        else:
+            curr = curr.out_trans[0].target
+
+    pr = PlanResult()
+    pr.plan = aut
     return pr

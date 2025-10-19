@@ -7,7 +7,8 @@ import unified_planning as up  # type: ignore[import-untyped]
 from unified_planning.model import (  # type: ignore[import-untyped]
     Problem,
     Fluent,
-    Action
+    Action,
+    FNode
 )
 from unified_planning.plans import (  # type: ignore[import-untyped]
     ActionInstance
@@ -33,6 +34,13 @@ class ISLProblem:
         self.predicate_to_internal = {}
         self.chkpt_gen = inflect.engine()
 
+    def add_nl(self, action_to_nl, predicate_to_nl) -> None:
+        self.action_to_nl = action_to_nl
+        self.predicate_to_nl = predicate_to_nl
+
+    def add_problem(self, problem) -> None:
+        self.problem = problem
+
     def add_pddl(self, domain_fn, problem_fn):
         self.problem = parse_to_unified_planner(domain_fn, problem_fn)
         parse_pddl_comments(domain_fn,
@@ -40,6 +48,11 @@ class ISLProblem:
                             self.predicate_to_internal,
                             self.action_to_nl,
                             self.action_to_internal)
+
+    def replace_initial_state(self, state_dict: Dict[FNode, FNode]) -> None:
+        self.problem.explicit_initial_values.clear()
+        for k, v in state_dict.items():
+            self.problem.set_initial_value(k, v)
 
     def get_fluent(self, name: str) -> Fluent:
         """Get problem fluent matching name."""
@@ -81,6 +94,12 @@ class ISLProblem:
                 s = "       <<{}>>".format(s)
                 return s
         return str(pred.fnode)
+
+    def clone(self) -> ISLProblem:
+        new_problem = ISLProblem()
+        new_problem.add_nl(self.action_to_nl, self.predicate_to_nl)
+        new_problem.add_problem(self.problem.clone())
+        return new_problem
 
 
 class ISLProblemFactory:
