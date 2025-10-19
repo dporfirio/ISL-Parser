@@ -49,6 +49,7 @@ For details about creating tests, visit the `tests` directory.
 Version 1.1 is backwards compatible in that ISL script written for 1.0 will still work.
 
 - Added classical planner for linear traces comprised of actions
+- Added reverse planner that distills plans to their underlying checkpoints
 - Bug fixes
 
 ## Citing the ISL
