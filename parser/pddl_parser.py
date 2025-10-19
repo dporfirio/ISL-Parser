@@ -33,7 +33,10 @@ def parse_pddl_comments(domain_filename: str,
             if ":predicates" in line:
                 pred_flag = True
                 continue
-            if ":action" in line:
+            if ":functions" in line:
+                pred_flag = False
+                continue
+            if "(:action" in line:
                 pred_flag = False
             nl_regx = re.search(r";\s*NL", line)
             in_regx = re.search(r";\s*INTERNAL", line)
@@ -48,7 +51,7 @@ def parse_pddl_comments(domain_filename: str,
                     pred_to_nl[pred_name] = line[regx.span()[1]:].strip()
                 else:
                     pred_to_internal[pred_name] = True
-            if ":action" in line:
+            if "(:action" in line:
                 assert regx is not None, \
                        "Actions must have a valid comment."
                 action_name = line.split()[1]
