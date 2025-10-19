@@ -182,6 +182,19 @@ class Automaton:
             return True
         return False
 
+    def copy(self) -> Automaton:
+        aut = Automaton(self.problem.clone())
+        for st in self.states:
+            copy_st: State = st.copy()
+            if st == self.init:
+                aut.init = copy_st
+            aut.states.append(copy_st)
+        for trans in self.transitions:
+            copy_trans: Transition = trans.copy()
+            aut.transitions.append(copy_trans)
+        aut.build()
+        return aut
+
     # + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
     # Other helpful methods
     #
@@ -220,6 +233,9 @@ class Automaton:
             for unsat_t in self.unsat_trans:
                 s += str(unsat_t) + "\n"
         return s
+
+    def __len__(self) -> int:
+        return len(self.states)
 
 
 class PredicateKey:
