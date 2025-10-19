@@ -89,6 +89,7 @@ def main(args) -> TestOutput:
             if str(pr.plan) == distill_out:
                 break
             distill_out = str(pr.plan)
+        distill_out = distill_out.strip()
 
     # assemble result
     out = TestOutput(parse_out, plan_out, distill_out)

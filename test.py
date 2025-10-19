@@ -31,8 +31,10 @@ parser_count = 0
 parser_total = 0
 planner_count = 0
 planner_total = 0
+distiller_count = 0
+distiller_total = 0
 
-print("\nISL lexing + parsing tests\n")
+print("\nISL tests: parser, planner, & distiller\n")
 
 # start coverage
 cov = coverage.Coverage()
@@ -56,9 +58,9 @@ for app_scenario in os.listdir("tests"):
 
     print("\nBATCH NAME: {}".format(app_scenario))
     print("------------------------------------------------------------------------")
-    print("{: <24}|  {: <7}  |  {: <7}  |     {: <20}".format("", "", "", ""))
-    print("{: <24}|  {: <7}  |  {: <7}  |     {: <20}".format("test id", "parser", "planner", "test duration"))
-    print("{: <24}|  {: <7}  |  {: <7}  |     {: <20}".format("", "", "", ""))
+    print("{: <24}| {: <7} | {: <7} | {: <7} | {: <20}".format("", "", "", "", ""))
+    print("{: <24}| {: <7} | {: <7} | {: <7} | {: <20}".format("test id", "parse", "plan", "distill", "test duration"))
+    print("{: <24}| {: <7} | {: <7} | {: <7} | {: <20}".format("", "", "", "", ""))
     print("------------------------------------------------------------------------")
 
     folders = os.listdir(fullpath)
@@ -79,6 +81,8 @@ for app_scenario in os.listdir("tests"):
         tasks: List[str] = []
         if os.path.exists(_dir + "/planner_out.txt"):
             tasks.append('plan')
+        if os.path.exists(_dir + "/distiller_out.txt"):
+            tasks.append('distill')
 
         # execute the ISL tasks
         start = time.time()
@@ -123,13 +127,34 @@ for app_scenario in os.listdir("tests"):
         else:
             planner_result_str = "no test"
             planner_color = GRAY
-        print("{: <24}|  {}{: <7}{}  |  {}{: <7}{}  |     {: <20}{}".format(
+        if 'distill' in tasks:
+            distilled_oracle = "".join(open(_dir + "/distiller_out.txt")
+                                       .readlines()).strip()
+            if distilled_oracle == result.distill_out:
+                distiller_result_str = "PASS"
+                distiller_color = GREEN
+                distiller_count += 1
+            else:
+                outfile_name = "{}.{}.distill.txt".format(app_scenario,
+                                                          _folder.rstrip('/'))
+                with open("tests/{}".format(outfile_name), "w") as outfile:
+                    outfile.write(result.distill_out)
+                msg += " distiller output written to {}.".format(outfile_name)
+                distiller_result_str = "FAIL"
+                distiller_color = RED
+        else:
+            distiller_result_str = "no test"
+            distiller_color = GRAY
+        print("{: <24}| {}{: <7}{} | {}{: <7}{} | {}{: <7}{} | {: <20}{}".format(
                 result_str,
                 parser_color,
                 parser_result_str,
                 NC,
                 planner_color,
                 planner_result_str,
+                NC,
+                distiller_color,
+                distiller_result_str,
                 NC,
                 runtime,
                 "{}".format(" <" + msg if len(msg) > 0 else ""))
