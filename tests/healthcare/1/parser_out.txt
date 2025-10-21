@@ -1,0 +1,12 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (move1):
+    -->  STRETCH grabs BLOODSAMPLE from ICUTRAY in ICU
+
+  checkpoint 2 (move2):
+    -->  STRETCH moves from ICUTRAY in ICU to LABBENCH in LAB
+
+  t: 0 -> 1
+  t: 1 -> 2
