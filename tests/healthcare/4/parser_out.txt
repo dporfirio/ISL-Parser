@@ -1,0 +1,28 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (move1):
+    -->  STRETCH moves to ICU
+
+  checkpoint 2 (grab1):
+    -->  STRETCH grabs BLOODSAMPLE
+
+  checkpoint 3 (deliver1):
+    -->  STRETCH puts BLOODSAMPLE on LABBENCH
+
+  checkpoint 4 (move2):
+    -->  STRETCH moves to ICU
+
+  checkpoint 5 (grab2):
+    -->  STRETCH grabs MEDICATION
+
+  checkpoint 6 (deliver2):
+    -->  STRETCH puts MEDICATION on LABBENCH
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6

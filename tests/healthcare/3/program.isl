@@ -4,20 +4,20 @@ import pddl.healthcare
 labels
 
 	deliver1: [
-		  action: grab_from_surface,
-		  params: [stretch, bloodsample, icutray, icu]
+		  action: grab,
+		  params: [stretch, bloodsample]
     ],
 	deliver2: [
-		  action: move_from_entity_to_entity,
-		  params: [stretch, icutray, icu, labbench, lab]
+		  action: approach,
+		  params: [stretch, labbench]
     ],
 	deliver3: [
 		  action: put_on_surface,
-		  params: [stretch, bloodsample, labbench, lab]
+		  params: [stretch, bloodsample, labbench]
     ],
     deliver4: [
           action: put_on_surface,
-		  params: [stretch, medication, labbench, lab]
+		  params: [stretch, medication, labbench]
 	]
 
 endlabels

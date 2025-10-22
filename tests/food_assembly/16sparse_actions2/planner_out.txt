@@ -3,27 +3,24 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  STRETCH approaches DAVID
-
-  state "step_2":
     -->  STRETCH approaches BREAD
 
-  state "step_3":
+  state "step_2":
     -->  STRETCH grabs BREAD
 
-  state "step_4":
+  state "step_3":
     -->  STRETCH approaches DAVID
 
-  checkpoint 5 (person_get):
+  checkpoint 4 (person_get):
     -->  STRETCH offers BREAD to DAVID
 
-  state "step_6":
+  state "step_5":
     -->  DAVID takes BREAD from STRETCH
 
-  state "step_7":
+  state "step_6":
     -->  STRETCH approaches APPLE
 
-  checkpoint 8 (robot_get):
+  checkpoint 7 (robot_get):
     -->  STRETCH grabs APPLE
 
   t: 0 -> 1
@@ -33,4 +30,3 @@ Automata.
   t: 4 -> 5
   t: 5 -> 6
   t: 6 -> 7
-  t: 7 -> 8

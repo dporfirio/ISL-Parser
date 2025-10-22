@@ -3,16 +3,16 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (deliver1):
-    -->  STRETCH grabs BLOODSAMPLE from ICUTRAY in ICU
+    -->  STRETCH grabs BLOODSAMPLE
 
   checkpoint 2 (deliver2):
-    -->  STRETCH moves from ICUTRAY in ICU to LABBENCH in LAB
+    -->  STRETCH approaches LABBENCH
 
   checkpoint 3 (deliver3):
-    -->  STRETCH puts BLOODSAMPLE on LABBENCH in LAB
+    -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   checkpoint 4 (deliver4):
-    -->  STRETCH puts MEDICATION on LABBENCH in LAB
+    -->  STRETCH puts MEDICATION on LABBENCH
 
   t: 0 -> 1
   t: 1 -> 2

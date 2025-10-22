@@ -25,7 +25,7 @@
 
         ; General requirements - DO NOT
         ; MODIFY THE FOLLOWING LINE!
-        :negative-preconditions :typing
+        :negative-preconditions :typing :conditional-effects
 
         ; =============================
         ; USER: Add custom requirements here
@@ -137,91 +137,68 @@
 
     ;  The robot always exists in a region and can move
     ;  between regions.
-    (:action move_from_region_to_region ; NL: [0] moves from [1] to [2]
-        :parameters (?agent - agent ?from - region ?to - region)
-        :precondition (and (entity_in ?agent ?from)
-                           (not (agent_near_anything ?agent)))
+    (:action move_to ; NL: [0] moves to [1]
+        :parameters (?agent - agent ?to - region)
+        :precondition ()
         :effect (and (entity_in ?agent ?to)
-                     (not (entity_in ?agent ?from)))
+                     (forall (?r - region) (not (entity_in ?agent ?r)))
+                     (forall (?nr - entity) (not (agent_near ?agent ?nr))))
     )
 
-    (:action move_from_entity_to_region ; NL: [0] moves from [1] in [2] to [3]
-        :parameters (?agent - agent ?from - entity ?in - region ?to - region)
-        :precondition (and (entity_in ?agent ?in)
-                           (agent_near ?agent ?from))
-        :effect (and (entity_in ?agent ?to)
-                     (not (entity_in ?agent ?in))
-                     (not (agent_near ?agent ?from))
-                     (not (agent_near_anything ?agent))) 
+    (:action approach ; NL: [0] approaches [1]
+        :parameters (?agent - agent ?to - entity)
+        :precondition (and (accessible ?to)
+                           (exists (?r - region)
+                                   (and (entity_in ?to ?r)
+                                         (entity_in ?agent ?r)
+                                   )
+                           ))
+        :effect (and (agent_near ?agent ?to)
+                     (forall (?nr - entity) (not (agent_near ?agent ?nr)))
+                     (forall (?r - region) 
+                             (and (when (not (entity_in ?to ?r))
+                                       (not (entity_in ?agent ?r)))
+                                 (when (entity_in ?to ?r)
+                                       (entity_in ?agent ?r)))
+                     )
+                )
     )
 
-    (:action move_from_region_to_entity ; NL: [0] moves from [1] to [2] in [3]
-        :parameters (?agent - agent ?from - region ?to - entity ?in - region)
-        :precondition (and (entity_in ?agent ?from)
-                           (entity_in ?to ?in)
-                           (not (agent_near_anything ?agent)))
-        :effect (and (entity_in ?agent ?in)
-                     (not (entity_in ?agent ?from))
-                     (agent_near ?agent ?to)
-                     (agent_near_anything ?agent))
-    )
-
-    (:action move_from_entity_to_entity ; NL: [0] moves from [1] in [2] to [3] in [4]
-        :parameters (?agent - agent ?from - entity ?from_in - region ?to - entity ?to_in - region)
-        :precondition (and (entity_in ?agent ?from_in)
-                           (entity_in ?from ?from_in)
-                           (entity_in ?to ?to_in)
-                           (agent_near ?agent ?from)
-                           (agent_near_anything ?agent))
-        :effect (and (entity_in ?agent ?to_in)
-                     (agent_near ?agent ?to)
-                     (not (agent_near ?agent ?from)))
-    )
-
-    ;(:action grab_from_floor ; NL: [0] grabs [1] from [2]
-    ;    :parameters (?agent - agent ?item - item ?region - region)
-    ;    :precondition (and (agent_near ?agent ?item)
-    ;                   (can_carry ?agent)
-    ;                   (accessible ?item)
-    ;                   (entity_in ?item ?region)
-    ;                   (is_grabbable ?item))
-    ;                   (forall (?surface - surface) (not (object_at ?item ?surface))))
-    ;    :effect (and (agent_has ?agent ?item)
-    ;             (not (can_carry ?agent))
-    ;             (not (accessible ?item))
-    ;             (not (entity_in ?item ?region)))
-    ;)
-
-    (:action grab_from_surface ; NL: [0] grabs [1] from [2] in [3]
-        :parameters (?agent - agent ?item - item ?surface - surface ?region - region)
+    (:action grab ; NL: [0] grabs [1]
+        :parameters (?agent - agent ?item - item)
         :precondition (and (agent_near ?agent ?item)
                        (can_carry ?agent)
                        (accessible ?item)
-                       (object_at ?item ?surface)
-                       (entity_in ?item ?region)
-                       (entity_in ?surface ?region)
                        (is_grabbable ?item))
         :effect (and (agent_has ?agent ?item)
                  (not (can_carry ?agent))
                  (not (accessible ?item))
-                 (not (object_at ?item ?surface))
-                 (not (entity_in ?item ?region))
-                 (not (agent_near ?agent ?item))
-                 (agent_near ?agent ?surface))
+                 (forall (?s - surface)
+                         (when (object_at ?item ?s)
+                               (and (agent_near ?agent ?s)
+                                    (not (object_at ?item ?s))
+                               )
+                         )
+                 )
+                 (forall (?r - region) (not (entity_in ?item ?r)))
+                 (not (agent_near ?agent ?item)))
     )
 
-    (:action put_on_surface ; NL: [0] puts [1] on [2] in [3]
-        :parameters (?agent - agent ?item - item ?surface - surface ?region - region)
+    (:action put_on_surface ; NL: [0] puts [1] on [2]
+        :parameters (?agent - agent ?item - item ?surface - surface)
         :precondition (and (agent_near ?agent ?surface)
-                       (entity_in ?surface ?region)
                        (not (object_at ?item ?surface))
-                       (not (entity_in ?item ?region))
                        (not (can_carry ?agent))
                        (agent_has ?agent ?item))
         :effect (and (not (agent_has ?agent ?item))
                  (can_carry ?agent)
                  (accessible ?item)
-                 (entity_in ?item ?region)
-                 (object_at ?item ?surface))
+                 (object_at ?item ?surface)
+                 (forall (?r - region)
+                         (when (entity_in ?surface ?r)
+                               (entity_in ?item ?r)
+                         )
+                 )
+        )
     )
 )

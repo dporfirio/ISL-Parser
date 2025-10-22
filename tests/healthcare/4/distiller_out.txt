@@ -2,11 +2,11 @@ Automata.
 
   checkpoint 0 (init):
 
-  checkpoint 1 (deliver1):
+  checkpoint 3 (deliver1):
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
-  checkpoint 2 (deliver2):
+  checkpoint 6 (deliver2):
     -->  STRETCH puts MEDICATION on LABBENCH
 
-  t: 0 -> 1
-  t: 1 -> 2
+  t: 0 -> 3
+  t: 3 -> 6

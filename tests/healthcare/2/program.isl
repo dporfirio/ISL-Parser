@@ -5,15 +5,15 @@ labels
 
 	deliver1: [
 		  action: put_on_surface,
-		  params: [stretch, bloodsample, labbench, lab]
+		  params: [stretch, bloodsample, labbench]
     ],
     deliver2: [
           action: put_on_surface,
-		  params: [stretch, medication, labbench, lab]
+		  params: [stretch, medication, labbench]
 	],
 	deliver3: [
           action: put_on_surface,
-		  params: [stretch, linen, icutray, icu]
+		  params: [stretch, linen, icutray]
 	]
 
 endlabels

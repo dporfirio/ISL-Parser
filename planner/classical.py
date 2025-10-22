@@ -84,11 +84,7 @@ def plan(aut: Automaton) -> PlanResult:
     problem.add_goal(step)
 
     # invoke the planner
-    planner_name: str = "fast-downward-opt"
-    pk: ProblemKind = aut.problem.problem.kind
-    if 'CONDITIONAL_EFFECTS' in pk.features or\
-       'FORALL_EFFECTS' in pk.features:
-        planner_name = "fast-downward"
+    planner_name: str = "symk-opt"
     pr: PlanResult = PlanResult()
     up.shortcuts.get_environment().credits_stream = None
     with OneshotPlanner(name=planner_name) as planner:

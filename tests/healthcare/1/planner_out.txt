@@ -3,14 +3,18 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  STRETCH moves from NURSESTATION to BLOODSAMPLE in ICU
+    -->  STRETCH moves to ICU
 
-  checkpoint 2 (move1):
-    -->  STRETCH grabs BLOODSAMPLE from ICUTRAY in ICU
+  state "step_2":
+    -->  STRETCH approaches BLOODSAMPLE
 
-  checkpoint 3 (move2):
-    -->  STRETCH moves from ICUTRAY in ICU to LABBENCH in LAB
+  checkpoint 3 (move1):
+    -->  STRETCH grabs BLOODSAMPLE
+
+  checkpoint 4 (move2):
+    -->  STRETCH moves to LAB
 
   t: 0 -> 1
   t: 1 -> 2
   t: 2 -> 3
+  t: 3 -> 4

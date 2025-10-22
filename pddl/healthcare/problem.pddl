@@ -1,8 +1,8 @@
 (define (problem healthcare)
 	(:domain healthcare)
-	(:objects icu lab nursestation - region
+	(:objects icu lab nursestation emergencyroom cafeteria birthingcenter pharmacy inpatient storage - region
 		      icutray bed labbench - surface
-              linen bloodsample medication - item
+              linen bloodsample medication locker - item
 		      stretch - robot)
 	(:init (entity_in stretch nursestation)
 
@@ -11,6 +11,7 @@
 		   (entity_in icutray icu)
            (entity_in bed icu)
            (entity_in labbench lab)
+           (entity_in locker storage)
 
            (entity_in linen icu)
            (entity_in bloodsample icu)
@@ -29,5 +30,6 @@
            
            (is_grabbable bloodsample)
            (is_grabbable medication)
-           (is_grabbable linen))
+           (is_grabbable linen)
+           (is_openable locker))
 	(:goal (entity_in stretch lab)))
