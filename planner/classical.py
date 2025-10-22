@@ -12,7 +12,7 @@ from unified_planning.shortcuts import (  # type: ignore
 )
 from unified_planning.model.problem_kind import ProblemKind  # type: ignore
 from unified_planning.engines import CompilationKind  # type: ignore
-from unified_planning.engines.compilers import Grounder  # type: ignore
+from unified_planning.engines.compilers import Grounder, GrounderHelper  # type: ignore
 from typing import List
 
 
@@ -21,7 +21,6 @@ def plan(aut: Automaton) -> PlanResult:
     Checks aut for if plan can be created.
     If so, returns a plan.
     """
-
     # Automata cannot be empty
     if not aut.is_executable():
         return PlanResult.nosat()
@@ -53,11 +52,6 @@ def plan(aut: Automaton) -> PlanResult:
     # the PDDL file may have contained a goal we need to remove
     problem.clear_goals()
 
-    # get all ground actions
-    with Grounder() as grounder:
-        cres = grounder.compile(problem, CompilationKind.GROUNDING)
-        grounded_problem = cres.problem  # all possible grounded actions
-
     # add sequencing constraints
     curr: Checkpoint = aut.init
     while len(curr.out_trans):
@@ -65,18 +59,12 @@ def plan(aut: Automaton) -> PlanResult:
         if curr.action is None:
             continue
         name = curr.action.action.name
-        params = [param.object().name
-                  for param in curr.action.actual_parameters]
-
-        # find the ground action that matches the aut action
-        new_act: InstantaneousAction = None
-        for act in grounded_problem.actions:
-            if len(name) <= len(act.name) and act.name[:len(name)] == name:
-                candidate_param_str = act.name[len(name)+1:]
-                candidate_params = candidate_param_str.split("_")
-                if candidate_params == params:
-                    new_act = act
-                    break
+        params = [param for param in curr.action.actual_parameters]
+        g: Grounder = Grounder()
+        grounder_helper: GrounderHelper = GrounderHelper(
+            problem, g._grounding_actions_map, g._prune_actions
+        )
+        new_act = grounder_helper.ground_action(curr.action.action, params)
 
         # TODO: add error messages
         if new_act is None:
