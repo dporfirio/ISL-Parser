@@ -6,14 +6,16 @@ This is the suite of test cases for the ISL. All test cases have the same direct
 test_group_name              # the name of the group of tests
 |
 |-- individual_test_1        # the name of an individual test
-|   |-- parser_out.txt       # the expected output of the test
+|   |-- distiller_out.txt    # the expected output of the distiller test
+|   |-- parser_out.txt       # the expected output of the parser test
+|   |-- planner_out.txt      # the expected output of the planner test
 |   |-- program.isl          # the goal automaton
 |
 |-- individual_test...       # another test...
 |   |--...
 ```
 
-*Example*: `general` is the name of a test group, which comprises numerous individual tests intended to evaluate the general functionality of the backend. Each individual test within the `general` group shares the `pddl/general/domain.pddl` domain and `pddl/general/problem.pddl` problem description. Each individual test has its own `program.isl`, and `pasrser_out.txt`, which describe the individual test characteristics.
+*Example*: `general` is the name of a test group, which comprises numerous individual tests intended to evaluate the general functionality of the backend. Each individual test within the `general` group shares the `pddl/general/domain.pddl` domain and `pddl/general/problem.pddl` problem description. Each individual test has its own `program.isl`, `parser_out.txt`, `planner_out.txt`, and `distiller_out.txt` which describe the individual test characteristics.
 
 
 ## Creating a new test group
@@ -55,6 +57,6 @@ You may start creating individual test cases using the following steps _within_ 
 
 1. Create a `tests/<group>/program.isl` file that describes the goal automaton.
 2. Create a `pddl/<group>/problem.pddl` file that describes the world and its initial state.
-3. Get the test case working with `python3 isl.py tests/<group_name>/<test_name>/program.isl -v test`. The `-v test` option outputs test information.
+3. Get the test case working with `python3 isl.py tests/<group_name>/<test_name>/program.isl -v test -t planner distiller`. The `-v test` option outputs test information. The `-t planner distiller` option tells ISL to run all three tests. Parser is run by default, but planner and distiller need to be explicitly invoked.
 4. Check the test output. Ensure that all output is as expected. Iterate, debug, and re-test if necessary.
 5. Run `python3 test.py` to make sure your test has been fully integrated into the test suite.
