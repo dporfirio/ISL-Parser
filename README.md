@@ -34,6 +34,16 @@ python -m pip install -r requirements.txt
 python3 isl.py tests/<group_name>/<test_name>
 ```
 
+## Running ther ISL functionality
+
+In addition to parsing, ISL is able to both create plans from checkpoints and deconstruct (distill) plans into their underlying checkpoints.
+
+```
+python3 isl.py tests/<group_name>/<test_name> -t <task>
+```
+
+Task is either `plan` or `distill`.
+
 ## Running all test cases
 
 All tests can be run by typing the following into a command line:
@@ -49,7 +59,7 @@ For details about creating tests, visit the `tests` directory.
 Version 1.1 is backwards compatible in that ISL script written for 1.0 will still work.
 
 - Added classical planner for linear traces comprised of actions
-- Added reverse planner that distills plans to their underlying checkpoints
+- Added reverse planner (distiller) that distills plans to their underlying checkpoints
 - Bug fixes
 
 ## Citing the ISL
