@@ -141,7 +141,8 @@
         :parameters (?agent - agent ?to - region)
         :precondition ()
         :effect (and (entity_in ?agent ?to)
-                     (forall (?r - region) (not (entity_in ?agent ?r)))
+                     (forall (?r - region) 
+                             (when (not (= ?to ?r)) (not (entity_in ?agent ?r))))
                      (forall (?nr - entity) (not (agent_near ?agent ?nr))))
     )
 
