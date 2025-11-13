@@ -9,7 +9,7 @@ labels
     ],
     deliver2: [
           action: put_on_surface,
-		  params: [stretch, medication, labbench]
+		  params: [stretch, ibuprofen, labbench]
 	],
 	deliver3: [
           action: put_on_surface,

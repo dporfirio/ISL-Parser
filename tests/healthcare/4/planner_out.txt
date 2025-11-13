@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (move1):
-    -->  STRETCH moves to ICU
+    -->  STRETCH moves to EMERGENCYROOM
 
   state "step_2":
     -->  STRETCH approaches BLOODSAMPLE
@@ -21,22 +21,28 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   checkpoint 7 (move2):
-    -->  STRETCH moves to ICU
+    -->  STRETCH moves to PHARMACY
 
   state "step_8":
-    -->  STRETCH approaches MEDICATION
+    -->  STRETCH approaches MEDICINECABINET
 
-  checkpoint 9 (grab2):
-    -->  STRETCH grabs MEDICATION
+  state "step_9":
+    -->  STRETCH opens MEDICINECABINET
 
   state "step_10":
-    -->  STRETCH moves to LAB
+    -->  STRETCH approaches IBUPROFEN
 
-  state "step_11":
-    -->  STRETCH approaches LABBENCH
+  checkpoint 11 (grab2):
+    -->  STRETCH grabs IBUPROFEN
 
-  checkpoint 12 (deliver2):
-    -->  STRETCH puts MEDICATION on LABBENCH
+  state "step_12":
+    -->  STRETCH moves to ICU
+
+  state "step_13":
+    -->  STRETCH approaches ICUTRAY
+
+  checkpoint 14 (deliver2):
+    -->  STRETCH puts IBUPROFEN on ICUTRAY
 
   t: 0 -> 1
   t: 1 -> 2
@@ -50,3 +56,5 @@ Automata.
   t: 9 -> 10
   t: 10 -> 11
   t: 11 -> 12
+  t: 12 -> 13
+  t: 13 -> 14
