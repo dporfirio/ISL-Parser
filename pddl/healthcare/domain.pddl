@@ -40,7 +40,7 @@
             world bookkeeping - object
             region entity - world
             agent inanimate - entity
-            item surface - inanimate
+            item surface container - inanimate
             person robot - agent
 
             ; =============================
@@ -82,7 +82,7 @@
         ;  v
         (can_carry ?agent)                        ; INTERNAL
         (agent_has ?agent - agent ?object - item)              ; NL: [0] is carrying [1]
-        (is_open ?object - item) ; NL: [1] is open
+        (is_open ?cont - container) ; NL: [1] is open
 
         ; General predicates - DO NOT MODIFY
         ; PREDICATES BELOW THIS LINE!
@@ -105,7 +105,13 @@
         
         ; ITEM ATTRIBUTES
         (is_grabbable ?object - item)                            ; INTERNAL
-        (is_openable ?object - item)                             ; INTERNAL
+        (is_openable ?cont - container)                             ; INTERNAL
+
+        (item_inside ?item - item ?cont - container)           ; NL: [0] is inside [1]
+
+        ; SENT MESSAGES
+        (task-completed ?task - item)                        ; NL: [0] is completed   
+        ;(message-sent ?r - robot ?msg - message)    
 
         ; DUMMY predicate
         ; required for certain parsers
@@ -145,6 +151,7 @@
                              (when (not (= ?to ?r)) (not (entity_in ?agent ?r))))
                      (forall (?nr - entity) (not (agent_near ?agent ?nr))))
     )
+
 
     (:action approach ; NL: [0] approaches [1]
         :parameters (?agent - agent ?to - entity)
@@ -194,6 +201,7 @@
         :effect (and (not (agent_has ?agent ?item))
                  (can_carry ?agent)
                  (accessible ?item)
+                 ;(is_grabbable ?item)
                  (object_at ?item ?surface)
                  (forall (?r - region)
                          (when (entity_in ?surface ?r)
@@ -202,4 +210,66 @@
                  )
         )
     )
+
+    ;; the items inside the container are accessible when the container is open
+    (:action open ; NL: [0] opens [1]
+        :parameters (?agent - agent ?cont - container)
+        :precondition (and (agent_near ?agent ?cont)
+                           (is_openable ?cont)
+                           (not (is_open ?cont)))
+        :effect (and (is_open ?cont)
+                (forall (?item - item) 
+                        (when (item_inside ?item ?cont) 
+                              (and (accessible ?item) 
+                                   (is_grabbable ?item)))))
+    )
+
+    ;; close the container and make all items inside are not accessible
+;   (:action close ; NL: [0] closes [1]
+;                 :parameters (?agent - agent ?container - item)
+;                 :precondition (and (agent_near ?agent ?container)
+;                                 (is_openable ?container)
+;                                 (is_open ?container))
+;                 :effect (and (not (is_open ?container))
+;                         (forall (?item - item) 
+;                                 (when (item_inside ?item ?container) 
+;                                       (not (accessible ?item)))))
+                
+;         )         
+    
+  ;; afeter receiving the item, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
+;   (:action receive ; NL: [0] receives [1]
+;         :parameters (?agent - agent ?item - item ?container - item)
+;         :precondition (and (agent_near ?agent ?container)
+;                            (is_open ?container)
+;                            (item_inside ?item ?container) 
+;                            (can_carry ?agent)
+;                            (accessible ?item))
+;         :effect (and (agent_has ?agent ?item)
+;                      (not (can_carry ?agent))
+;                      (not (accessible ?item))
+;                      (not (item_inside ?item ?container))
+;                      (forall (?r - region) (not (entity_in ?item ?r))))
+;     )  
+  
+  ;; deliver object to destination
+;   (:action deliver ; NL: [0] delivers [1] to [2]
+;         :parameters (?agent - agent ?item - item ?destination - region)
+;         :precondition (and (agent_has ?agent ?item)
+;                            (entity_in ?agent ?destination))
+;         :effect (and (not (agent_has ?agent ?item))
+;                      (can_carry ?agent)
+;                      (object_at ?item ?destination)
+;                      (entity_in ?item ?destination))
+;     )
+    
+  
+  ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
+
+
+  ;; dump action from cleaning, like grabe a water and dump to sink? Assume robot has dustbin / water tank? 
+
+
+;; report action from patrol, send a messgae to the user about the state of the world, for example,  "the patient need help", 
+
 )
