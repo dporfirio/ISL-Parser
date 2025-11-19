@@ -220,48 +220,55 @@
         :effect (and (is_open ?cont)
                 (forall (?item - item) 
                         (when (item_inside ?item ?cont) 
-                              (and (accessible ?item) 
-                                   (is_grabbable ?item)))))
+                              (and (accessible ?item) ))))
     )
 
+
     ;; close the container and make all items inside are not accessible
-;   (:action close ; NL: [0] closes [1]
-;                 :parameters (?agent - agent ?container - item)
-;                 :precondition (and (agent_near ?agent ?container)
-;                                 (is_openable ?container)
-;                                 (is_open ?container))
-;                 :effect (and (not (is_open ?container))
-;                         (forall (?item - item) 
-;                                 (when (item_inside ?item ?container) 
-;                                       (not (accessible ?item)))))
+  (:action close ; NL: [0] closes [1]
+        :parameters (?agent - agent ?cont - container)
+        :precondition (and (agent_near ?agent ?cont)
+                           (is_openable ?cont)
+                           (is_open ?cont))
+        :effect (and (not (is_open ?cont))
+                (forall (?item - item) 
+                        (when (item_inside ?item ?cont) 
+                              (and (not (accessible ?item))
+                                   (not (is_grabbable ?item))))))
                 
-;         )         
-    
-  ;; afeter receiving the item, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
-;   (:action receive ; NL: [0] receives [1]
-;         :parameters (?agent - agent ?item - item ?container - item)
-;         :precondition (and (agent_near ?agent ?container)
-;                            (is_open ?container)
-;                            (item_inside ?item ?container) 
+        )         
+
+  ;; receive from a person afeter receiving the item, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
+;   (:action receive ; NL: [0] receives [1] from [2]
+;         :parameters (?agent - robot ?item - item ?giver - person)
+;         :precondition (and (agent_near ?agent ?giver)
 ;                            (can_carry ?agent)
-;                            (accessible ?item))
+;                            (exists (?r - region)
+;                            (and (entity_in ?giver ?r)
+;                            (entity_in ?item ?r)))
+;                            )
 ;         :effect (and (agent_has ?agent ?item)
 ;                      (not (can_carry ?agent))
 ;                      (not (accessible ?item))
-;                      (not (item_inside ?item ?container))
-;                      (forall (?r - region) (not (entity_in ?item ?r))))
+;                      (forall (?r - region) 
+;                           (not (entity_in ?item ?r)))
+;         )
 ;     )  
   
-  ;; deliver object to destination
-;   (:action deliver ; NL: [0] delivers [1] to [2]
-;         :parameters (?agent - agent ?item - item ?destination - region)
-;         :precondition (and (agent_has ?agent ?item)
-;                            (entity_in ?agent ?destination))
-;         :effect (and (not (agent_has ?agent ?item))
-;                      (can_carry ?agent)
-;                      (object_at ?item ?destination)
-;                      (entity_in ?item ?destination))
-;     )
+  ;; deliver object to a person, after delivering the item, the agent can carry and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
+ (:action deliver ; NL: [0] delivers [1] to [2]
+        :parameters (?agent - robot ?item - item ?recipient - person)
+        :precondition (and (agent_has ?agent ?item)
+                           (agent_near ?agent ?recipient))
+    :effect (and (not (agent_has ?agent ?item))
+                 (can_carry ?agent)
+                 (not (accessible ?item))
+                 (not (is_grabbable ?item))
+                (forall (?r - region)
+                        (when (entity_in ?recipient ?r)
+                              (entity_in ?item ?r)))
+    )
+)
     
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?

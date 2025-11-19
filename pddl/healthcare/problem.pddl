@@ -15,12 +15,25 @@
 		
 		; Robot
 		stretch - robot
+
+		; Person
+		; icudoctor icupatient nurse patient pharmacist emdoctor
+		labtech  - person
 	)
 	
 	(:init 
 		; Robot initial state
 		(entity_in stretch nursestation)
 		(can_carry stretch)
+
+		; person initial state
+		; (entity_in icudoctor icu)
+		; (entity_in icupatient icu)
+		; (entity_in nurse nursestation)
+		; (entity_in patient inpatient)
+		; (entity_in pharmacist pharmacy)
+		(entity_in labtech lab)
+		; (entity_in emdoctor emergencyroom)
 
 		; Surfaces and containers in regions
 		(entity_in icutray icu)
@@ -52,6 +65,15 @@
 		(item_inside bandages medicinecabinet)
 		(item_inside antacid medicinecabinet)
 
+		; person accessibility by robot
+		; (accessible icudoctor)
+		; (accessible icupatient)
+		; (accessible nurse)
+		; (accessible patient)
+		; (accessible pharmacist)
+		(accessible labtech)
+		
+
 		; Accessibility of items
 		(accessible bloodsample)
 		(accessible meal)
@@ -76,12 +98,12 @@
 		(is_grabbable bloodsample)
 		(is_grabbable meal)
 		(is_grabbable xrayfile)
-		(not (is_grabbable linen))
-		(not (is_grabbable amoxicillin))
-		(not (is_grabbable ibuprofen))
-		(not (is_grabbable bandages))
-		(not (is_grabbable insulin))
-		(not (is_grabbable antacid))
+		(is_grabbable linen)
+		(is_grabbable amoxicillin)
+		(is_grabbable ibuprofen)
+		(is_grabbable bandages)
+		(is_grabbable insulin)
+		(is_grabbable antacid)
 
 		; Container states
 		(not (is_open medicinecabinet))
