@@ -2,11 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  checkpoint 1 (move1):
-    -->  STRETCH grabs BLOODSAMPLE
-
-  checkpoint 2 (move2):
-    -->  STRETCH moves to LAB
+  checkpoint 1 (move):
+    -->  STRETCH approaches BLOODSAMPLE
 
   t: 0 -> 1
-  t: 1 -> 2

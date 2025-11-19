@@ -91,8 +91,7 @@
         ; the agent can only traverse regions, and
         ; thus can only be IN a region.
         ; the agent is ALWAYS in a region
-        (agent_near ?agent - agent ?entity - entity)       ; NL: [0] near [1]
-        (agent_near_anything ?agent) ; INTERNAL
+        (agent_near ?agent - robot ?entity - entity)       ; NL: [0] near [1]
 
         ; OBJECTS
         ; an object can theoretically be at any location.
@@ -108,10 +107,6 @@
         (is_openable ?cont - container)                             ; INTERNAL
 
         (item_inside ?item - item ?cont - container)           ; NL: [0] is inside [1]
-
-        ; SENT MESSAGES
-        (task-completed ?task - item)                        ; NL: [0] is completed   
-        ;(message-sent ?r - robot ?msg - message)    
 
         ; DUMMY predicate
         ; required for certain parsers
@@ -144,7 +139,7 @@
     ;  The robot always exists in a region and can move
     ;  between regions.
     (:action move_to ; NL: [0] moves to [1]
-        :parameters (?agent - agent ?to - region)
+        :parameters (?agent - robot ?to - region)
         :precondition ()
         :effect (and (entity_in ?agent ?to)
                      (forall (?r - region) 
@@ -154,7 +149,7 @@
 
 
     (:action approach ; NL: [0] approaches [1]
-        :parameters (?agent - agent ?to - entity)
+        :parameters (?agent - robot ?to - entity)
         :precondition (and (accessible ?to)
                            (exists (?r - region)
                                    (and (entity_in ?to ?r)
@@ -173,7 +168,7 @@
     )
 
     (:action grab ; NL: [0] grabs [1]
-        :parameters (?agent - agent ?item - item)
+        :parameters (?agent - robot ?item - item)
         :precondition (and (agent_near ?agent ?item)
                        (can_carry ?agent)
                        (accessible ?item)
@@ -193,7 +188,7 @@
     )
 
     (:action put_on_surface ; NL: [0] puts [1] on [2]
-        :parameters (?agent - agent ?item - item ?surface - surface)
+        :parameters (?agent - robot ?item - item ?surface - surface)
         :precondition (and (agent_near ?agent ?surface)
                        (not (object_at ?item ?surface))
                        (not (can_carry ?agent))
@@ -213,7 +208,7 @@
 
     ;; the items inside the container are accessible when the container is open
     (:action open ; NL: [0] opens [1]
-        :parameters (?agent - agent ?cont - container)
+        :parameters (?agent - robot ?cont - container)
         :precondition (and (agent_near ?agent ?cont)
                            (is_openable ?cont)
                            (not (is_open ?cont)))
@@ -226,7 +221,7 @@
 
     ;; close the container and make all items inside are not accessible
   (:action close ; NL: [0] closes [1]
-        :parameters (?agent - agent ?cont - container)
+        :parameters (?agent - robot ?cont - container)
         :precondition (and (agent_near ?agent ?cont)
                            (is_openable ?cont)
                            (is_open ?cont))

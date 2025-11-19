@@ -2,17 +2,17 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_1":
-    -->  LABTECH moves to EMERGENCYROOM
-
-  checkpoint 2 (move1):
+  checkpoint 1 (move1):
     -->  STRETCH moves to EMERGENCYROOM
 
-  state "step_3":
+  state "step_2":
     -->  STRETCH approaches BLOODSAMPLE
 
-  checkpoint 4 (grab1):
+  checkpoint 3 (grab1):
     -->  STRETCH grabs BLOODSAMPLE
+
+  state "step_4":
+    -->  STRETCH moves to LAB
 
   state "step_5":
     -->  STRETCH approaches LABTECH
