@@ -6,7 +6,7 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   checkpoint 6 (deliver2):
-    -->  STRETCH puts MEDICATION on LABBENCH
+    -->  STRETCH puts IBUPROFEN on ICUTRAY
 
   t: 0 -> 3
   t: 3 -> 6

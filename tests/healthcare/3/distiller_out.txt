@@ -6,7 +6,7 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   checkpoint 4 (deliver4):
-    -->  STRETCH puts MEDICATION on LABBENCH
+    -->  STRETCH puts ANTACID on LABBENCH
 
   t: 3 -> 4
   t: 0 -> 3

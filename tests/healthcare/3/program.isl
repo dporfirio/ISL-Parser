@@ -17,7 +17,7 @@ labels
     ],
     deliver4: [
           action: put_on_surface,
-		  params: [stretch, medication, labbench]
+		  params: [stretch, antacid, labbench]
 	]
 
 endlabels

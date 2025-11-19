@@ -6,7 +6,7 @@ labels
 
 	move1: [
 		  action: move_to,
-		  params: [stretch, icu]
+		  params: [stretch, emergencyroom]
 	],
 	grab1: [
 		  action: grab,
@@ -18,15 +18,15 @@ labels
     ],
 	move2: [
 		  action: move_to,
-		  params: [stretch, icu]
+		  params: [stretch, pharmacy]
 	],
 	grab2: [
 		  action: grab,
-		  params: [stretch, medication]
+		  params: [stretch, ibuprofen]
     ],
 	deliver2: [
 		  action: put_on_surface,
-		  params: [stretch, medication, labbench]
+		  params: [stretch, ibuprofen, icutray]
     ]
 
 endlabels
