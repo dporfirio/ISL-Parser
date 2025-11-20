@@ -104,7 +104,6 @@
         (accessible ?location - entity)                       ; INTERNAL
         
         ; ITEM ATTRIBUTES
-        (is_grabbable ?object - item)                            ; INTERNAL
         (is_openable ?cont - container)                             ; INTERNAL
 
         ; REQUEST 
@@ -159,15 +158,16 @@
                                    )
                            ))
         :effect (and 
-                    (forall (?nr - entity)(not (agent_near ?agent ?nr)))
-                     (agent_near ?agent ?to)
+                    ; (forall (?nr - entity)
+                    ;         (not (agent_near ?agent ?nr)))
+                    (agent_near ?agent ?to)
                                                   
-                     (forall (?r - region) 
-                             (and (when (not (entity_in ?to ?r))
-                                       (not (entity_in ?agent ?r)))
-                                 (when (entity_in ?to ?r)
-                                       (entity_in ?agent ?r)))
-                     )
+                ;      (forall (?r - region) 
+                ;              (and (when (not (entity_in ?to ?r))
+                ;                         (not (entity_in ?agent ?r)))
+                ;                  (when (entity_in ?to ?r)
+                ;                        (entity_in ?agent ?r));)
+                ;      )
                 )
     )
 
@@ -231,8 +231,7 @@
         :effect (and (not (is_open ?cont))
                 (forall (?item - item) 
                         (when (item_inside ?item ?cont) 
-                              (and (not (accessible ?item))
-                                   (not (is_grabbable ?item))))))
+                              (not (accessible ?item)))))
                 
         )   
 

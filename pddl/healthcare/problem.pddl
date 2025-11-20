@@ -96,17 +96,6 @@
 		(accessible storagecabinet)
 		(accessible kitchencountertop)
 
-		; Grabbable items
-		(is_grabbable bloodsample)
-		(is_grabbable meal)
-		(is_grabbable xrayfile)
-		(is_grabbable linen)
-		(is_grabbable amoxicillin)
-		(is_grabbable ibuprofen)
-		(is_grabbable bandages)
-		(is_grabbable insulin)
-		(is_grabbable antacid)
-
 		; Container states
 		(not (is_open medicinecabinet))
 		(not (is_open storagecabinet))
