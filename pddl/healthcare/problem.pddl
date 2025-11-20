@@ -17,8 +17,7 @@
 		stretch - robot
 
 		; Person
-		; icudoctor icupatient nurse patient pharmacist emdoctor
-		labtech  - person
+		icudoctor icupatient nurse patient pharmacist emdoctor labtech  - person
 	)
 	
 	(:init 
@@ -26,14 +25,14 @@
 		(entity_in stretch nursestation)
 		(can_carry stretch)
 
-		; person initial state
-		; (entity_in icudoctor icu)
-		; (entity_in icupatient icu)
-		; (entity_in nurse nursestation)
-		; (entity_in patient inpatient)
-		; (entity_in pharmacist pharmacy)
+		;person initial state
+		(entity_in icudoctor icu)
+		(entity_in icupatient icu)
+		(entity_in nurse nursestation)
+		(entity_in patient inpatient)
+		(entity_in pharmacist pharmacy)
 		(entity_in labtech lab)
-		; (entity_in emdoctor emergencyroom)
+		(entity_in emdoctor emergencyroom)
 
 		; Surfaces and containers in regions
 		(entity_in icutray icu)
@@ -65,12 +64,15 @@
 		(item_inside bandages medicinecabinet)
 		(item_inside antacid medicinecabinet)
 
+		; person has item
+		(agent_has nurse xrayfile)
+
 		; person accessibility by robot
-		; (accessible icudoctor)
-		; (accessible icupatient)
-		; (accessible nurse)
-		; (accessible patient)
-		; (accessible pharmacist)
+		(accessible icudoctor)
+		(accessible icupatient)
+		(accessible nurse)
+		(accessible patient)
+		(accessible pharmacist)
 		(accessible labtech)
 		
 

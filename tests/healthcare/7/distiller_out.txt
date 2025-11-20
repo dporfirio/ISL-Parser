@@ -1,0 +1,16 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (move1):
+    -->  STRETCH moves to NURSESTATION
+
+  checkpoint 3 (receive1):
+    -->  STRETCH receives XRAYFILE from NURSE
+
+  checkpoint 4 (deliver1):
+    -->  STRETCH delivers XRAYFILE to ICUDOCTOR
+
+  t: 0 -> 1
+  t: 3 -> 4
+  t: 1 -> 3

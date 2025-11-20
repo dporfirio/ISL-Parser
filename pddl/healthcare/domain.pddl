@@ -95,7 +95,8 @@
 
         ; OBJECTS
         ; an object can theoretically be at any location.
-        (object_at ?object - item ?location - inanimate)              ; NL: [0] at [1]
+        (object_at ?object - item ?location - surface)              ; NL: [0] at [1]
+        (item_inside ?item - item ?cont - container)           ; NL: [0] is inside [1]
         ; all objects must be in a region
         (entity_in ?object - entity ?region - region)         ; NL: [0] in [1]
         
@@ -106,7 +107,8 @@
         (is_grabbable ?object - item)                            ; INTERNAL
         (is_openable ?cont - container)                             ; INTERNAL
 
-        (item_inside ?item - item ?cont - container)           ; NL: [0] is inside [1]
+        ; REQUEST 
+        (requested ?agent - robot ?item - item ?person - person) ; NL: [0] requested [1] from [2]
 
         ; DUMMY predicate
         ; required for certain parsers
@@ -156,8 +158,10 @@
                                          (entity_in ?agent ?r)
                                    )
                            ))
-        :effect (and (agent_near ?agent ?to)
-                     (forall (?nr - entity) (not (agent_near ?agent ?nr)))
+        :effect (and 
+                    (forall (?nr - entity)(not (agent_near ?agent ?nr)))
+                     (agent_near ?agent ?to)
+                                                  
                      (forall (?r - region) 
                              (and (when (not (entity_in ?to ?r))
                                        (not (entity_in ?agent ?r)))
@@ -171,8 +175,7 @@
         :parameters (?agent - robot ?item - item)
         :precondition (and (agent_near ?agent ?item)
                        (can_carry ?agent)
-                       (accessible ?item)
-                       (is_grabbable ?item))
+                       (accessible ?item))
         :effect (and (agent_has ?agent ?item)
                  (not (can_carry ?agent))
                  (not (accessible ?item))
@@ -231,24 +234,32 @@
                               (and (not (accessible ?item))
                                    (not (is_grabbable ?item))))))
                 
-        )         
+        )   
 
-  ;; receive from a person afeter receiving the item, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
-;   (:action receive ; NL: [0] receives [1] from [2]
-;         :parameters (?agent - robot ?item - item ?giver - person)
-;         :precondition (and (agent_near ?agent ?giver)
-;                            (can_carry ?agent)
-;                            (exists (?r - region)
-;                            (and (entity_in ?giver ?r)
-;                            (entity_in ?item ?r)))
-;                            )
-;         :effect (and (agent_has ?agent ?item)
-;                      (not (can_carry ?agent))
-;                      (not (accessible ?item))
-;                      (forall (?r - region) 
-;                           (not (entity_in ?item ?r)))
-;         )
-;     )  
+   ;; request from person for a item
+   (:action request ; NL: [0] requests [1] from [2]
+        :parameters (?agent - robot ?item - item ?giver - person)
+        :precondition (and (agent_near ?agent ?giver)
+                          (not (requested ?agent ?item ?giver))) ;can't request twice
+        :effect (requested ?agent ?item ?giver)
+        )    
+
+  ;; receive from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
+  (:action receive ; NL: [0] receives [1] from [2]
+        :parameters (?agent - robot ?item - item ?giver - person)
+        :precondition (and (requested ?agent ?item ?giver)
+                           (can_carry ?agent)
+                           (agent_has ?giver ?item)
+                           (agent_near ?agent ?giver))
+        :effect (and (agent_has ?agent ?item)
+                     (not (can_carry ?agent))
+                     (not (accessible ?item))
+                     (not (agent_has ?giver ?item))
+                     (not (requested ?agent ?item ?giver))
+                     (forall (?r - region) 
+                          (not (entity_in ?item ?r)))
+        )
+    )  
   
   ;; deliver object to a person, after delivering the item, the agent can carry and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
  (:action deliver ; NL: [0] delivers [1] to [2]
@@ -258,13 +269,12 @@
     :effect (and (not (agent_has ?agent ?item))
                  (can_carry ?agent)
                  (not (accessible ?item))
-                 (not (is_grabbable ?item))
                 (forall (?r - region)
                         (when (entity_in ?recipient ?r)
                               (entity_in ?item ?r)))
     )
 )
-    
+   
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
 
