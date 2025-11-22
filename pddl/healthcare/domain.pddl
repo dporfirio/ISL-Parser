@@ -158,8 +158,9 @@
                                    )
                            ))
         :effect (and 
-                    ; (forall (?nr - entity)
-                    ;         (not (agent_near ?agent ?nr)))
+                    (forall (?nr - entity)
+                            (when (not (= ?to ?nr)) 
+                                  (not (agent_near ?agent ?nr))))
                     (agent_near ?agent ?to)
                                                   
                 ;      (forall (?r - region) 
