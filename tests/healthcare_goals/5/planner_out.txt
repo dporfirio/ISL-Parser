@@ -1,0 +1,28 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
+
+  state "step_2":
+    -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
+
+  state "step_3":
+    -->  STRETCH grabs BLOODSAMPLE from EMTRAY in EMERGENCYROOM
+
+  state "step_4":
+    -->  STRETCH moves from EMTRAY to LAB
+
+  state "step_5":
+    -->  STRETCH approaches LABTECH in LAB
+
+  state "step_6":
+    -->  STRETCH delivers BLOODSAMPLE to LABTECH
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6

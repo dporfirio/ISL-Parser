@@ -1,0 +1,48 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH moves to EMERGENCYROOM
+
+  state "step_2":
+    -->  STRETCH approaches BLOODSAMPLE
+
+  state "step_3":
+    -->  STRETCH grabs BLOODSAMPLE
+
+  state "step_4":
+    -->  STRETCH moves to LAB
+
+  state "step_5":
+    -->  STRETCH approaches LABBENCH
+
+  checkpoint 6 (move):
+    -->  STRETCH puts BLOODSAMPLE on LABBENCH
+
+  state "step_7":
+    -->  STRETCH moves to PHARMACY
+
+  state "step_8":
+    -->  STRETCH approaches MEDICINECABINET
+
+  state "step_9":
+    -->  STRETCH opens MEDICINECABINET
+
+  state "step_10":
+    -->  STRETCH approaches AMOXICILLIN
+
+  checkpoint 11 (place):
+    -->  STRETCH grabs AMOXICILLIN
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11

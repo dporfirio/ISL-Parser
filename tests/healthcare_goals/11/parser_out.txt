@@ -1,0 +1,29 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is approaching>>
+         <<stretch near xrayfile>>
+
+  checkpoint 2 (two):
+         <<is grabbing>>
+         <<stretch is carrying xrayfile>>
+
+  checkpoint 3 (three):
+         <<is moving>>
+         <<stretch in lab>>
+
+  checkpoint 4 (four):
+         <<is approaching>>
+         <<stretch near labbench>>
+
+  checkpoint 5 (five):
+         <<is putting>>
+         <<xrayfile at labbench>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5

@@ -1,0 +1,24 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is moving>>
+         <<stretch in nursestation>>
+
+  checkpoint 2 (two):
+         <<is requesting>>
+         <<stretch requested xrayfile from nurse>>
+
+  checkpoint 3 (three):
+         <<is receiving>>
+         <<stretch is carrying xrayfile>>
+
+  checkpoint 4 (four):
+         <<is delivering>>
+         <<icudoctor has xrayfile>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4

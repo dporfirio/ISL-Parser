@@ -7,13 +7,30 @@ from unified_planning.shortcuts import (  # type: ignore
     OneshotPlanner,
     Fluent,
     BoolType,
-    InstantaneousAction,
     SequentialSimulator
 )
-from unified_planning.model.problem_kind import ProblemKind  # type: ignore
-from unified_planning.engines import CompilationKind  # type: ignore
-from unified_planning.engines.compilers import Grounder, GrounderHelper  # type: ignore
+from unified_planning.engines.compilers import (  # type: ignore
+    Grounder,
+    GrounderHelper
+)
 from typing import List
+
+
+def get_planner_name(problem: up.model.Problem) -> str:
+    planner_name: str = "fast-downward-opt"
+    if problem.kind.has_conditional_effects():
+        planner_name = "symk-opt"
+    return planner_name
+
+
+def create_trace(plan, chkpts) -> None:
+    for i, cp in enumerate(chkpts):
+        new_chkpt = State(i+1, cp.name)
+        new_chkpt.action = cp.action
+        plan.states.append(new_chkpt)
+    for i, _ in enumerate(plan.states[1:]):
+        trans: Transition = Transition(i, i+1)
+        plan.transitions.append(trans)
 
 
 def plan(aut: Automaton) -> PlanResult:
@@ -48,25 +65,17 @@ def plan(aut: Automaton) -> PlanResult:
     # the PDDL file may have contained a goal we need to remove
     problem.clear_goals()
 
+    # declare and/or instantiate some variables
+    plan: Automaton
+    pr: PlanResult
+    planner_name: str
+    checkpoints: List[State] = []
+
     # add sequencing constraints
-    curr: Checkpoint = aut.init
-    while len(curr.out_trans):
-        curr = curr.out_trans[0].target
-        if len(curr.predicates) > 0:
-            name = "TEMP_{}".format(curr._id)
-            new_act = InstantaneousAction(name)
-            new_act.add_precondition(step)
-            new_act.add_effect(step, False)
-            curr_step += 1
-            step = Fluent("step_{}".format(curr_step), BoolType())
-            new_act.add_effect(step, True)
-            problem.add_fluent(step)
-
-            for pred in curr.predicates:
-                new_act.add_precondition(pred.fnode)
-
-            problem.add_action(new_act)
-        elif curr.action is not None:
+    if not aut.contains_goals():
+        curr: Checkpoint = aut.init
+        while len(curr.out_trans):
+            curr = curr.out_trans[0].target
             name = curr.action.action.name
             params = [param for param in curr.action.actual_parameters]
             g: Grounder = Grounder()
@@ -89,42 +98,84 @@ def plan(aut: Automaton) -> PlanResult:
             problem.add_fluent(step)
             problem.add_action(new_act)
 
-    # the goal is for the plan to achieve the final step
-    problem.add_goal(step)
+        # the goal is for the plan to achieve the final step
+        problem.add_goal(step)
 
-    # invoke the planner
-    planner_name: str = "symk-opt"
-    pr: PlanResult = PlanResult()
-    up.shortcuts.get_environment().credits_stream = None
-    with OneshotPlanner(name=planner_name) as planner:
-        result = planner.solve(aut.problem.problem)
-        if len(result.plan.actions) == 0:
-            return PlanResult.nosat()
+        # invoke the planner
+        pr = PlanResult()
+        planner_name = get_planner_name(problem)
+        up.shortcuts.get_environment().credits_stream = None
+        with OneshotPlanner(name=planner_name) as planner:
+            result = planner.solve(aut.problem.problem)
+            if len(result.plan.actions) == 0:
+                return PlanResult.nosat()
 
-        # Assemble the plan
+            # Assemble the plan
+            plan = Automaton(aut_orig.problem)
+            plan.add_init()
+            i: int = 0
+            for act in result.plan.actions:
+                name = act.action.name
+                state: State
+                if name.startswith("TEMP_"):
+                    checkpoints.append(plan.states[-1])
+                    continue
+                elif "_" in name and name[:name.index("_")].isdigit():
+                    _id: int = int(name[:name.index("_")])
+                    state = aut.query_state_by_id(_id)
+                    state._id = i + 1
+                    i += 1
+                else:
+                    state = State(i + 1, "step_{}".format(i + 1))
+                    state.action = act
+                    i += 1
+                plan.states.append(state)
+    else:
         plan = Automaton(aut_orig.problem)
         plan.add_init()
-        i: int = 0
-        for act in result.plan.actions:
-            name = act.action.name
-            state: State
-            if name.startswith("TEMP_"):
-                continue
-            elif "_" in name and name[:name.index("_")].isdigit():
-                _id: int = int(name[:name.index("_")])
-                state = aut.query_state_by_id(_id)
-                state._id = i + 1
-                i += 1
-            else:
-                state = State(i + 1, "step_{}".format(i + 1))
-                state.action = act
-                i += 1
-            plan.states.append(state)
-        for i, _ in enumerate(plan.states[1:]):
-            trans: Transition = Transition(i, i+1)
-            plan.transitions.append(trans)
-        plan.build()
-        pr.add_plan(plan)
+        curr = aut.init
+        while len(curr.out_trans):
+            problem.clear_goals()
+            curr = curr.out_trans[0].target
+            for pred in curr.predicates:
+                problem.add_goal(pred.fnode)
+            planner_name = get_planner_name(problem)
+            pr = PlanResult()
+            up.shortcuts.get_environment().credits_stream = None
+            with OneshotPlanner(name=planner_name) as planner:
+                result = planner.solve(aut.problem.problem)
+                if len(result.plan.actions) == 0:
+                    return PlanResult.nosat()
+
+                # update the initial state
+                simulator = SequentialSimulator(problem)
+                curr_st = simulator.get_initial_state()
+                for st in result.plan.actions:
+                    curr_st = simulator.apply(curr_st, st)
+                curr_st._condense_state()
+                aut.problem.replace_initial_state(curr_st._values)
+
+                curr_plan_len: int = len(plan.states)
+                for i, act in enumerate(result.plan.actions):
+                    name = act.action.name
+                    state: State
+                    _id = i + curr_plan_len
+                    if "_" in name and name[:name.index("_")].isdigit():
+                        _id: int = int(name[:name.index("_")])
+                        state = aut.query_state_by_id(_id)
+                        state._id = _id
+                    else:
+                        state = State(_id, "step_{}".format(_id))
+                        state.action = act
+                    plan.states.append(state)
+                checkpoints.append(state)
+
+    for i, _ in enumerate(plan.states[1:]):
+        trans: Transition = Transition(i, i+1)
+        plan.transitions.append(trans)
+    plan.build()
+    pr.add_plan(plan)
+    pr.add_checkpoints(checkpoints)
 
     return pr
 
@@ -145,10 +196,6 @@ def distill(aut: Automaton) -> PlanResult:
 
     # TODO: extend to branching automaton
     if aut.contains_branches():
-        return PlanResult.nosat()
-
-    # TODO: extend to dealing with goals
-    if aut.contains_goals():
         return PlanResult.nosat()
 
     # Automata must have at least 2 non-init checkpoints

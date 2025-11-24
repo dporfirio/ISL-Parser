@@ -1,0 +1,24 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+    -->  STRETCH approaches XRAYFILE
+
+  checkpoint 2 (two):
+    -->  STRETCH grabs XRAYFILE
+
+  checkpoint 3 (three):
+    -->  STRETCH moves to LAB
+
+  checkpoint 4 (four):
+    -->  STRETCH approaches LABBENCH
+
+  checkpoint 5 (five):
+    -->  STRETCH puts XRAYFILE on LABBENCH
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5

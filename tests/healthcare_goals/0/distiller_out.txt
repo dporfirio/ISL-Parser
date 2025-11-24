@@ -1,0 +1,12 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_6":
+    -->  STRETCH puts BLOODSAMPLE on LABBENCH
+
+  state "step_14":
+    -->  STRETCH puts AMOXICILLIN on LABBENCH
+
+  t: 0 -> 1
+  t: 1 -> 2

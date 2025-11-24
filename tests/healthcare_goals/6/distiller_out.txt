@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_2":
+    -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
+
+  t: 0 -> 1

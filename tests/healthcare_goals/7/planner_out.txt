@@ -1,0 +1,32 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH moves from NURSESTATION to NURSESTATION
+
+  state "step_2":
+    -->  STRETCH approaches NURSE in NURSESTATION
+
+  state "step_3":
+    -->  STRETCH requests XRAYFILE from NURSE
+
+  state "step_4":
+    -->  STRETCH receives XRAYFILE from NURSE
+
+  state "step_5":
+    -->  STRETCH moves from NURSE to ICU
+
+  state "step_6":
+    -->  STRETCH approaches ICUDOCTOR in ICU
+
+  state "step_7":
+    -->  STRETCH delivers XRAYFILE to ICUDOCTOR
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7

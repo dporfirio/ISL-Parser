@@ -1,0 +1,34 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is moving>>
+         <<stretch in emergencyroom>>
+
+  checkpoint 2 (two):
+         <<is grabbing>>
+         <<stretch is carrying bloodsample>>
+
+  checkpoint 3 (three):
+         <<is putting>>
+         <<bloodsample at labbench>>
+
+  checkpoint 4 (four):
+         <<is moving>>
+         <<stretch in pharmacy>>
+
+  checkpoint 5 (five):
+         <<is grabbing>>
+         <<stretch is carrying ibuprofen>>
+
+  checkpoint 6 (six):
+         <<is putting>>
+         <<ibuprofen at icutray>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6

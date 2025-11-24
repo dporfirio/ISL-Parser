@@ -1,0 +1,19 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is moving>>
+         <<stretch in emergencyroom>>
+
+  checkpoint 2 (two):
+         <<is grabbing>>
+         <<stretch is carrying bloodsample>>
+
+  checkpoint 3 (three):
+         <<is delivering>>
+         <<labtech has bloodsample>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3

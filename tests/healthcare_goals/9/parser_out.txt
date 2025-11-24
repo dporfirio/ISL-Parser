@@ -1,0 +1,14 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is receiving>>
+         <<stretch is carrying xrayfile>>
+
+  checkpoint 2 (two):
+         <<is delivering>>
+         <<icudoctor has xrayfile>>
+
+  t: 0 -> 1
+  t: 1 -> 2

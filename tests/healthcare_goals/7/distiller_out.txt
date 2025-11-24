@@ -2,10 +2,10 @@ Automata.
 
   checkpoint 0 (init):
 
-  checkpoint 1 (move1):
-    -->  STRETCH moves to NURSESTATION
+  state "step_1":
+    -->  STRETCH moves from NURSESTATION to NURSESTATION
 
-  checkpoint 4 (deliver1):
+  state "step_7":
     -->  STRETCH delivers XRAYFILE to ICUDOCTOR
 
   t: 0 -> 1

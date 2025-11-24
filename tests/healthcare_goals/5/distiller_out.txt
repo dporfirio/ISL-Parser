@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_6":
+    -->  STRETCH delivers BLOODSAMPLE to LABTECH
+
+  t: 0 -> 3

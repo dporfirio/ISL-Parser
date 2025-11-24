@@ -1,0 +1,14 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is putting>>
+         <<bloodsample at labbench>>
+
+  checkpoint 2 (two):
+         <<is putting>>
+         <<amoxicillin at labbench>>
+
+  t: 0 -> 1
+  t: 1 -> 2

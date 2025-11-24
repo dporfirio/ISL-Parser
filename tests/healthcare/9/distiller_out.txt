@@ -2,11 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  checkpoint 1 (receive1):
-    -->  STRETCH receives XRAYFILE from NURSE
-
   checkpoint 2 (deliver1):
     -->  STRETCH delivers XRAYFILE to ICUDOCTOR
 
-  t: 0 -> 1
-  t: 1 -> 2
+  t: 0 -> 2
