@@ -200,6 +200,7 @@
         :effect (and (not (agent_has ?agent ?item))
                  (can_carry ?agent)
                  (accessible ?item)
+                 (agent_near ?agent ?item)
                  ;(is_grabbable ?item)
                  (object_at ?item ?surface)
                  (forall (?r - region)

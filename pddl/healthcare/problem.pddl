@@ -79,7 +79,7 @@
 		; Accessibility of items
 		(accessible bloodsample)
 		(accessible meal)
-		(accessible xrayfile)
+		; (accessible xrayfile)
 		(not (accessible linen))
 		(not (accessible amoxicillin))
 		(not (accessible ibuprofen))
