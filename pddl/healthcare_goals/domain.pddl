@@ -85,6 +85,8 @@
         (person_has ?person - person ?object - item)              ; NL: [0] has [1]
         (is_open ?cont - container) ; NL: [1] is open
 
+        (has_supply ?person - person ?item - item) ; NL: [0] has supply of [1]
+
         ; General predicates - DO NOT MODIFY
         ; PREDICATES BELOW THIS LINE!
         ;
@@ -121,6 +123,8 @@
         (is_requesting) ; NL: is requesting
         (is_receiving) ; NL: is receiving
         (is_delivering) ; NL: is delivering
+        (is_wiping) ; NL: is wiping
+        (is_vacuuming) ; NL: is vacuuming
 
         ; DUMMY predicate
         ; required for certain parsers
@@ -388,16 +392,23 @@
         :parameters (?agent - robot ?item - item ?giver - person ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
                            (can_carry ?agent)
-                           (agent_has ?giver ?item)
                            (agent_near ?agent ?giver)
                            (entity_in ?agent ?region)
-                           (entity_in ?giver ?region))
+                           (entity_in ?giver ?region)
+                           ; giver must hvae the item or has supply
+                           (or (agent_has ?giver ?item)
+                               (has_supply ?giver ?item))
+                           )
         :effect (and (agent_has ?agent ?item)
                      (not (can_carry ?agent))
                      ;(not (accessible ?item))
                      (not (agent_has ?giver ?item))
                      (not (requested ?agent ?item ?giver))
                      (not (entity_in ?item ?region))
+                     ; only remove when the giveer doesn't have supply of the item
+                     (when (not (has_supply ?giver ?item))
+                           (not (agent_has ?giver ?item)))
+
                      (not is_moving)
                      (not is_approaching)
                      (not is_grabbing)
@@ -433,11 +444,47 @@
    
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
+; (:action wipe ; NL: [0] wipes [1]
+;     :parameters (?agent - robot ?surface - surface ?region - region)
+;     :precondition (and (agent_near ?agent ?surface)
+;                        (entity_in ?agent ?region)
+;                        (entity_in ?surface ?region)
+;                        (agent_has ?agent wiper))
+;     :effect (and 
+;                 (not is_moving)
+;                 (not is_approaching)
+;                 (not is_grabbing)
+;                 (not is_putting)
+;                 (not is_opening)
+;                 (not is_closing)
+;                 (not is_requesting)
+;                 (not is_receiving)
+;                 (not is_delivering)
+;                 (is_wiping)
+;             )
+; )
+
+;   ;; dump action from cleaning, like grabe a water and dump to sink? Assume robot has dustbin / water tank? 
 
 
-  ;; dump action from cleaning, like grabe a water and dump to sink? Assume robot has dustbin / water tank? 
-
-
-;; report action from patrol, send a messgae to the user about the state of the world, for example,  "the patient need help", 
-
+; ;; report action from patrol, send a messgae to the user about the state of the world, for example,  "the patient need help", 
+  
+; (:action vacume ; NL: [0] vacuums [1]
+;     :parameters (?agent - robot ?surface - floor ?region - region)
+;     :precondition (and (agent_near ?agent ?surface)
+;                        (entity_in ?agent ?region)
+;                        (entity_in ?surface ?region)
+;                        (agent_has ?agent vacuum))
+;     :effect (and 
+;                 (not is_moving)
+;                 (not is_approaching)
+;                 (not is_grabbing)
+;                 (not is_putting)
+;                 (not is_opening)
+;                 (not is_closing)
+;                 (not is_requesting)
+;                 (not is_receiving)
+;                 (not is_delivering)
+;                 (is_vacuuming)
+;             )
 )

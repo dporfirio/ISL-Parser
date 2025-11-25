@@ -8,10 +8,10 @@
 		icutray bed labbench emtray kitchencountertop - surface
 		
 		; Containers
-		medicinecabinet storagecabinet - container
+		medicinecabinet storagecabinet trashbin - container
 
 		; Items
-		linen bloodsample amoxicillin bandages insulin ibuprofen antacid meal xrayfile - item
+		mop vacume linen bloodsample amoxicillin bandages insulin ibuprofen antacid meal xrayfile - item
 		
 		; Robot
 		stretch - robot
@@ -52,6 +52,7 @@
 		(entity_in ibuprofen pharmacy)
 		(entity_in bandages pharmacy)
 		(entity_in antacid pharmacy)
+		(entity_in insulin pharmacy)
 
 		; Items on surfaces
 		(object_at bloodsample emtray)
@@ -66,6 +67,8 @@
 
 		; person has item
 		(agent_has nurse xrayfile)
+
+		(has_supply pharmacist insulin)
 
 		; person accessibility by robot
 		; (accessible icudoctor)
@@ -99,7 +102,9 @@
 		; Container states
 		(not (is_open medicinecabinet))
 		(not (is_open storagecabinet))
+		(not (is_open trashbin))
 		(is_openable medicinecabinet)
 		(is_openable storagecabinet)
+		(is_openable trashbin)
 	)
 	(:goal (entity_in stretch lab)))
