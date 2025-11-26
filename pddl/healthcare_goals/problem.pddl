@@ -11,7 +11,8 @@
 		medicinecabinet storagecabinet trashbin - container
 
 		; Items
-		mop vacume linen bloodsample amoxicillin bandages insulin ibuprofen antacid meal xrayfile - item
+		linen amoxicillin bandages insulin ibuprofen antacid meal - citem
+		bloodsample xrayfile mop vacum - uitem 
 		
 		; Robot
 		stretch - robot
@@ -68,7 +69,7 @@
 		; person has item
 		(agent_has nurse xrayfile)
 
-		(has_supply pharmacist insulin)
+		(agent_has pharmacist insulin)
 
 		; person accessibility by robot
 		; (accessible icudoctor)
