@@ -37,10 +37,12 @@
 
             ; General types - DO NOT MODIFY
             ; THE FOLLOWING 5 LINES!
+            ; uitem is unique item, citem is consumable item
             world bookkeeping - object
             region entity - world
             agent inanimate - entity
             item surface container - inanimate
+            uitem citem - item  
             person robot - agent
 
             ; =============================
@@ -84,8 +86,6 @@
         (agent_has ?agent - agent ?object - item)              ; NL: [0] is carrying [1]
         (person_has ?person - person ?object - item)              ; NL: [0] has [1]
         (is_open ?cont - container) ; NL: [1] is open
-
-        (has_supply ?person - person ?item - item) ; NL: [0] has supply of [1]
 
         ; General predicates - DO NOT MODIFY
         ; PREDICATES BELOW THIS LINE!
@@ -162,7 +162,7 @@
                            (not (agent_is_near_something)))
         :effect (and (entity_in ?agent ?to)
                      (not (entity_in ?agent ?from))
-                     (not agent_is_near_something)
+                     (not (agent_is_near_something))
                      (is_moving)
                      (not is_approaching)
                      (not is_grabbing)
@@ -252,7 +252,7 @@
         :effect (and (agent_has ?agent ?item)
                  (not (can_carry ?agent))
                  ; (not (accessible ?item))
-                 (agent_near ?agent ?surface)
+                 (agent_near ?agent ?surface)      ;when grab, the robot near the surface, but when put_on surface, agent is not near the surface? make the agent only near one entity at a time? 
                  (not (object_at ?item ?surface))
                  (not (entity_in ?item ?region))
                  (not (agent_near ?agent ?item))
@@ -306,8 +306,8 @@
                  (can_carry ?agent)
                  ; (accessible ?item)
                  ;(is_grabbable ?item)
-                 (not (agent_near ?agent ?surface))
-                 (agent_near ?agent ?item)
+               ;  (not (agent_near ?agent ?surface))
+                ; (agent_near ?agent ?item)
                  (object_at ?item ?surface)
                  (entity_in ?item ?region)
                  (not is_moving)
@@ -387,18 +387,16 @@
                      (not is_delivering))
         )    
 
-  ;; receive from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
-  (:action receive ; NL: [0] receives [1] from [2]
-        :parameters (?agent - robot ?item - item ?giver - person ?region - region)
+  ;; receive a unique item from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
+  (:action receive_uitem ; NL: [0] receives [1] from [2]
+        :parameters (?agent - robot ?item - uitem ?giver - person ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
+                           (agent_has ?giver ?item)
                            (can_carry ?agent)
                            (agent_near ?agent ?giver)
                            (entity_in ?agent ?region)
-                           (entity_in ?giver ?region)
-                           ; giver must hvae the item or has supply
-                           (or (agent_has ?giver ?item)
-                               (has_supply ?giver ?item))
-                           )
+                           (entity_in ?giver ?region))
+                          
         :effect (and (agent_has ?agent ?item)
                      (not (can_carry ?agent))
                      ;(not (accessible ?item))
@@ -406,9 +404,7 @@
                      (not (requested ?agent ?item ?giver))
                      (not (entity_in ?item ?region))
                      ; only remove when the giveer doesn't have supply of the item
-                     (when (not (has_supply ?giver ?item))
-                           (not (agent_has ?giver ?item)))
-
+                     (not (agent_has ?giver ?item))
                      (not is_moving)
                      (not is_approaching)
                      (not is_grabbing)
@@ -419,7 +415,32 @@
                      (is_receiving)
                      (not is_delivering)
         )
-    )  
+    )
+ (:action receive_citem ; NL: [0] receives [1] from [2]
+        :parameters (?agent - robot ?item - citem ?giver - person ?region - region)
+        :precondition (and (requested ?agent ?item ?giver)
+                           (agent_has ?giver ?item)
+                           (can_carry ?agent)
+                           (agent_near ?agent ?giver)
+                           (entity_in ?agent ?region)
+                           (entity_in ?giver ?region))
+                          
+        :effect (and (agent_has ?agent ?item)
+                     (not (can_carry ?agent))
+                     ;(not (accessible ?item))
+                     (not (agent_has ?giver ?item))
+                     (not (requested ?agent ?item ?giver))
+                     (not is_moving)
+                     (not is_approaching)
+                     (not is_grabbing)
+                     (not is_putting)
+                     (not is_opening)
+                     (not is_closing)
+                     (not is_requesting)
+                     (is_receiving)
+                     (not is_delivering)
+        )
+    )
   
   ;; deliver object to a person, after delivering the item, the agent can carry and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
  (:action deliver ; NL: [0] delivers [1] to [2]
