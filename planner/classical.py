@@ -169,6 +169,7 @@ def plan(aut: Automaton) -> PlanResult:
                         state = State(_id, "step_{}".format(_id))
                         state.action = act
                     plan.states.append(state)
+                state.name = curr.name
                 checkpoints.append(state)
 
     for i, _ in enumerate(plan.states[1:]):
