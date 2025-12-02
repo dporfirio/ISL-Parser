@@ -1,8 +1,0 @@
-Automata.
-
-  checkpoint 0 (init):
-
-  checkpoint 2 (deliver1):
-    -->  STRETCH delivers XRAYFILE to ICUDOCTOR
-
-  t: 0 -> 2

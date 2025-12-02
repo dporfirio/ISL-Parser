@@ -1,8 +1,0 @@
-Automata.
-
-  checkpoint 0 (init):
-
-  checkpoint 1 (move):
-    -->  STRETCH approaches BLOODSAMPLE
-
-  t: 0 -> 1

@@ -1,11 +1,12 @@
 from model.automata import Automaton
-from model.state import Checkpoint, State
+from model.state import Checkpoint, State, Predicate
 from model.transition import Transition
 from planner.plan_result import PlanResult
 import unified_planning as up  # type: ignore
 from unified_planning.shortcuts import (  # type: ignore
     OneshotPlanner,
     Fluent,
+    FNode,
     BoolType,
     SequentialSimulator
 )
@@ -209,13 +210,27 @@ def distill(aut: Automaton) -> PlanResult:
     curr: State = aut.init.out_trans[0].target
     curr = curr.out_trans[0].target
     while True:
-        # set the initial and final states
+        # Set the initial and final states.
+        # The final state must be the end effects of curr.
         temp_aut = Automaton(aut.problem.clone())
         temp_aut.problem.replace_initial_state(initial_st)
         temp_init: State = initial_chkpt.copy()
         temp_init.name = "temp_" + temp_init.name
         temp_aut.init = temp_init
-        temp_curr: State = curr.copy()
+
+        temp_curr: State = State(curr._id, curr.name, predicates=[])
+        subs = {p: v for p, v in zip(curr.action.action.parameters, curr.action.actual_parameters)}
+        for eff in curr.action.action.effects:
+            f = eff.fluent
+            v = eff.value
+            if isinstance(f, FNode) and f.is_forall() or\
+               isinstance(v, FNode) and v.is_forall():
+                continue
+            gf = eff.fluent.substitute(subs)        # grounded fluent
+            gv = eff.value.substitute(subs)         # grounded assigned value
+            if gv.is_true():
+                temp_curr.predicates.append(Predicate(gf))
+
         temp_curr.name = "temp_" + temp_curr.name
         temp_trans: Transition = Transition(temp_init._id, temp_curr._id)
         temp_aut.states.append(temp_init)

@@ -2,11 +2,11 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_7":
-    -->  STRETCH moves from BLOODSAMPLE to PHARMACY
+  state "step_6":
+    -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "step_14":
     -->  STRETCH puts IBUPROFEN on ICUTRAY
 
-  t: 4 -> 6
-  t: 0 -> 4
+  t: 0 -> 3
+  t: 3 -> 6
