@@ -5,14 +5,21 @@
 		icu lab nursestation emergencyroom cafeteria birthingcenter pharmacy inpatient storage - region
 		
 		; Surfaces
-		icutray bed labbench emtray kitchencountertop - surface
+		icutray bed labbench emtray kitchencountertop - objectsurface
+
+		;floor
+		icufloor labfloor nursestationfloor cafeteriafloor - floor
 		
 		; Containers
 		medicinecabinet storagecabinet trashbin - container
 
 		; Items
 		linen amoxicillin bandages insulin ibuprofen antacid meal - citem
-		bloodsample xrayfile mop vacum - uitem 
+		bloodsample xrayfile - uitem 
+
+		; Cleaning tools
+		vacuum - vacuum_tool 
+		wiper - wiper_tool
 		
 		; Robot
 		stretch - robot
@@ -49,11 +56,21 @@
 		(entity_in meal cafeteria)
 		(entity_in xrayfile nursestation)
 		(entity_in linen storage)
+		(entity_in vacuum storage)
+		(entity_in wiper storage)
 		(entity_in amoxicillin pharmacy)
 		(entity_in ibuprofen pharmacy)
 		(entity_in bandages pharmacy)
 		(entity_in antacid pharmacy)
 		(entity_in insulin pharmacy)
+
+
+		; floor in regions
+		 ; Floors in regions (already doing this)
+		(entity_in icufloor icu)
+		(entity_in labfloor lab)
+		(entity_in nursestationfloor nursestation)
+		(entity_in cafeteriafloor cafeteria)
 
 		; Items on surfaces
 		(object_at bloodsample emtray)
@@ -66,10 +83,21 @@
 		(item_inside bandages medicinecabinet)
 		(item_inside antacid medicinecabinet)
 
+		;Cleanning tool inside container
+		(item_inside vacuum storagecabinet)
+		(item_inside wiper storagecabinet)
+
+		; Mark which items are tools ← SET IT HERE!
+        (is_tool vacuum)
+        (is_tool wiper)
+
 		; person has item
 		(agent_has nurse xrayfile)
 
 		(agent_has pharmacist insulin)
+
+		(not (is_clean labfloor))
+		(not (is_clean kitchencountertop))
 
 		; person accessibility by robot
 		; (accessible icudoctor)
