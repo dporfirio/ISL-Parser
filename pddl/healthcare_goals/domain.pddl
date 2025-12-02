@@ -42,7 +42,9 @@
             region entity - world
             agent inanimate - entity
             item surface container - inanimate
-            uitem citem - item  
+            objectsurface floor - surface 
+            uitem citem tool - item 
+            vacuum_tool wiper_tool - tool
             person robot - agent
 
             ; =============================
@@ -56,7 +58,8 @@
     )
 
     ; any region that is not labeled defaults to "unknown"
-    (:constants unknown_region - region)
+    (:constants unknown_region - region
+    )
 
     (:predicates
 
@@ -109,6 +112,13 @@
         
         ; ITEM ATTRIBUTES
         (is_openable ?cont - container)                             ; INTERNAL
+
+        ;surface is dirty
+        (is_clean ?surface - surface)                             ; NL: [0] is dirty
+        (has_item ?surface - surface)                             ; NL: [0] has an item
+
+        ; is tool
+        (is_tool ?item - item)                                   ; NL: [0] is a tool
 
         ; REQUEST 
         (requested ?agent - robot ?item - item ?person - person) ; NL: [0] requested [1] from [2]
@@ -299,6 +309,7 @@
         :parameters (?agent - robot ?item - item ?surface - surface ?region - region)
         :precondition (and (agent_near ?agent ?surface)
                        (not (object_at ?item ?surface))
+                       (not (is_tool ?item))  ; vacume can not be put on surface
                        (not (can_carry ?agent))
                        (agent_has ?agent ?item)
                        (entity_in ?surface ?region))
@@ -321,6 +332,34 @@
                  (not is_delivering)
         )
     )
+
+    ; robot needs to put the tool back to the storage cabinet before grabing other items
+   (:action put_tool_back ; NL: [0] puts back [1] into [2] in [3]
+    :parameters (?agent - robot ?item - tool ?container - container ?region - region)
+    :precondition (and (agent_near ?agent ?container)
+                       (not (item_inside ?item ?container))
+                       (not (can_carry ?agent))
+                       (is_open ?container)
+                       (entity_in ?container ?region)  ; Add this!
+                       (entity_in ?agent ?region)       ; Add this!
+                       (agent_has ?agent ?item))
+    :effect (and (not (agent_has ?agent ?item))
+                 (can_carry ?agent)
+                 (agent_near ?agent ?item)
+                 (not (agent_near ?agent ?container))
+                 (item_inside ?item ?container)
+                 (entity_in ?item ?region)              ; Add this!
+                 (not is_moving)
+                 (not is_approaching)
+                 (not is_grabbing)
+                 (is_putting)
+                 (not is_opening)
+                 (not is_closing)
+                 (not is_requesting)
+                 (not is_receiving)
+                 (not is_delivering)
+    )
+)
 
     ;; the items inside the container are accessible when the container is open
     (:action open ; NL: [0] opens [1]
@@ -465,47 +504,48 @@
    
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
-; (:action wipe ; NL: [0] wipes [1]
-;     :parameters (?agent - robot ?surface - surface ?region - region)
-;     :precondition (and (agent_near ?agent ?surface)
-;                        (entity_in ?agent ?region)
-;                        (entity_in ?surface ?region)
-;                        (agent_has ?agent wiper))
-;     :effect (and 
-;                 (not is_moving)
-;                 (not is_approaching)
-;                 (not is_grabbing)
-;                 (not is_putting)
-;                 (not is_opening)
-;                 (not is_closing)
-;                 (not is_requesting)
-;                 (not is_receiving)
-;                 (not is_delivering)
-;                 (is_wiping)
-;             )
-; )
+(:action wipe ; NL: [0] wipes [1]
+    :parameters (?agent - robot ?surface - objectsurface ?region - region ?tool - wiper_tool)
+    :precondition (and (agent_near ?agent ?surface)
+                       (entity_in ?agent ?region)
+                       (entity_in ?surface ?region)
+                       (agent_has ?agent ?tool))
+    :effect (and (is_clean ?surface)
+                (not is_moving)
+                (not is_approaching)
+                (not is_grabbing)
+                (not is_putting)
+                (not is_opening)
+                (not is_closing)
+                (not is_requesting)
+                (not is_receiving)
+                (not is_delivering)
+                (is_wiping)
+            )
+)
 
-;   ;; dump action from cleaning, like grabe a water and dump to sink? Assume robot has dustbin / water tank? 
+  ;; dump action from cleaning, like grabe a water and dump to sink? Assume robot has dustbin / water tank? 
 
 
-; ;; report action from patrol, send a messgae to the user about the state of the world, for example,  "the patient need help", 
-  
-; (:action vacume ; NL: [0] vacuums [1]
-;     :parameters (?agent - robot ?surface - floor ?region - region)
-;     :precondition (and (agent_near ?agent ?surface)
-;                        (entity_in ?agent ?region)
-;                        (entity_in ?surface ?region)
-;                        (agent_has ?agent vacuum))
-;     :effect (and 
-;                 (not is_moving)
-;                 (not is_approaching)
-;                 (not is_grabbing)
-;                 (not is_putting)
-;                 (not is_opening)
-;                 (not is_closing)
-;                 (not is_requesting)
-;                 (not is_receiving)
-;                 (not is_delivering)
-;                 (is_vacuuming)
-;             )
+(:action vacuum_floor ; NL: [0] vacuums [1] in [2]
+    :parameters (?agent - robot ?floor - floor ?region - region ?tool - vacuum_tool)  ; Changed from uitem to tool
+    :precondition (and (entity_in ?agent ?region)
+                       (entity_in ?floor ?region)
+                       (agent_has ?agent ?tool)
+                       (not(is_clean ?floor)))  ; Add this!
+    :effect (and (is_clean ?floor)  ; Add this!
+                 (not is_moving)
+                 (not is_approaching)
+                 (not is_grabbing)
+                 (not is_putting)
+                 (not is_opening)
+                 (not is_closing)
+                 (not is_requesting)
+                 (not is_receiving)
+                 (not is_delivering)
+                 (not is_wiping)  
+                 (is_vacuuming)
+                 )
+)
+
 )
