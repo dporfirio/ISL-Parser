@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_8":
+    -->  STRETCH wipes KITCHENCOUNTERTOP
+
+  t: 0 -> 3
