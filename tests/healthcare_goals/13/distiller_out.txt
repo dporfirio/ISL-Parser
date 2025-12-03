@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_8":
+  state "three":
     -->  STRETCH wipes KITCHENCOUNTERTOP
 
   t: 0 -> 3

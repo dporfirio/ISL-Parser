@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_2":
+  state "one":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
 
   t: 0 -> 1

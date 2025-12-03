@@ -22,7 +22,7 @@ labels
 		  params: []
           &
           predicate: is_clean,
-		  params: [labfloor]
+		  params: [lab]
 	]
 
 

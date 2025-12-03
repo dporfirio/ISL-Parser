@@ -37,13 +37,12 @@
 
             ; General types - DO NOT MODIFY
             ; THE FOLLOWING 5 LINES!
-            ; uitem is unique item, citem is consumable item
+            ; uniqueitem is unique item, consumableitem is consumable item
             world bookkeeping - object
             region entity - world
             agent inanimate - entity
             item surface container - inanimate
-            objectsurface floor - surface 
-            uitem citem tool - item 
+            uniqueitem consumableitem tool - item 
             vacuum_tool wiper_tool - tool
             person robot - agent
 
@@ -114,8 +113,7 @@
         (is_openable ?cont - container)                             ; INTERNAL
 
         ;surface is dirty
-        (is_clean ?surface - surface)                             ; NL: [0] is dirty
-        (has_item ?surface - surface)                             ; NL: [0] has an item
+        (is_clean ?world - world)                             ; NL: [0] is dirty
 
         ; is tool
         (is_tool ?item - item)                                   ; NL: [0] is a tool
@@ -427,8 +425,8 @@
         )    
 
   ;; receive a unique item from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
-  (:action receive_uitem ; NL: [0] receives [1] from [2]
-        :parameters (?agent - robot ?item - uitem ?giver - person ?region - region)
+  (:action receive_uniqueitem ; NL: [0] receives [1] from [2]
+        :parameters (?agent - robot ?item - uniqueitem ?giver - person ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
                            (agent_has ?giver ?item)
                            (can_carry ?agent)
@@ -455,8 +453,8 @@
                      (not is_delivering)
         )
     )
- (:action receive_citem ; NL: [0] receives [1] from [2]
-        :parameters (?agent - robot ?item - citem ?giver - person ?region - region)
+ (:action receive_consumableitem ; NL: [0] receives [1] from [2]
+        :parameters (?agent - robot ?item - consumableitem ?giver - person ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
                            (agent_has ?giver ?item)
                            (can_carry ?agent)
@@ -505,12 +503,12 @@
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
 (:action wipe ; NL: [0] wipes [1]
-    :parameters (?agent - robot ?surface - objectsurface ?region - region ?tool - wiper_tool)
-    :precondition (and (agent_near ?agent ?surface)
+    :parameters (?agent - robot ?world - surface ?region - region ?tool - wiper_tool)
+    :precondition (and (agent_near ?agent ?world)
                        (entity_in ?agent ?region)
-                       (entity_in ?surface ?region)
+                       (entity_in ?world ?region)
                        (agent_has ?agent ?tool))
-    :effect (and (is_clean ?surface)
+    :effect (and (is_clean ?world)
                 (not is_moving)
                 (not is_approaching)
                 (not is_grabbing)
@@ -527,13 +525,12 @@
   ;; dump action from cleaning, like grabe a water and dump to sink? Assume robot has dustbin / water tank? 
 
 
-(:action vacuum_floor ; NL: [0] vacuums [1] in [2]
-    :parameters (?agent - robot ?floor - floor ?region - region ?tool - vacuum_tool)  ; Changed from uitem to tool
-    :precondition (and (entity_in ?agent ?region)
-                       (entity_in ?floor ?region)
+(:action vacuum_floor ; NL: [0] vacuums [1] FLOOR
+    :parameters (?agent - robot ?world - region ?tool - vacuum_tool)  ; Changed from uniqueitem to tool
+    :precondition (and (entity_in ?agent ?world)
                        (agent_has ?agent ?tool)
-                       (not(is_clean ?floor)))  ; Add this!
-    :effect (and (is_clean ?floor)  ; Add this!
+                       (not(is_clean ?world)))  ; Add this!
+    :effect (and (is_clean ?world)  ; Add this!
                  (not is_moving)
                  (not is_approaching)
                  (not is_grabbing)

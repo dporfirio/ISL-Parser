@@ -17,7 +17,7 @@ Automata.
   state "step_5":
     -->  STRETCH approaches LABBENCH in LAB
 
-  state "step_6":
+  state "one":
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "step_7":
@@ -32,7 +32,7 @@ Automata.
   state "step_10":
     -->  STRETCH approaches AMOXICILLIN from MEDICINECABINET
 
-  state "step_11":
+  state "two":
     -->  STRETCH grabs AMOXICILLIN from MEDICINECABINET in PHARMACY
 
   t: 0 -> 1

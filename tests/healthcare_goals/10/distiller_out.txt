@@ -2,10 +2,10 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_6":
+  state "one":
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
-  state "step_11":
+  state "two":
     -->  STRETCH grabs AMOXICILLIN from MEDICINECABINET in PHARMACY
 
   t: 0 -> 1

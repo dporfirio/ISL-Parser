@@ -17,7 +17,7 @@ Automata.
   state "step_5":
     -->  STRETCH approaches LABBENCH in LAB
 
-  state "step_6":
+  state "one":
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "step_7":
@@ -41,7 +41,7 @@ Automata.
   state "step_13":
     -->  STRETCH approaches LABBENCH in LAB
 
-  state "step_14":
+  state "two":
     -->  STRETCH puts AMOXICILLIN on LABBENCH
 
   t: 0 -> 1

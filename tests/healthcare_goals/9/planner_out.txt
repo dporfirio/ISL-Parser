@@ -8,7 +8,7 @@ Automata.
   state "step_2":
     -->  STRETCH requests XRAYFILE from NURSE
 
-  state "step_3":
+  state "one":
     -->  STRETCH receives XRAYFILE from NURSE
 
   state "step_4":
@@ -17,7 +17,7 @@ Automata.
   state "step_5":
     -->  STRETCH approaches ICUDOCTOR in ICU
 
-  state "step_6":
+  state "two":
     -->  STRETCH delivers XRAYFILE to ICUDOCTOR
 
   t: 0 -> 1

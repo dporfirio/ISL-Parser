@@ -12,7 +12,7 @@ Automata.
 
   checkpoint 3 (three):
          <<is vacuuming>>
-         <<labfloor is dirty>>
+         <<lab is dirty>>
 
   t: 0 -> 1
   t: 1 -> 2

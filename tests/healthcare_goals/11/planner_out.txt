@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_1":
+  state "one":
     -->  STRETCH approaches XRAYFILE in NURSESTATION
 
   state "step_2":
@@ -23,16 +23,16 @@ Automata.
   state "step_7":
     -->  STRETCH puts XRAYFILE on KITCHENCOUNTERTOP
 
-  state "step_8":
+  state "two":
     -->  STRETCH grabs XRAYFILE from KITCHENCOUNTERTOP in CAFETERIA
 
-  state "step_9":
+  state "three":
     -->  STRETCH moves from KITCHENCOUNTERTOP to LAB
 
-  state "step_10":
+  state "four":
     -->  STRETCH approaches LABBENCH in LAB
 
-  state "step_11":
+  state "five":
     -->  STRETCH puts XRAYFILE on LABBENCH
 
   t: 0 -> 1

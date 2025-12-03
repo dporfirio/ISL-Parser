@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_1":
+  state "one":
     -->  STRETCH moves from NURSESTATION to STORAGE
 
   state "step_2":
@@ -14,14 +14,14 @@ Automata.
   state "step_4":
     -->  STRETCH approaches VACUUM from STORAGECABINET
 
-  state "step_5":
+  state "two":
     -->  STRETCH grabs VACUUM from STORAGECABINET in STORAGE
 
   state "step_6":
     -->  STRETCH moves from STORAGECABINET to LAB
 
-  state "step_7":
-    -->  STRETCH vacuums LABFLOOR in LAB
+  state "three":
+    -->  STRETCH vacuums LAB FLOOR
 
   t: 0 -> 1
   t: 1 -> 2

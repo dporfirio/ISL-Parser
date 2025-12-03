@@ -2,20 +2,17 @@
 	(:domain healthcare)
 	(:objects 
 		; Regions
-		icu lab nursestation emergencyroom cafeteria birthingcenter pharmacy inpatient storage - region
+		icu lab nursestation emergencyroom cafeteria birthcenter pharmacy inpatient storage - region
 		
 		; Surfaces
-		icutray bed labbench emtray kitchencountertop - objectsurface
+		icutray bed labbench emtray kitchencountertop - surface
 
-		;floor
-		icufloor labfloor nursestationfloor cafeteriafloor - floor
-		
 		; Containers
 		medicinecabinet storagecabinet trashbin - container
 
 		; Items
-		linen amoxicillin bandages insulin ibuprofen antacid meal - citem
-		bloodsample xrayfile - uitem 
+		linen amoxicillin bandages insulin ibuprofen antacid meal - consumableitem
+		bloodsample xrayfile - uniqueitem 
 
 		; Cleaning tools
 		vacuum - vacuum_tool 
@@ -63,15 +60,7 @@
 		(entity_in bandages pharmacy)
 		(entity_in antacid pharmacy)
 		(entity_in insulin pharmacy)
-
-
-		; floor in regions
-		 ; Floors in regions (already doing this)
-		(entity_in icufloor icu)
-		(entity_in labfloor lab)
-		(entity_in nursestationfloor nursestation)
-		(entity_in cafeteriafloor cafeteria)
-
+	
 		; Items on surfaces
 		(object_at bloodsample emtray)
 		(object_at meal kitchencountertop)
@@ -96,8 +85,23 @@
 
 		(agent_has pharmacist insulin)
 
-		(not (is_clean labfloor))
-		(not (is_clean kitchencountertop))
+		(not (is_clean lab))
+		(not (is_clean icu))
+		(not (is_clean inpatient))
+		(not (is_clean emergencyroom))
+		(not (is_clean nursestation))
+		(not (is_clean birthcenter))
+		(not (is_clean pharmacy))
+		(not (is_clean cafeteria))
+		(not (is_clean storage))
+
+
+		; surfaces are not clean
+		(not(is_clean icutray))
+		(not(is_clean bed))
+		(not(is_clean labbench))
+		(not(is_clean emtray))
+		(not(is_clean kitchencountertop))
 
 		; person accessibility by robot
 		; (accessible icudoctor)
@@ -118,15 +122,6 @@
 		; (not (accessible bandages))
 		; (not (accessible insulin))
 		; (not (accessible antacid))
-
-		; Accessibility of surfaces and containers
-		; (accessible icutray)
-		; (accessible bed)
-		; (accessible labbench)
-		; (accessible emtray)
-		; (accessible medicinecabinet)
-		; (accessible storagecabinet)
-		; (accessible kitchencountertop)
 
 		; Container states
 		(not (is_open medicinecabinet))

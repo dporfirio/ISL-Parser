@@ -8,10 +8,10 @@ Automata.
   state "step_2":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
 
-  state "step_3":
+  state "one":
     -->  STRETCH grabs BLOODSAMPLE from EMTRAY in EMERGENCYROOM
 
-  state "step_4":
+  state "two":
     -->  STRETCH moves from EMTRAY to LAB
 
   t: 0 -> 1
