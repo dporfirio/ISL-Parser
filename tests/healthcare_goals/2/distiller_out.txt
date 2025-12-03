@@ -2,13 +2,13 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_6":
+  state "deliver1":
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
-  state "step_14":
+  state "deliver2":
     -->  STRETCH puts IBUPROFEN on LABBENCH
 
-  state "step_22":
+  state "deliver3":
     -->  STRETCH puts LINEN on ICUTRAY
 
   t: 0 -> 1

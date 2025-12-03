@@ -5,7 +5,7 @@ Automata.
   state "step_1":
     -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
 
-  state "step_2":
+  state "one":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
 
   t: 0 -> 1

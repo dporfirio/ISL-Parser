@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_7":
-    -->  STRETCH vacuums LABFLOOR in LAB
+  state "three":
+    -->  STRETCH vacuums LAB FLOOR
 
   t: 0 -> 3

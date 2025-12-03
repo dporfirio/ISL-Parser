@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_6":
+  state "three":
     -->  STRETCH delivers XRAYFILE to ICUDOCTOR
 
   t: 0 -> 3

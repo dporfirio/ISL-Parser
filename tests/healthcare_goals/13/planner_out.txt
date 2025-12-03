@@ -2,7 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_1":
+  state "one":
     -->  STRETCH moves from NURSESTATION to STORAGE
 
   state "step_2":
@@ -14,7 +14,7 @@ Automata.
   state "step_4":
     -->  STRETCH approaches WIPER from STORAGECABINET
 
-  state "step_5":
+  state "two":
     -->  STRETCH grabs WIPER from STORAGECABINET in STORAGE
 
   state "step_6":
@@ -23,7 +23,7 @@ Automata.
   state "step_7":
     -->  STRETCH approaches KITCHENCOUNTERTOP in CAFETERIA
 
-  state "step_8":
+  state "three":
     -->  STRETCH wipes KITCHENCOUNTERTOP
 
   t: 0 -> 1

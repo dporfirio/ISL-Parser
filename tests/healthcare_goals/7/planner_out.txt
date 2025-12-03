@@ -2,16 +2,16 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "step_1":
+  state "one":
     -->  STRETCH moves from NURSESTATION to NURSESTATION
 
   state "step_2":
     -->  STRETCH approaches NURSE in NURSESTATION
 
-  state "step_3":
+  state "two":
     -->  STRETCH requests XRAYFILE from NURSE
 
-  state "step_4":
+  state "three":
     -->  STRETCH receives XRAYFILE from NURSE
 
   state "step_5":
@@ -20,7 +20,7 @@ Automata.
   state "step_6":
     -->  STRETCH approaches ICUDOCTOR in ICU
 
-  state "step_7":
+  state "four":
     -->  STRETCH delivers XRAYFILE to ICUDOCTOR
 
   t: 0 -> 1

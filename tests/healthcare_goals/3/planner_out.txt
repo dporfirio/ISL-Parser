@@ -8,16 +8,16 @@ Automata.
   state "step_2":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
 
-  state "step_3":
+  state "one":
     -->  STRETCH grabs BLOODSAMPLE from EMTRAY in EMERGENCYROOM
 
   state "step_4":
     -->  STRETCH moves from EMTRAY to LAB
 
-  state "step_5":
+  state "two":
     -->  STRETCH approaches LABBENCH in LAB
 
-  state "step_6":
+  state "three":
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "step_7":
@@ -41,7 +41,7 @@ Automata.
   state "step_13":
     -->  STRETCH approaches LABBENCH in LAB
 
-  state "step_14":
+  state "four":
     -->  STRETCH puts ANTACID on LABBENCH
 
   t: 0 -> 1
