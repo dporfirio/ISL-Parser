@@ -1,0 +1,100 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "one":
+    -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
+
+  state "step_2":
+    -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
+
+  state "two":
+    -->  STRETCH grabs BLOODSAMPLE from EMTRAY in EMERGENCYROOM
+
+  state "step_4":
+    -->  STRETCH moves from EMTRAY to LAB
+
+  state "step_5":
+    -->  STRETCH approaches LABTECH in LAB
+
+  state "three":
+    -->  STRETCH delivers BLOODSAMPLE to LABTECH
+
+  state "four":
+    -->  STRETCH moves from LABTECH to PHARMACY
+
+  state "step_8":
+    -->  STRETCH approaches PHARMACIST in PHARMACY
+
+  state "five":
+    -->  STRETCH requests INSULIN from PHARMACIST
+
+  state "six":
+    -->  STRETCH receives INSULIN from PHARMACIST
+
+  state "seven":
+    -->  STRETCH moves from PHARMACIST to ICU
+
+  state "step_12":
+    -->  STRETCH approaches ICUTRAY in ICU
+
+  state "step_13":
+    -->  STRETCH puts INSULIN on ICUTRAY
+
+  state "step_14":
+    -->  STRETCH moves from INSULIN to PHARMACY
+
+  state "step_15":
+    -->  STRETCH approaches MEDICINECABINET in PHARMACY
+
+  state "step_16":
+    -->  STRETCH opens MEDICINECABINET
+
+  state "step_17":
+    -->  STRETCH approaches IBUPROFEN from MEDICINECABINET
+
+  state "step_18":
+    -->  STRETCH grabs IBUPROFEN from MEDICINECABINET in PHARMACY
+
+  state "step_19":
+    -->  STRETCH moves from MEDICINECABINET to ICU
+
+  state "step_20":
+    -->  STRETCH approaches ICUTRAY in ICU
+
+  state "eight":
+    -->  STRETCH puts IBUPROFEN on ICUTRAY
+
+  state "step_22":
+    -->  STRETCH grabs IBUPROFEN from ICUTRAY in ICU
+
+  state "step_23":
+    -->  STRETCH approaches ICUDOCTOR from ICUTRAY
+
+  state "nine":
+    -->  STRETCH delivers IBUPROFEN to ICUDOCTOR
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13
+  t: 13 -> 14
+  t: 14 -> 15
+  t: 15 -> 16
+  t: 16 -> 17
+  t: 17 -> 18
+  t: 18 -> 19
+  t: 19 -> 20
+  t: 20 -> 21
+  t: 21 -> 22
+  t: 22 -> 23
+  t: 23 -> 24

@@ -1,0 +1,24 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "three":
+    -->  STRETCH delivers BLOODSAMPLE to LABTECH
+
+  state "six":
+    -->  STRETCH receives INSULIN from PHARMACIST
+
+  state "seven":
+    -->  STRETCH moves from PHARMACIST to ICU
+
+  state "eight":
+    -->  STRETCH puts IBUPROFEN on ICUTRAY
+
+  state "nine":
+    -->  STRETCH delivers IBUPROFEN to ICUDOCTOR
+
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 0 -> 3
+  t: 3 -> 6

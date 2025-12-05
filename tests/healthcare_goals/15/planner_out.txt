@@ -1,0 +1,76 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "one":
+    -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
+
+  state "step_2":
+    -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
+
+  state "two":
+    -->  STRETCH grabs BLOODSAMPLE from EMTRAY in EMERGENCYROOM
+
+  state "step_4":
+    -->  STRETCH moves from EMTRAY to LAB
+
+  state "step_5":
+    -->  STRETCH approaches LABTECH in LAB
+
+  state "three":
+    -->  STRETCH delivers BLOODSAMPLE to LABTECH
+
+  state "four":
+    -->  STRETCH moves from LABTECH to PHARMACY
+
+  state "step_8":
+    -->  STRETCH approaches PHARMACIST in PHARMACY
+
+  state "five":
+    -->  STRETCH requests INSULIN from PHARMACIST
+
+  state "six":
+    -->  STRETCH receives INSULIN from PHARMACIST
+
+  state "step_11":
+    -->  STRETCH delivers INSULIN to PHARMACIST
+
+  state "step_12":
+    -->  STRETCH approaches MEDICINECABINET from PHARMACIST
+
+  state "step_13":
+    -->  STRETCH opens MEDICINECABINET
+
+  state "step_14":
+    -->  STRETCH approaches AMOXICILLIN from MEDICINECABINET
+
+  state "step_15":
+    -->  STRETCH grabs AMOXICILLIN from MEDICINECABINET in PHARMACY
+
+  state "step_16":
+    -->  STRETCH moves from MEDICINECABINET to ICU
+
+  state "step_17":
+    -->  STRETCH approaches ICUTRAY in ICU
+
+  state "seven":
+    -->  STRETCH puts AMOXICILLIN on ICUTRAY
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13
+  t: 13 -> 14
+  t: 14 -> 15
+  t: 15 -> 16
+  t: 16 -> 17
+  t: 17 -> 18

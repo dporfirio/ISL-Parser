@@ -1,0 +1,16 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "three":
+    -->  STRETCH delivers BLOODSAMPLE to LABTECH
+
+  state "six":
+    -->  STRETCH receives INSULIN from PHARMACIST
+
+  state "seven":
+    -->  STRETCH puts AMOXICILLIN on ICUTRAY
+
+  t: 6 -> 7
+  t: 0 -> 3
+  t: 3 -> 6
