@@ -1,5 +1,5 @@
 from __future__ import annotations
-import model.state as state
+import islparser.model.state as state
 
 
 class Transition:

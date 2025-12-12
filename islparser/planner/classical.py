@@ -1,7 +1,7 @@
-from model.automata import Automaton
-from model.state import Checkpoint, State, Predicate
-from model.transition import Transition
-from planner.plan_result import PlanResult
+from islparser.model.automata import Automaton
+from islparser.model.state import Checkpoint, State, Predicate
+from islparser.model.transition import Transition
+from islparser.planner.plan_result import PlanResult
 import unified_planning as up  # type: ignore
 from unified_planning.shortcuts import (  # type: ignore
     OneshotPlanner,

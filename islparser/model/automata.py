@@ -1,19 +1,16 @@
 from __future__ import annotations
 from typing import List, cast
-from model.state import (
+from islparser.model.state import (
     State,
     CheckpointFactory,
     LabeledFormula,
     Predicate
 )
-from model.transition import Transition
-from model.conditionals import (  # type: ignore[import-not-found]
+from islparser.model.transition import Transition
+from islparser.model.conditionals import (  # type: ignore[import-not-found]
     get_list_of_conditional_values
 )
-from util.componentidentifier import ComponentIdentifier
-from unified_planning.plans import (  # type: ignore[import-untyped]
-    ActionInstance
-)
+from islparser.util.componentidentifier import ComponentIdentifier
 from unified_planning.model import (  # type: ignore[import-untyped]
     Problem,
     FNode

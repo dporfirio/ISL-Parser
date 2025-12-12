@@ -1,14 +1,14 @@
 import argparse
-import parser.lexer_and_parser as aut_reader
-import planner.classical as classical
-from planner.plan_result import PlanResult
-from parser.lexer_and_parser import (  # type: ignore[import-untyped]
+import islparser.parser.lexer_and_parser as aut_reader
+import islparser.planner.classical as classical
+from islparser.planner.plan_result import PlanResult
+from islparser.parser.lexer_and_parser import (  # type: ignore[import-untyped]
     ParseResult,
     ParseResultStatus
 )
-from model.automata import Automaton, PredicateKey
-from util.logger import Logger
-from util.options import Options
+from islparser.model.automata import Automaton, PredicateKey
+from islparser.util.logger import Logger
+from islparser.util.options import Options
 from typing import List, cast
 
 

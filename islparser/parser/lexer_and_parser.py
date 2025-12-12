@@ -6,18 +6,18 @@ from unified_planning.model.fnode import FNode  # type: ignore[import-untyped]
 from unified_planning.model.object import Object  # type: ignore[import-untyped]
 from ply.lex import lex  # type: ignore[import-untyped]
 from ply.yacc import yacc  # type: ignore[import-untyped]
-from model.isl_problem import (
+from islparser.model.isl_problem import (
     ISLProblemFactory,
     ISLProblem
 )
-from model.automata import (
+from islparser.model.automata import (
     Automaton,
     AutomataFactory
 )
-from model.state import LabeledFormula, CheckpointFactory, Predicate
-from model.transition import Transition
-from model.conditionals import Eq, GoalSat, GuardEnum
-from util.options import Options
+from islparser.model.state import LabeledFormula, CheckpointFactory, Predicate
+from islparser.model.transition import Transition
+from islparser.model.conditionals import Eq, GoalSat, GuardEnum
+from islparser.util.options import Options
 
 
 class ParseResult:
@@ -393,8 +393,8 @@ def parse_program(ast: Tuple) -> ParseResult:
     labeled_formulae: List[LabeledFormula] = []
     problem: ISLProblem = ISLProblemFactory.make()
     pddl_path: str = pddl_import.replace(".", "/")
-    problem.add_pddl("{}/domain.pddl".format(pddl_path),
-                     "{}/problem.pddl".format(pddl_path))
+    problem.add_pddl("islparser/{}/domain.pddl".format(pddl_path),
+                     "islparser/{}/problem.pddl".format(pddl_path))
     automaton = AutomataFactory.make(problem)
     automaton.initialize()
     ParseResult.instance().automaton = automaton

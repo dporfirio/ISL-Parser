@@ -12,8 +12,8 @@ from unified_planning.model import (  # type: ignore[import-untyped]
 from unified_planning.plans import (  # type: ignore[import-untyped]
     ActionInstance
 )
-import model.transition as transition
-import model.isl_problem as isl_problem
+import islparser.model.transition as transition
+import islparser.model.isl_problem as isl_problem
 
 
 class LabeledFormula:

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from model.automata import Automaton
+from islparser.model.automata import Automaton
 from typing import List
 
 

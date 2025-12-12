@@ -1,16 +1,16 @@
 [run]
 branch = False
 source =
-    isl
-    model.state
-    model.transition
-    model.automata
-    model.conditionals
-    parser.lexer_and_parser
-    model.isl_problem
-    util.logger
-    util.options
-    util.componentidentifier
+    islparser.isl
+    islparser.model.state
+    islparser.model.transition
+    islparser.model.automata
+    islparser.model.conditionals
+    islparser.parser.lexer_and_parser
+    islparser.model.isl_problem
+    islparser.util.logger
+    islparser.util.options
+    islparser.util.componentidentifier
 
 [report]
 exclude_lines =

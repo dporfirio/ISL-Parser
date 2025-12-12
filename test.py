@@ -39,7 +39,7 @@ print("\nISL tests: parser, planner, & distiller\n")
 # start coverage
 cov = coverage.Coverage()
 cov.start()
-import isl  # noqa: E402
+import islparser.isl as isl  # noqa: E402
 
 # track memory profiling
 maxmem: float = 0.0

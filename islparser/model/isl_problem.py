@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import Dict
 import inflect
-from model.state import Predicate
-from parser.pddl_parser import parse_to_unified_planner, parse_pddl_comments
+from islparser.model.state import Predicate
+from islparser.parser.pddl_parser import parse_to_unified_planner, parse_pddl_comments
 import unified_planning as up  # type: ignore[import-untyped]
 from unified_planning.model import (  # type: ignore[import-untyped]
     Problem,
