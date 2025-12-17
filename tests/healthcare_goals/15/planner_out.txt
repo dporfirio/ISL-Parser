@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   state "one":
-    -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
+    -->  STRETCH moves from ROBOTDOCK to EMERGENCYROOM
 
   state "step_2":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
@@ -27,13 +27,13 @@ Automata.
     -->  STRETCH approaches PHARMACIST in PHARMACY
 
   state "five":
-    -->  STRETCH requests INSULIN from PHARMACIST
+    -->  STRETCH requests INSULIN1 from PHARMACIST
 
   state "six":
-    -->  STRETCH receives INSULIN from PHARMACIST
+    -->  STRETCH receives INSULIN1 from PHARMACIST
 
   state "step_11":
-    -->  STRETCH delivers INSULIN to PHARMACIST
+    -->  STRETCH delivers INSULIN1 to PHARMACIST
 
   state "step_12":
     -->  STRETCH approaches MEDICINECABINET from PHARMACIST
@@ -42,10 +42,10 @@ Automata.
     -->  STRETCH opens MEDICINECABINET
 
   state "step_14":
-    -->  STRETCH approaches AMOXICILLIN from MEDICINECABINET
+    -->  STRETCH approaches AMOXICILLIN1 from MEDICINECABINET
 
   state "step_15":
-    -->  STRETCH grabs AMOXICILLIN from MEDICINECABINET in PHARMACY
+    -->  STRETCH grabs AMOXICILLIN1 from MEDICINECABINET in PHARMACY
 
   state "step_16":
     -->  STRETCH moves from MEDICINECABINET to ICU
@@ -54,7 +54,7 @@ Automata.
     -->  STRETCH approaches ICUTRAY in ICU
 
   state "seven":
-    -->  STRETCH puts AMOXICILLIN on ICUTRAY
+    -->  STRETCH puts AMOXICILLIN1 on ICUTRAY
 
   t: 0 -> 1
   t: 1 -> 2

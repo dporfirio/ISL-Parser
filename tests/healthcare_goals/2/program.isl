@@ -15,14 +15,14 @@ labels
 		  params: []
           &
           predicate: object_at,
-		  params: [ibuprofen, labbench]
+		  params: [ibuprofen1, labbench]
 	],
     deliver3: [
         predicate: is_putting,
 		  params: []
           &
           predicate: object_at,
-		  params: [linen, icutray]
+		  params: [linen1, icutray]
     ]
 
 endlabels

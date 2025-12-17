@@ -2,32 +2,35 @@ Automata.
 
   checkpoint 0 (init):
 
+  state "step_1":
+    -->  STRETCH moves from ROBOTDOCK to NURSESTATION
+
   state "one":
     -->  STRETCH approaches XRAYFILE in NURSESTATION
 
-  state "step_2":
+  state "step_3":
     -->  STRETCH approaches NURSE from XRAYFILE
 
-  state "step_3":
+  state "step_4":
     -->  STRETCH requests XRAYFILE from NURSE
 
-  state "step_4":
-    -->  STRETCH receives XRAYFILE from NURSE
-
   state "step_5":
-    -->  STRETCH moves from NURSE to CAFETERIA
+    -->  STRETCH opens ROBOTDRAWER
 
   state "step_6":
-    -->  STRETCH approaches KITCHENCOUNTERTOP in CAFETERIA
+    -->  STRETCH receives XRAYFILE from NURSE
 
   state "step_7":
-    -->  STRETCH puts XRAYFILE on KITCHENCOUNTERTOP
+    -->  STRETCH puts XRAYFILE in ROBOTDRAWER
 
   state "two":
-    -->  STRETCH grabs XRAYFILE from KITCHENCOUNTERTOP in CAFETERIA
+    -->  STRETCH grabs XRAYFILE from ROBOTDRAWER
+
+  state "step_9":
+    -->  STRETCH closes ROBOTDRAWER
 
   state "three":
-    -->  STRETCH moves from KITCHENCOUNTERTOP to LAB
+    -->  STRETCH moves from NURSE to LAB
 
   state "four":
     -->  STRETCH approaches LABBENCH in LAB
@@ -46,3 +49,4 @@ Automata.
   t: 8 -> 9
   t: 9 -> 10
   t: 10 -> 11
+  t: 11 -> 12

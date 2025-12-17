@@ -1,0 +1,66 @@
+# Healthcare test
+import pddl.healthcare_goals
+
+labels
+	
+    one: [
+        predicate: is_moving,
+		  params: []
+          &
+          predicate: entity_in,
+		  params: [stretch, pharmacy]
+    ],
+	two: [
+		predicate: is_approaching,
+		params: []
+		&
+		predicate: agent_near,
+		params: [stretch, medicinecabinet]
+	],
+	three: [
+		predicate: is_grabbing,
+		  params: []
+          &
+          predicate: agent_has,
+		  params: [stretch, bandages1]
+	],
+	four: [
+		predicate: is_putting,
+		params:[]
+		&
+		 predicate: item_inside,
+		  params: [bandages1, robotdrawer]
+	],
+	five: [
+		predicate: is_closing_drawer,
+		  params: []
+	],
+	six: [
+		predicate: is_closing,
+		  params: []
+	],
+	
+	seven: [
+		predicate: is_delivering,
+		  params: []
+          &
+          predicate: agent_has,
+		  params: [icudoctor, bandages1]
+	]
+
+	
+endlabels
+
+module
+
+	st: [0: init, 1: one, 2: two, 3: three,4: four, 5: five, 6: six, 7: seven];
+
+	[] 0 -> 1;
+    [] 1 -> 2;
+	[] 2 -> 3;
+	[] 3 -> 4;
+	[] 4 -> 5;
+	[] 5 -> 6;
+	[] 6 -> 7;
+
+endmodule

@@ -15,7 +15,7 @@ labels
 		  params: []
           &
           predicate: agent_has,
-		  params: [stretch, amoxicillin]
+		  params: [stretch, amoxicillin1]
 	]
 
 endlabels

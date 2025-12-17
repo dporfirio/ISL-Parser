@@ -20,11 +20,11 @@ Automata.
 
   checkpoint 5 (five):
          <<is grabbing>>
-         <<stretch is carrying ibuprofen>>
+         <<stretch is carrying ibuprofen1>>
 
   checkpoint 6 (six):
          <<is putting>>
-         <<ibuprofen at icutray>>
+         <<ibuprofen1 at icutray>>
 
   t: 0 -> 1
   t: 1 -> 2

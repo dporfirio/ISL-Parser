@@ -16,7 +16,7 @@ Automata.
 
   checkpoint 4 (four):
          <<is delivering>>
-         <<icudoctor has xrayfile>>
+         <<icudoctor is carrying xrayfile>>
 
   t: 0 -> 1
   t: 1 -> 2

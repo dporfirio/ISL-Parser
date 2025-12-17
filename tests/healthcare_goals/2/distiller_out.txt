@@ -6,10 +6,10 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "deliver2":
-    -->  STRETCH puts IBUPROFEN on LABBENCH
+    -->  STRETCH puts IBUPROFEN1 on LABBENCH
 
   state "deliver3":
-    -->  STRETCH puts LINEN on ICUTRAY
+    -->  STRETCH puts LINEN1 on ICUTRAY
 
   t: 0 -> 1
   t: 1 -> 2

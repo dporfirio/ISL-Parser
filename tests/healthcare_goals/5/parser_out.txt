@@ -12,7 +12,7 @@ Automata.
 
   checkpoint 3 (three):
          <<is delivering>>
-         <<labtech has bloodsample>>
+         <<labtech is carrying bloodsample>>
 
   t: 0 -> 1
   t: 1 -> 2

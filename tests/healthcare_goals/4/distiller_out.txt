@@ -6,7 +6,7 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "six":
-    -->  STRETCH puts IBUPROFEN on ICUTRAY
+    -->  STRETCH puts IBUPROFEN1 on ICUTRAY
 
   t: 0 -> 3
   t: 3 -> 6

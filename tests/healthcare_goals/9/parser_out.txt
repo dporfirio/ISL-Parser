@@ -8,7 +8,7 @@ Automata.
 
   checkpoint 2 (two):
          <<is delivering>>
-         <<icudoctor has xrayfile>>
+         <<icudoctor is carrying xrayfile>>
 
   t: 0 -> 1
   t: 1 -> 2

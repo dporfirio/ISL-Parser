@@ -3,18 +3,21 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  STRETCH approaches NURSE in NURSESTATION
+    -->  STRETCH moves from ROBOTDOCK to NURSESTATION
 
   state "step_2":
+    -->  STRETCH approaches NURSE in NURSESTATION
+
+  state "step_3":
     -->  STRETCH requests XRAYFILE from NURSE
 
   state "one":
     -->  STRETCH receives XRAYFILE from NURSE
 
-  state "step_4":
+  state "step_5":
     -->  STRETCH moves from NURSE to ICU
 
-  state "step_5":
+  state "step_6":
     -->  STRETCH approaches ICUDOCTOR in ICU
 
   state "two":
@@ -26,3 +29,4 @@ Automata.
   t: 3 -> 4
   t: 4 -> 5
   t: 5 -> 6
+  t: 6 -> 7

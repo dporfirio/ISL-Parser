@@ -12,7 +12,7 @@ Automata.
 
   checkpoint 3 (three):
          <<is delivering>>
-         <<labtech has bloodsample>>
+         <<labtech is carrying bloodsample>>
 
   checkpoint 4 (four):
          <<is moving>>
@@ -20,15 +20,15 @@ Automata.
 
   checkpoint 5 (five):
          <<is requesting>>
-         <<stretch requested insulin from pharmacist>>
+         <<stretch requested insulin1 from pharmacist>>
 
   checkpoint 6 (six):
          <<is receiving>>
-         <<stretch is carrying insulin>>
+         <<stretch is carrying insulin1>>
 
   checkpoint 7 (seven):
          <<is putting>>
-         <<amoxicillin at icutray>>
+         <<amoxicillin1 at icutray>>
 
   t: 0 -> 1
   t: 1 -> 2

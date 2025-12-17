@@ -6,15 +6,11 @@ Automata.
     -->  STRETCH approaches XRAYFILE in NURSESTATION
 
   state "two":
-    -->  STRETCH grabs XRAYFILE from KITCHENCOUNTERTOP in CAFETERIA
-
-  state "three":
-    -->  STRETCH moves from KITCHENCOUNTERTOP to LAB
+    -->  STRETCH grabs XRAYFILE from ROBOTDRAWER
 
   state "five":
     -->  STRETCH puts XRAYFILE on LABBENCH
 
   t: 0 -> 1
   t: 1 -> 2
-  t: 2 -> 3
-  t: 3 -> 5
+  t: 2 -> 5

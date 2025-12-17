@@ -15,7 +15,7 @@ labels
 		  params: []
           &
           predicate: object_at,
-		  params: [amoxicillin, labbench]
+		  params: [amoxicillin1, labbench]
 	]
 
 endlabels

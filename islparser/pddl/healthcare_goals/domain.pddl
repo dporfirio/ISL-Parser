@@ -37,12 +37,11 @@
 
             ; General types - DO NOT MODIFY
             ; THE FOLLOWING 5 LINES!
-            ; uniqueitem is unique item, consumableitem is consumable item
             world bookkeeping - object
             region entity - world
             agent inanimate - entity
             item surface container - inanimate
-            uniqueitem consumableitem tool - item 
+            tool - item 
             vacuum_tool wiper_tool - tool
             person robot - agent
 
@@ -58,6 +57,7 @@
 
     ; any region that is not labeled defaults to "unknown"
     (:constants unknown_region - region
+                robotdrawer - container  ; ADD THIS: The robot's drawer as a constant
     )
 
     (:predicates
@@ -86,7 +86,6 @@
         ;  v
         (can_carry ?agent)                        ; INTERNAL
         (agent_has ?agent - agent ?object - item)              ; NL: [0] is carrying [1]
-        (person_has ?person - person ?object - item)              ; NL: [0] has [1]
         (is_open ?cont - container) ; NL: [1] is open
 
         ; General predicates - DO NOT MODIFY
@@ -98,6 +97,8 @@
         ; the agent is ALWAYS in a region
         (agent_near ?agent - robot ?entity - entity)       ; NL: [0] near [1]
         (agent_is_near_something)  ; INTERNAL
+
+        (agent_has_drawer ?agent - robot ?cont - container) ; INTERNALß
 
         ; OBJECTS
         ; an object can theoretically be at any location.
@@ -128,6 +129,7 @@
         (is_putting) ; NL: is putting
         (is_opening) ; NL: is opening
         (is_closing) ; NL: is closing
+        (is_closing_drawer) ; NL: is closing drawer
         (is_requesting) ; NL: is requesting
         (is_receiving) ; NL: is receiving
         (is_delivering) ; NL: is delivering
@@ -167,7 +169,8 @@
     (:action move_from_reg_to ; NL: [0] moves from [1] to [2]
         :parameters (?agent - robot ?from - region ?to - region)
         :precondition (and (entity_in ?agent ?from)
-                           (not (agent_is_near_something)))
+                           (not (agent_is_near_something))
+                           (not (is_open robotdrawer)))
         :effect (and (entity_in ?agent ?to)
                      (not (entity_in ?agent ?from))
                      (not (agent_is_near_something))
@@ -187,7 +190,8 @@
         :precondition (and (entity_in ?agent ?in)
                            (entity_in ?from ?in)
                            (agent_near ?agent ?from)
-                           (agent_is_near_something))
+                           (agent_is_near_something)
+                           (not (is_open robotdrawer)))
         :effect (and (entity_in ?agent ?to)
                      (not (entity_in ?agent ?in))
                      (not (agent_near ?agent ?from))
@@ -198,6 +202,7 @@
                      (not is_putting)
                      (not is_opening)
                      (not is_closing)
+                     (not is_closing_drawer)
                      (not is_requesting)
                      (not is_receiving)
                      (not is_delivering))
@@ -209,7 +214,8 @@
         :precondition (and ; (accessible ?to)
                            (entity_in ?to ?in)
                            (entity_in ?agent ?in)
-                           (not (agent_is_near_something)))
+                           (not (agent_is_near_something))
+                           (not (is_open robotdrawer)))
         :effect (and 
                     (agent_near ?agent ?to)
                     (agent_is_near_something)
@@ -219,6 +225,7 @@
                     (not is_putting)
                     (not is_opening)
                     (not is_closing)
+                    (not is_closing_drawer)
                     (not is_requesting)
                     (not is_receiving)
                     (not is_delivering)
@@ -231,7 +238,8 @@
                            (entity_in ?to ?in)
                            (entity_in ?agent ?in)
                            (agent_near ?agent ?from)
-                           (agent_is_near_something))
+                           (agent_is_near_something)
+                           (not (is_open robotdrawer)))
         :effect (and 
                     (not (agent_near ?agent ?from))
                     (agent_near ?agent ?to)
@@ -242,6 +250,7 @@
                     (not is_putting)
                     (not is_opening)
                     (not is_closing)
+                    (not is_closing_drawer)
                     (not is_requesting)
                     (not is_receiving)
                     (not is_delivering)
@@ -270,6 +279,7 @@
                  (not is_putting)
                  (not is_opening)
                  (not is_closing)
+                 (not is_closing_drawer)
                  (not is_requesting)
                  (not is_receiving)
                  (not is_delivering))
@@ -298,9 +308,33 @@
                  (not is_putting)
                  (not is_opening)
                  (not is_closing)
+                 (not is_closing_drawer)
                  (not is_requesting)
                  (not is_receiving)
                  (not is_delivering))
+    )
+
+    ; grab item from robot drawer
+    (:action grab_from_robotdrawer ; NL: [0] grabs [1] from ROBOTDRAWER
+        :parameters (?agent - robot ?item - item)
+        :precondition (and (is_open robotdrawer)
+                        (can_carry ?agent)
+                        (agent_has_drawer ?agent robotdrawer)
+                        (item_inside ?item robotdrawer))
+        :effect (and (agent_has ?agent ?item)
+                    (not (can_carry ?agent))
+                    (not (item_inside ?item robotdrawer))
+                    (not (agent_near ?agent ?item))
+                    (not (is_moving))
+                    (not (is_approaching))
+                    (is_grabbing)
+                    (not (is_putting))
+                    (not (is_opening))
+                    (not (is_closing))
+                    (not (is_closing_drawer))
+                    (not (is_requesting))
+                    (not (is_receiving))
+                    (not (is_delivering)))
     )
 
     (:action put_on_surface ; NL: [0] puts [1] on [2]
@@ -325,11 +359,38 @@
                  (is_putting)
                  (not is_opening)
                  (not is_closing)
+                 (not is_closing_drawer)
                  (not is_requesting)
                  (not is_receiving)
                  (not is_delivering)
         )
     )
+
+    ;action put item inside drawer
+    (:action put_in_robotdrawer ; NL: [0] puts [1] in ROBOTDRAWER
+        :parameters (?agent - robot ?item - item)
+        :precondition (and (not (item_inside ?item robotdrawer))
+                        (not (can_carry ?agent))
+                        (agent_has ?agent ?item)
+                        (agent_has_drawer ?agent robotdrawer)
+                        (is_open robotdrawer)
+                        (not (is_tool ?item)))
+        :effect (and (not (agent_has ?agent ?item))
+                    (can_carry ?agent)
+                    (agent_near ?agent ?item)
+                    (item_inside ?item robotdrawer)
+                    (not (is_moving))
+                    (not (is_approaching))
+                    (not (is_grabbing))
+                    (is_putting)
+                    (not (is_opening))
+                    (not (is_closing))
+                    (not (is_closing_drawer))
+                    (not (is_requesting))
+                    (not (is_receiving))
+                    (not (is_delivering))
+        )
+)
 
     ; robot needs to put the tool back to the storage cabinet before grabing other items
    (:action put_tool_back ; NL: [0] puts back [1] into [2] in [3]
@@ -360,15 +421,12 @@
 )
 
     ;; the items inside the container are accessible when the container is open
-    (:action open ; NL: [0] opens [1]
+  (:action open ; NL: [0] opens [1]
         :parameters (?agent - robot ?cont - container)
         :precondition (and (agent_near ?agent ?cont)
                            (is_openable ?cont)
                            (not (is_open ?cont)))
         :effect (and (is_open ?cont)
-                ;(forall (?item - item) 
-                ;        (when (item_inside ?item ?cont) 
-                ;              (and (accessible ?item) )))
                 (not is_moving)
                 (not is_approaching)
                 (not is_grabbing)
@@ -379,31 +437,68 @@
                 (not is_receiving)
                 (not is_delivering)
                 )
+)
+
+  (:action open_robotdrawer ; NL: [0] opens ROBOTDRAWER
+    :parameters (?agent - robot)
+    :precondition (and (is_openable robotdrawer)
+
+                       (not (is_open robotdrawer))
+                       (agent_has_drawer ?agent robotdrawer))
+    :effect (and (is_open robotdrawer)
+                 (not (is_moving))
+                 (not (is_approaching))
+                 (not (is_grabbing))
+                 (not (is_putting))
+                 (is_opening)
+                 (not (is_closing))
+                 (not (is_closing_drawer))
+                 (not (is_requesting))
+                 (not (is_receiving))
+                 (not (is_delivering))
     )
+)
 
 
     ;; close the container and make all items inside are not accessible
     (:action close ; NL: [0] closes [1]
         :parameters (?agent - robot ?cont - container)
-        :precondition (and (agent_near ?agent ?cont)
-                           (is_openable ?cont)
-                           (is_open ?cont))
+        :precondition (and (is_openable ?cont)
+                           (is_open ?cont)
+                           (not (agent_has_drawer ?agent ?cont))
+                           (agent_near ?agent ?cont))
         :effect (and (not (is_open ?cont))
-                ;(forall (?item - item) 
-                ;        (when (item_inside ?item ?cont) 
-                ;              (not (accessible ?item))))
                 (not is_moving)
                 (not is_approaching)
                 (not is_grabbing)
                 (not is_putting)
                 (not is_opening)
                 (is_closing)
+                (not is_closing_drawer)
                 (not is_requesting)
                 (not is_receiving)
                 (not is_delivering)
-                )
-                
-   )   
+                )        
+   )  
+
+  (:action close_robotdrawer ; NL: [0] closes ROBOTDRAWER
+    :parameters (?agent - robot)
+    :precondition (and (is_openable robotdrawer)
+                       (is_open robotdrawer)
+                       (agent_has_drawer ?agent robotdrawer))
+    :effect (and (not (is_open robotdrawer))
+                 (not (is_moving))
+                 (not (is_approaching))
+                 (not (is_grabbing))
+                 (not (is_putting))
+                 (not (is_opening))
+                 (is_closing_drawer)
+                 (not is_closing)
+                 (not (is_requesting))
+                 (not (is_receiving))
+                 (not (is_delivering))
+    )
+)
 
    ;; request from person for a item
    (:action request ; NL: [0] requests [1] from [2]
@@ -424,37 +519,9 @@
                      (not is_delivering))
         )    
 
-  ;; receive a unique item from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
-  (:action receive_uniqueitem ; NL: [0] receives [1] from [2]
-        :parameters (?agent - robot ?item - uniqueitem ?giver - person ?region - region)
-        :precondition (and (requested ?agent ?item ?giver)
-                           (agent_has ?giver ?item)
-                           (can_carry ?agent)
-                           (agent_near ?agent ?giver)
-                           (entity_in ?agent ?region)
-                           (entity_in ?giver ?region))
-                          
-        :effect (and (agent_has ?agent ?item)
-                     (not (can_carry ?agent))
-                     ;(not (accessible ?item))
-                     (not (agent_has ?giver ?item))
-                     (not (requested ?agent ?item ?giver))
-                     (not (entity_in ?item ?region))
-                     ; only remove when the giveer doesn't have supply of the item
-                     (not (agent_has ?giver ?item))
-                     (not is_moving)
-                     (not is_approaching)
-                     (not is_grabbing)
-                     (not is_putting)
-                     (not is_opening)
-                     (not is_closing)
-                     (not is_requesting)
-                     (is_receiving)
-                     (not is_delivering)
-        )
-    )
- (:action receive_consumableitem ; NL: [0] receives [1] from [2]
-        :parameters (?agent - robot ?item - consumableitem ?giver - person ?region - region)
+  ;; receive an item from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
+  (:action receive ; NL: [0] receives [1] from [2]
+        :parameters (?agent - robot ?item - item ?giver - person ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
                            (agent_has ?giver ?item)
                            (can_carry ?agent)
@@ -473,6 +540,7 @@
                      (not is_putting)
                      (not is_opening)
                      (not is_closing)
+                     (not is_closing_drawer)
                      (not is_requesting)
                      (is_receiving)
                      (not is_delivering)
@@ -483,8 +551,9 @@
  (:action deliver ; NL: [0] delivers [1] to [2]
         :parameters (?agent - robot ?item - item ?person - person)
         :precondition (and (agent_has ?agent ?item)
-                           (agent_near ?agent ?person))
-    :effect (and (person_has ?person ?item)
+                           (agent_near ?agent ?person)
+                            (not (is_open robotdrawer)))
+    :effect (and (agent_has ?person ?item)
                  (not (agent_has ?agent ?item))
                  (can_carry ?agent)
                  ;(not (accessible ?item))
@@ -494,6 +563,7 @@
                  (not is_putting)
                  (not is_opening)
                  (not is_closing)
+                 (not is_closing_drawer)
                  (not is_requesting)
                  (not is_receiving)
                  (is_delivering)
@@ -526,7 +596,7 @@
 
 
 (:action vacuum_floor ; NL: [0] vacuums [1] FLOOR
-    :parameters (?agent - robot ?world - region ?tool - vacuum_tool)  ; Changed from uniqueitem to tool
+    :parameters (?agent - robot ?world - region ?tool - vacuum_tool) 
     :precondition (and (entity_in ?agent ?world)
                        (agent_has ?agent ?tool)
                        (not(is_clean ?world)))  ; Add this!

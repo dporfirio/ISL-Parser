@@ -1,0 +1,16 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "three":
+    -->  STRETCH grabs BANDAGES1 from MEDICINECABINET in PHARMACY
+
+  state "four":
+    -->  STRETCH closes MEDICINECABINET
+
+  state "five":
+    -->  STRETCH delivers BANDAGES1 to ICUDOCTOR
+
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 0 -> 3

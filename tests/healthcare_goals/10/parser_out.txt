@@ -8,7 +8,7 @@ Automata.
 
   checkpoint 2 (two):
          <<is grabbing>>
-         <<stretch is carrying amoxicillin>>
+         <<stretch is carrying amoxicillin1>>
 
   t: 0 -> 1
   t: 1 -> 2
