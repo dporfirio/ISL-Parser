@@ -17,28 +17,45 @@ labels
 		predicate: agent_near,
 		params: [stretch, medicinecabinet]
 	],
-	three: [
+	three:
+	[
+		predicate: is_opening,
+		  params: []
+          &
+          predicate: is_open,
+		  params: [medicinecabinet]
+	],
+	four: [
 		predicate: is_grabbing,
 		  params: []
           &
           predicate: agent_has,
 		  params: [stretch, bandages1]
 	],
-	four: [
+	five: [
 		predicate: is_putting,
 		params:[]
 		&
 		 predicate: item_inside,
 		  params: [bandages1, robotdrawer]
 	],
-	five: [
+	six: [
 		predicate: is_closing,
 		  params: []
 		  &
 		  predicate: is_closed,
-		  params: [medicinecabinet]
+		  params:[medicinecabinet] 
+
 	],
-	six: [
+	seven: [
+		predicate: is_closing,
+		  params: []
+		  &
+		  predicate: is_closed,
+		  params:[robotdrawer] 
+	],
+	
+	eight: [
 		predicate: is_delivering,
 		  params: []
           &
@@ -51,7 +68,7 @@ endlabels
 
 module
 
-	st: [0: init, 1: one, 2: two, 3: three,4: four, 5: five, 6: six];
+	st: [0: init, 1: one, 2: two, 3: three,4: four, 5: five, 6: six, 7: seven, 8: eight];
 
 	[] 0 -> 1;
     [] 1 -> 2;
@@ -59,5 +76,7 @@ module
 	[] 3 -> 4;
 	[] 4 -> 5;
 	[] 5 -> 6;
+	[] 6 -> 7;
+	[] 7 -> 8;
 
 endmodule

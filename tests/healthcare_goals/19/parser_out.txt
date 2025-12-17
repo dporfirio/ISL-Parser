@@ -19,10 +19,12 @@ Automata.
          <<bandages1 is inside robotdrawer>>
 
   checkpoint 5 (five):
-         <<is closing drawer>>
+         <<is closing>>
+         <<robotdrawer is closed>>
 
   checkpoint 6 (six):
          <<is closing>>
+         <<medicinecabinet is closed>>
 
   checkpoint 7 (seven):
          <<is delivering>>

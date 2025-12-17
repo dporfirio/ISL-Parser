@@ -76,7 +76,7 @@ def main(args) -> TestOutput:
     parse_out += str_aut
 
     # planner output
-    pr: PlanResult
+    pr: PlanResult | None = None
     if 'plan' in arg_task:
         pr = classical.plan(aut)
         if pr.sat:
