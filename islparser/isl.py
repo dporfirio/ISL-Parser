@@ -86,7 +86,8 @@ def main(args) -> TestOutput:
     if 'distill' in arg_task:
         # we cannot distill goals, so convert to plan if needed
         if aut.contains_goals():
-            pr = classical.plan(aut)
+            if pr is None:
+                pr = classical.plan(aut)
             chkpts = pr.checkpoints if pr.checkpoints is not None else []
             plan = Automaton(aut.problem)
             plan.add_init()
