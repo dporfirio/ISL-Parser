@@ -87,7 +87,7 @@
         (can_carry ?agent)                        ; INTERNAL
         (agent_has ?agent - agent ?object - item)              ; NL: [0] is carrying [1]
         (person_has ?person - person ?object - item)              ; NL: [0] has [1]
-        (is_open ?cont - container) ; NL: [1] is open
+        (is_open ?cont - container) ; NL: [0] is open
 
         ; General predicates - DO NOT MODIFY
         ; PREDICATES BELOW THIS LINE!
