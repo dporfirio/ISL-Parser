@@ -8,11 +8,11 @@ Automata.
 
   checkpoint 2 (deliver2):
          <<is putting>>
-         <<ibuprofen at labbench>>
+         <<ibuprofen1 at labbench>>
 
   checkpoint 3 (deliver3):
          <<is putting>>
-         <<linen at icutray>>
+         <<linen1 at icutray>>
 
   t: 0 -> 1
   t: 1 -> 2

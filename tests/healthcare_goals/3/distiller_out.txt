@@ -6,7 +6,7 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "four":
-    -->  STRETCH puts ANTACID on LABBENCH
+    -->  STRETCH puts ANTACID1 on LABBENCH
 
   t: 3 -> 4
   t: 0 -> 3

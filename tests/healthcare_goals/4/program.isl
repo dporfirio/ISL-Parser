@@ -36,14 +36,14 @@ labels
 		  params: []
           &
           predicate: agent_has,
-		  params: [stretch, ibuprofen]
+		  params: [stretch, ibuprofen1]
 	],
     six: [
         predicate: is_putting,
 		  params: []
           &
           predicate: object_at,
-		  params: [ibuprofen, icutray]
+		  params: [ibuprofen1, icutray]
     ]
 
 endlabels

@@ -1,0 +1,20 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "four":
+    -->  STRETCH puts BANDAGES1 in ROBOTDRAWER
+
+  state "five":
+    -->  STRETCH closes ROBOTDRAWER
+
+  state "six":
+    -->  STRETCH closes MEDICINECABINET
+
+  state "seven":
+    -->  STRETCH delivers BANDAGES1 to ICUDOCTOR
+
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 0 -> 4

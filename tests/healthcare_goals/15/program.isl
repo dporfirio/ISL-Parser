@@ -21,7 +21,7 @@ labels
 		  predicate: is_delivering,
 		  params: []
           &
-          predicate: person_has,
+          predicate: agent_has,
 		  params: [labtech, bloodsample]
 	],
     four: [
@@ -36,21 +36,21 @@ labels
 		  params: []
           &
           predicate: requested,
-		  params: [stretch, insulin, pharmacist]
+		  params: [stretch, insulin1, pharmacist]
 	],
 	six: [
 		  predicate: is_receiving,
 		  params: []
           &
           predicate: agent_has,
-		  params: [stretch, insulin]
+		  params: [stretch, insulin1]
 	],
     seven: [
           predicate: is_putting,
 		  params: []
           &
           predicate: object_at,
-		  params: [amoxicillin, icutray]
+		  params: [amoxicillin1, icutray]
 	]
     
 

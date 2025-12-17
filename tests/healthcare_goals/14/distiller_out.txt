@@ -6,16 +6,16 @@ Automata.
     -->  STRETCH delivers BLOODSAMPLE to LABTECH
 
   state "six":
-    -->  STRETCH receives INSULIN from PHARMACIST
+    -->  STRETCH receives INSULIN1 from PHARMACIST
 
   state "seven":
     -->  STRETCH moves from PHARMACIST to ICU
 
   state "eight":
-    -->  STRETCH puts IBUPROFEN on ICUTRAY
+    -->  STRETCH puts IBUPROFEN1 on ICUTRAY
 
   state "nine":
-    -->  STRETCH delivers IBUPROFEN to ICUDOCTOR
+    -->  STRETCH delivers IBUPROFEN1 to ICUDOCTOR
 
   t: 6 -> 7
   t: 7 -> 8

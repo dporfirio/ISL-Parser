@@ -6,7 +6,7 @@ Automata.
     -->  STRETCH puts BLOODSAMPLE on LABBENCH
 
   state "two":
-    -->  STRETCH grabs AMOXICILLIN from MEDICINECABINET in PHARMACY
+    -->  STRETCH grabs AMOXICILLIN1 from MEDICINECABINET in PHARMACY
 
   t: 0 -> 1
   t: 1 -> 2

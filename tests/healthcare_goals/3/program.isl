@@ -29,7 +29,7 @@ labels
 		  params: []
           &
           predicate: object_at,
-		  params: [antacid, labbench]
+		  params: [antacid1, labbench]
     ]
 
 endlabels

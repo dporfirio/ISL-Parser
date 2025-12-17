@@ -8,7 +8,7 @@ Automata.
 
   checkpoint 2 (two):
          <<is putting>>
-         <<amoxicillin at labbench>>
+         <<amoxicillin1 at labbench>>
 
   t: 0 -> 1
   t: 1 -> 2

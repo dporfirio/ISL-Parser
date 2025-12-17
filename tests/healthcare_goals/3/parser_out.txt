@@ -16,7 +16,7 @@ Automata.
 
   checkpoint 4 (four):
          <<is putting>>
-         <<antacid at labbench>>
+         <<antacid1 at labbench>>
 
   t: 0 -> 1
   t: 1 -> 2

@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
+    -->  STRETCH moves from ROBOTDOCK to EMERGENCYROOM
 
   state "step_2":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM

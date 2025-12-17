@@ -1,0 +1,56 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "one":
+    -->  STRETCH moves from ROBOTDOCK to PHARMACY
+
+  state "two":
+    -->  STRETCH approaches MEDICINECABINET in PHARMACY
+
+  state "step_3":
+    -->  STRETCH opens MEDICINECABINET
+
+  state "step_4":
+    -->  STRETCH approaches BANDAGES1 from MEDICINECABINET
+
+  state "three":
+    -->  STRETCH grabs BANDAGES1 from MEDICINECABINET in PHARMACY
+
+  state "step_6":
+    -->  STRETCH opens ROBOTDRAWER
+
+  state "four":
+    -->  STRETCH puts BANDAGES1 in ROBOTDRAWER
+
+  state "five":
+    -->  STRETCH closes MEDICINECABINET
+
+  state "step_9":
+    -->  STRETCH grabs BANDAGES1 from ROBOTDRAWER
+
+  state "step_10":
+    -->  STRETCH closes ROBOTDRAWER
+
+  state "step_11":
+    -->  STRETCH moves from MEDICINECABINET to ICU
+
+  state "step_12":
+    -->  STRETCH approaches ICUDOCTOR in ICU
+
+  state "six":
+    -->  STRETCH delivers BANDAGES1 to ICUDOCTOR
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13

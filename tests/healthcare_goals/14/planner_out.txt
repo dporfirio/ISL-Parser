@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   state "one":
-    -->  STRETCH moves from NURSESTATION to EMERGENCYROOM
+    -->  STRETCH moves from ROBOTDOCK to EMERGENCYROOM
 
   state "step_2":
     -->  STRETCH approaches BLOODSAMPLE in EMERGENCYROOM
@@ -27,22 +27,22 @@ Automata.
     -->  STRETCH approaches PHARMACIST in PHARMACY
 
   state "five":
-    -->  STRETCH requests INSULIN from PHARMACIST
+    -->  STRETCH requests INSULIN1 from PHARMACIST
 
   state "six":
-    -->  STRETCH receives INSULIN from PHARMACIST
+    -->  STRETCH receives INSULIN1 from PHARMACIST
 
   state "seven":
     -->  STRETCH moves from PHARMACIST to ICU
 
   state "step_12":
-    -->  STRETCH approaches ICUTRAY in ICU
+    -->  STRETCH approaches BED in ICU
 
   state "step_13":
-    -->  STRETCH puts INSULIN on ICUTRAY
+    -->  STRETCH puts INSULIN1 on BED
 
   state "step_14":
-    -->  STRETCH moves from INSULIN to PHARMACY
+    -->  STRETCH moves from INSULIN1 to PHARMACY
 
   state "step_15":
     -->  STRETCH approaches MEDICINECABINET in PHARMACY
@@ -51,10 +51,10 @@ Automata.
     -->  STRETCH opens MEDICINECABINET
 
   state "step_17":
-    -->  STRETCH approaches IBUPROFEN from MEDICINECABINET
+    -->  STRETCH approaches IBUPROFEN1 from MEDICINECABINET
 
   state "step_18":
-    -->  STRETCH grabs IBUPROFEN from MEDICINECABINET in PHARMACY
+    -->  STRETCH grabs IBUPROFEN1 from MEDICINECABINET in PHARMACY
 
   state "step_19":
     -->  STRETCH moves from MEDICINECABINET to ICU
@@ -63,16 +63,16 @@ Automata.
     -->  STRETCH approaches ICUTRAY in ICU
 
   state "eight":
-    -->  STRETCH puts IBUPROFEN on ICUTRAY
+    -->  STRETCH puts IBUPROFEN1 on ICUTRAY
 
   state "step_22":
-    -->  STRETCH grabs IBUPROFEN from ICUTRAY in ICU
+    -->  STRETCH grabs IBUPROFEN1 from ICUTRAY in ICU
 
   state "step_23":
     -->  STRETCH approaches ICUDOCTOR from ICUTRAY
 
   state "nine":
-    -->  STRETCH delivers IBUPROFEN to ICUDOCTOR
+    -->  STRETCH delivers IBUPROFEN1 to ICUDOCTOR
 
   t: 0 -> 1
   t: 1 -> 2

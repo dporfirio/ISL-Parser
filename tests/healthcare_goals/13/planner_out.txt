@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   state "one":
-    -->  STRETCH moves from NURSESTATION to STORAGE
+    -->  STRETCH moves from ROBOTDOCK to STORAGE
 
   state "step_2":
     -->  STRETCH approaches STORAGECABINET in STORAGE

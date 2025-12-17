@@ -2,11 +2,7 @@ Automata.
 
   checkpoint 0 (init):
 
-  state "one":
-    -->  STRETCH moves from NURSESTATION to NURSESTATION
-
   state "four":
     -->  STRETCH delivers XRAYFILE to ICUDOCTOR
 
-  t: 0 -> 1
-  t: 1 -> 4
+  t: 0 -> 4

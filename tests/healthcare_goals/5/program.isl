@@ -21,7 +21,7 @@ labels
         predicate: is_delivering,
 		  params: []
           &
-          predicate: person_has,
+          predicate: agent_has,
 		  params: [labtech, bloodsample]
     ]
 
