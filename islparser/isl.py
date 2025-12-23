@@ -1,4 +1,5 @@
 import argparse
+import os
 import islparser.parser.lexer_and_parser as aut_reader
 import islparser.planner.classical as classical
 from islparser.planner.plan_result import PlanResult
@@ -50,6 +51,7 @@ class TestOutput:
 def main(args) -> TestOutput:
     arg_file: str = args.file
     arg_task: List[str] = args.task
+    arg_plan_dir: str = args.exec_dir
     arg_verbosity: str = args.verbosity
     Logger.instance(arg_verbosity)
 
@@ -76,6 +78,8 @@ def main(args) -> TestOutput:
     parse_out += str_aut
 
     # planner output
+    curr_dir: str = os.getcwd()
+    os.chdir(arg_plan_dir)
     pr: PlanResult
     if 'plan' in arg_task:
         pr = classical.plan(aut)
@@ -100,6 +104,7 @@ def main(args) -> TestOutput:
                 break
             distill_out = str(pr.plan)
         distill_out = distill_out.strip()
+    os.chdir(curr_dir)
 
     # assemble result
     out = TestOutput(parse_out, plan_out, distill_out)
@@ -119,6 +124,10 @@ if __name__ == "__main__":
                         type=str,
                         nargs='+',
                         default=['parse'])
+    parser.add_argument("-d", "--dir",
+                        help="plan solver directory",
+                        type=str,
+                        default=".")
     parser.add_argument("-v", "--verbosity",
                         help="Set the level of information to \'silent\'," +
                              "\'test\', or \'debug\'",
