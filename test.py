@@ -153,14 +153,6 @@ if __name__ == '__main__':
     GRAY = '\033[90m'
     NC = '\033[0m'
 
-    # counts of correct tests
-    parser_count = 0
-    parser_total = 0
-    planner_count = 0
-    planner_total = 0
-    distiller_count = 0
-    distiller_total = 0
-
     print("\nISL tests: parser, planner, & distiller\n")
 
     # track memory profiling
@@ -173,6 +165,9 @@ if __name__ == '__main__':
     if num_cores == 1:
         cov = coverage.Coverage()
         cov.start()
+
+    # apply_async callback adds results to an array
+    results: Results = Results()
 
     def callback(result, index, results) -> None:
         with results.lock:
@@ -190,6 +185,7 @@ if __name__ == '__main__':
                 results.curr_idx += 1
 
     for app_scenario in os.listdir("tests"):
+        results.curr_idx = 0
 
         # possibly run just one test
         if args.group is not None and \
@@ -213,9 +209,6 @@ if __name__ == '__main__':
 
         # test main.py ability to remove slash from folder name
         folders[0] += "/"
-
-        # apply_async callback adds results to an array
-        results: Results = Results()
 
         if num_cores > 1:
             if not os.path.isdir("tmp_test_store"):
@@ -263,18 +256,18 @@ if __name__ == '__main__':
         cov_val = cov.report()
 
     color = NC
-    if parser_count == parser_total:
-        if parser_total > 0:
+    if results.parser_count == results.parser_total:
+        if results.parser_total > 0:
             color = GREEN
-    elif parser_count == 0:
+    elif results.parser_count == 0:
         color = RED
     else:
         color = YELLOW
     print("\n\n{}{: <17}{} {: <50}\n".format(color,
                                              "Parser Result:", NC,
                                              "{} out of {} tests passed."
-                                             .format(parser_count,
-                                                     parser_total)),
+                                             .format(results.parser_count,
+                                                     results.parser_total)),
           end="")
 
     if num_cores == 1:

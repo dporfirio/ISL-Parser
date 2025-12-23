@@ -80,7 +80,7 @@ def main(args) -> TestOutput:
     # planner output
     curr_dir: str = os.getcwd()
     os.chdir(arg_plan_dir)
-    pr: PlanResult
+    pr: PlanResult | None = None
     if 'plan' in arg_task:
         pr = classical.plan(aut)
         if pr.sat:

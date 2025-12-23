@@ -32,12 +32,18 @@ labels
 		  params: [bandages1, robotdrawer]
 	],
 	five: [
-		predicate: is_closing_drawer,
-		  params: []
+		predicate: is_closing,
+		  params: []		 
+		  &
+		  predicate: is_closed,
+		  params:[robotdrawer] 
 	],
 	six: [
 		predicate: is_closing,
 		  params: []
+		   &
+		  predicate: is_closed,
+		  params:[medicinecabinet] 
 	],
 	
 	seven: [

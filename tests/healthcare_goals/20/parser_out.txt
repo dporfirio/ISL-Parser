@@ -11,18 +11,26 @@ Automata.
          <<stretch near medicinecabinet>>
 
   checkpoint 3 (three):
+         <<is opening>>
+         <<medicinecabinet is open>>
+
+  checkpoint 4 (four):
          <<is grabbing>>
          <<stretch is carrying bandages1>>
 
-  checkpoint 4 (four):
+  checkpoint 5 (five):
          <<is putting>>
          <<bandages1 is inside robotdrawer>>
 
-  checkpoint 5 (five):
+  checkpoint 6 (six):
          <<is closing>>
          <<medicinecabinet is closed>>
 
-  checkpoint 6 (six):
+  checkpoint 7 (seven):
+         <<is closing>>
+         <<robotdrawer is closed>>
+
+  checkpoint 8 (eight):
          <<is delivering>>
          <<icudoctor is carrying bandages1>>
 
@@ -32,3 +40,5 @@ Automata.
   t: 3 -> 4
   t: 4 -> 5
   t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8

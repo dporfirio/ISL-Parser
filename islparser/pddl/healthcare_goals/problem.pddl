@@ -154,10 +154,10 @@
 		; (not (accessible antacid))
 
 		; Container states
-		(not (is_open medicinecabinet))
-		(not (is_open storagecabinet))
-		(not (is_open trashbin))
-		(not (is_open robotdrawer))
+		(is_closed medicinecabinet)
+		(is_closed storagecabinet)
+		(is_closed trashbin)
+		(is_closed robotdrawer)
 		(not (agent_near stretch robotdrawer))
 		(is_openable medicinecabinet)
 		(is_openable storagecabinet)
