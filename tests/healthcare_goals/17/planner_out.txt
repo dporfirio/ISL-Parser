@@ -17,13 +17,25 @@ Automata.
   state "three":
     -->  STRETCH grabs BANDAGES1 from MEDICINECABINET in PHARMACY
 
+  state "step_6":
+    -->  STRETCH opens ROBOTDRAWER
+
+  state "step_7":
+    -->  STRETCH puts BANDAGES1 in ROBOTDRAWER
+
   state "four":
     -->  STRETCH closes MEDICINECABINET
 
-  state "step_7":
+  state "step_9":
+    -->  STRETCH grabs BANDAGES1 from ROBOTDRAWER
+
+  state "step_10":
+    -->  STRETCH closes ROBOTDRAWER
+
+  state "step_11":
     -->  STRETCH moves from MEDICINECABINET to ICU
 
-  state "step_8":
+  state "step_12":
     -->  STRETCH approaches ICUDOCTOR in ICU
 
   state "five":
@@ -38,3 +50,7 @@ Automata.
   t: 6 -> 7
   t: 7 -> 8
   t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13

@@ -41,8 +41,8 @@
             region entity - world
             agent inanimate - entity
             item surface container - inanimate
-            tool - item 
-            vacuum_tool wiper_tool - tool
+            ; tool - item 
+            ; vacuum_tool wiper_tool - tool
             person robot - agent
 
             ; =============================
@@ -57,6 +57,8 @@
 
     ; any region that is not labeled defaults to "unknown"
     (:constants robotdrawer - container  ; The robot's drawer as a constant
+                wiper - item
+                vacuum - item
     )
 
     (:predicates
@@ -117,7 +119,7 @@
         (is_clean ?world - world)                             ; NL: [0] is dirty
 
         ; is tool
-        (is_tool ?item - item)                                   ; NL: [0] is a tool
+        ; (is_tool ?item - item)                                   ; NL: [0] is a tool
 
         ; REQUEST 
         (requested ?agent - robot ?item - item ?person - person) ; NL: [0] requested [1] from [2]
@@ -168,7 +170,7 @@
                            (is_closed robotdrawer))
         :effect (and (entity_in ?agent ?to)
                      (not (entity_in ?agent ?from))
-                     (not (agent_is_near_something))
+                     ; (not (agent_is_near_something))
                      (is_moving)
                      (not (is_approaching))
                      (not (is_grabbing))
@@ -236,7 +238,7 @@
         :effect (and 
                     (not (agent_near ?agent ?from))
                     (agent_near ?agent ?to)
-                    (agent_is_near_something)
+                    ; (agent_is_near_something)
                     (not (is_moving))
                     (is_approaching)
                     (not (is_grabbing))
@@ -330,7 +332,7 @@
         :parameters (?agent - robot ?item - item ?surface - surface ?region - region)
         :precondition (and (agent_near ?agent ?surface)
                        (not (object_at ?item ?surface))
-                       (not (is_tool ?item))  ; vacume can not be put on surface
+                       (not (= ?item vacuum))  ; vacuum can not be put on surface
                        (not (can_carry ?agent))
                        (agent_has ?agent ?item)
                        (entity_in ?surface ?region))
@@ -362,7 +364,7 @@
                         (agent_has ?agent ?item)
                         ; (agent_has_drawer ?agent robotdrawer)
                         (is_open robotdrawer)
-                        (not (is_tool ?item)))
+                        (not (= ?item vacuum)))
         :effect (and (not (agent_has ?agent ?item))
                     (can_carry ?agent)
                     (agent_near ?agent ?item)
@@ -377,40 +379,41 @@
                     (not (is_receiving))
                     (not (is_delivering))
         )
-)
+    )
 
     ; robot needs to put the tool back to the storage cabinet before grabing other items
-   (:action put_tool_back ; NL: [0] puts back [1] into [2] in [3]
-    :parameters (?agent - robot ?item - tool ?container - container ?region - region)
-    :precondition (and (agent_near ?agent ?container)
-                       (not (item_inside ?item ?container))
-                       (not (can_carry ?agent))
-                       (is_open ?container)
-                       (entity_in ?container ?region)
-                       (entity_in ?agent ?region)
-                       (agent_has ?agent ?item))
-    :effect (and (not (agent_has ?agent ?item))
-                 (can_carry ?agent)
-                 (agent_near ?agent ?item)
-                 (not (agent_near ?agent ?container))
-                 (item_inside ?item ?container)
-                 (entity_in ?item ?region)
-                 (not (is_moving))
-                 (not (is_approaching))
-                 (not (is_grabbing))
-                 (is_putting)
-                 (not (is_opening))
-                 (not (is_closing))
-                 (not (is_requesting))
-                 (not (is_receiving))
-                 (not (is_delivering))
-    )
-)
+    ; (:action put_tool_back ; NL: [0] puts back [1] into [2] in [3]
+    ; :parameters (?agent - robot ?item - tool ?container - container ?region - region)
+    ; :precondition (and (agent_near ?agent ?container)
+    ;                    (not (item_inside ?item ?container))
+    ;                    (not (can_carry ?agent))
+    ;                    (is_open ?container)
+    ;                    (entity_in ?container ?region)
+    ;                    (entity_in ?agent ?region)
+    ;                    (agent_has ?agent ?item))
+    ; :effect (and (not (agent_has ?agent ?item))
+    ;              (can_carry ?agent)
+    ;              (agent_near ?agent ?item)
+    ;              (not (agent_near ?agent ?container))
+    ;              (item_inside ?item ?container)
+    ;              (entity_in ?item ?region)
+    ;              (not (is_moving))
+    ;              (not (is_approaching))
+    ;              (not (is_grabbing))
+    ;              (is_putting)
+    ;              (not (is_opening))
+    ;              (not (is_closing))
+    ;              (not (is_requesting))
+    ;              (not (is_receiving))
+    ;              (not (is_delivering))
+    ;      )
+    ; )
 
     ;; the items inside the container are accessible when the container is open
   (:action open ; NL: [0] opens [1]
         :parameters (?agent - robot ?cont - container)
         :precondition (and (agent_near ?agent ?cont)
+                           (can_carry ?agent)
                            ; (is_openable ?cont)
                            (is_closed ?cont)
                            (not (= ?cont robotdrawer)))
@@ -453,6 +456,7 @@
     (:action close ; NL: [0] closes [1]
         :parameters (?agent - robot ?cont - container)
         :precondition (and ; (is_openable ?cont)
+                           (can_carry ?agent)
                            (is_open ?cont)
                            (not (= ?cont robotdrawer))
                            ; (not (agent_has_drawer ?agent ?cont))
@@ -541,7 +545,8 @@
         :parameters (?agent - robot ?item - item ?person - person)
         :precondition (and (agent_has ?agent ?item)
                            (agent_near ?agent ?person)
-                           (is_closed robotdrawer))
+                           (is_closed robotdrawer)
+                           (not (can_carry ?agent)))
     :effect (and (agent_has ?person ?item)
                  (not (agent_has ?agent ?item))
                  (can_carry ?agent)
@@ -561,11 +566,11 @@
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
 (:action wipe ; NL: [0] wipes [1]
-    :parameters (?agent - robot ?world - surface ?region - region ?tool - wiper_tool)
+    :parameters (?agent - robot ?world - surface ?region - region)
     :precondition (and (agent_near ?agent ?world)
                        (entity_in ?agent ?region)
                        (entity_in ?world ?region)
-                       (agent_has ?agent ?tool))
+                       (agent_has ?agent wiper))
     :effect (and (is_clean ?world)
                  (not (is_moving))
                  (not (is_approaching))
@@ -584,9 +589,9 @@
 
 
 (:action vacuum_floor ; NL: [0] vacuums [1] FLOOR
-    :parameters (?agent - robot ?world - region ?tool - vacuum_tool) 
+    :parameters (?agent - robot ?world - region) 
     :precondition (and (entity_in ?agent ?world)
-                       (agent_has ?agent ?tool)
+                       (agent_has ?agent vacuum)
                        (not (is_clean ?world)))
     :effect (and (is_clean ?world)
                  (not (is_moving))

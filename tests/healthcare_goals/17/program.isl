@@ -28,6 +28,9 @@ labels
 	four: [
 		predicate: is_closing,
 		  params: []
+		  &
+          predicate: is_closed,
+		  params: [medicinecabinet]
 	],
 	five: [
 		predicate: is_delivering,

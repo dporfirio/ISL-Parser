@@ -14,8 +14,8 @@
 		linen1 linen2 linen3 amoxicillin1 amoxicillin2 amoxicillin3 bandages1 bandages2 bandages3 insulin1 insulin2 insulin3 ibuprofen1 ibuprofen2 ibuprofen3 antacid1 antacid2 antacid3 meal1 meal2 meal3 bloodsample xrayfile - item
 
 		; Cleaning tools
-		vacuum - vacuum_tool 
-		wiper - wiper_tool
+		; vacuum - vacuum_tool 
+		; wiper - wiper_tool
 		
 		; Robot
 		stretch - robot
@@ -105,8 +105,8 @@
 		(item_inside wiper storagecabinet)
 
 		; Mark which items are tools ← SET IT HERE!
-        (is_tool vacuum)
-        (is_tool wiper)
+        ; (is_tool vacuum)
+        ; (is_tool wiper)
 
 		; person has item
 		(agent_has nurse xrayfile)

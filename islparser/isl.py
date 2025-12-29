@@ -125,7 +125,7 @@ if __name__ == "__main__":
                         type=str,
                         nargs='+',
                         default=['parse'])
-    parser.add_argument("-d", "--dir",
+    parser.add_argument("-d", "--exec_dir",
                         help="plan solver directory",
                         type=str,
                         default=".")

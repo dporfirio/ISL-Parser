@@ -16,6 +16,7 @@ Automata.
 
   checkpoint 4 (four):
          <<is closing>>
+         <<medicinecabinet is closed>>
 
   checkpoint 5 (five):
          <<is delivering>>
