@@ -81,6 +81,7 @@ def main(args) -> TestOutput:
     curr_dir: str = os.getcwd()
     os.chdir(arg_plan_dir)
     pr: PlanResult | None = None
+    classical._planner_cache.clear()
     if 'plan' in arg_task:
         pr = classical.plan(aut)
         if pr.sat:
@@ -88,7 +89,6 @@ def main(args) -> TestOutput:
             plan_out += str_aut
 
     if 'distill' in arg_task:
-        classical._planner_cache.clear()
         # we cannot distill goals, so convert to plan if needed
         if aut.contains_goals():
             if pr is None:

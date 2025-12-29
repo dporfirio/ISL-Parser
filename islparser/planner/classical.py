@@ -19,14 +19,66 @@ from typing import List
 # Simple in-memory cache for planner results keyed by (initial_state, goals)
 _planner_cache = {}
 
+# Meta-action predicates to exclude from cache keys
+_META_PREDICATES = {
+    'is_moving', 'is_approaching', 'is_grabbing', 'is_putting',
+    'is_opening', 'is_closing', 'is_requesting', 'is_receiving',
+    'is_delivering', 'is_wiping', 'is_vacuuming'
+}
+
+
+def _should_include_in_cache_key(fluent_str):
+    """Check if a fluent should be included in the cache key."""
+    # Skip step fluents
+    if 'step_' in fluent_str:
+        return False
+    # Skip meta-action predicates
+    for meta_pred in _META_PREDICATES:
+        if meta_pred in fluent_str:
+            return False
+    # Skip empty strings
+    if not fluent_str.strip():
+        return False
+    return True
+
 
 def _make_problem_key(problem: up.model.Problem):
     # initial_values is a dict mapping fluent -> value
     initial = getattr(problem, "initial_values", {}) or {}
-    initial_items = tuple(sorted((str(k), str(v)) for k, v in initial.items()))
+    initial_items = tuple(sorted(
+        (str(k), str(v)) for k, v in initial.items()
+        if v.is_true() and _should_include_in_cache_key(str(k))
+    ))
     goals = getattr(problem, "goals", []) or []
     goals_tuple = tuple(sorted(str(g) for g in goals))
     return (initial_items, goals_tuple)
+
+
+def _cache_intermediate_plan(initial_state_dict, goals_tuple, remaining_actions):
+    """
+    Cache the remaining plan for a given initial state and goals.
+    goals_tuple is a tuple of goal predicates (as strings).
+    remaining_actions is a list of action objects to cache.
+    """
+    # Create the cache key from initial state and goals, filtering to only true values
+    # and excluding meta-predicates and step fluents
+    initial_items = tuple(sorted(
+        (str(k), str(v)) for k, v in initial_state_dict.items()
+        if v.is_true() and _should_include_in_cache_key(str(k))
+    ))
+    key = (initial_items, goals_tuple)
+    
+    # Create a mock result object with the remaining actions
+    class MockPlanResult:
+        def __init__(self, actions):
+            self.plan = MockPlan(actions)
+    
+    class MockPlan:
+        def __init__(self, actions):
+            self.actions = actions
+    
+    _planner_cache[key] = MockPlanResult(remaining_actions)
+
 
 def get_planner_name(problem: up.model.Problem) -> str:
     planner_name: str = "fast-downward-opt"
@@ -169,11 +221,35 @@ def plan(aut: Automaton, cache=False) -> PlanResult:
                 if len(result.plan.actions) == 0:
                     return PlanResult.nosat()
 
-                # update the initial state
+                # Run simulator, cache intermediate states (remaining actions) and
+                # then update the initial state. Goals are extracted from the
+                # current checkpoint predicates using the same forall filter
+                # logic used when extracting effects.
                 simulator = SequentialSimulator(problem)
                 curr_st = simulator.get_initial_state()
-                for st in result.plan.actions:
-                    curr_st = simulator.apply(curr_st, st)
+
+                # Maintain complete state by merging deltas
+                complete_state = dict(curr_st._values)
+
+                # Build goals tuple from the current checkpoint predicates
+                goals_list = []
+                for p in curr.predicates:
+                    f = p.fnode
+                    if isinstance(f, FNode) and f.is_forall():
+                        continue
+                    goals_list.append(f)
+                goals_tuple = tuple(sorted(str(g) for g in goals_list))
+
+                actions = list(result.plan.actions)
+                for i, act in enumerate(actions):
+                    remaining = actions[i:]
+                    # Cache the complete state BEFORE applying this action
+                    _cache_intermediate_plan(complete_state, goals_tuple, remaining)
+                    # Apply action and merge simulator deltas into complete state
+                    curr_st = simulator.apply(curr_st, act)
+                    complete_state.update(curr_st._values)
+
+                # finalize and update automaton initial state
                 curr_st._condense_state()
                 aut.problem.replace_initial_state(curr_st._values)
 
@@ -310,7 +386,6 @@ def distill(aut: Automaton) -> PlanResult:
             aut.transitions.append(new_trans)
             aut.build()
 
-        # 4.
         if len(curr.out_trans) == 0:
             break
         elif len(flagged_for_removal) > 0:
