@@ -88,6 +88,7 @@ def main(args) -> TestOutput:
             plan_out += str_aut
 
     if 'distill' in arg_task:
+        classical._planner_cache.clear()
         # we cannot distill goals, so convert to plan if needed
         if aut.contains_goals():
             if pr is None:

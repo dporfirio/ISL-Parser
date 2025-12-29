@@ -16,6 +16,17 @@ from unified_planning.engines.compilers import (  # type: ignore
 )
 from typing import List
 
+# Simple in-memory cache for planner results keyed by (initial_state, goals)
+_planner_cache = {}
+
+
+def _make_problem_key(problem: up.model.Problem):
+    # initial_values is a dict mapping fluent -> value
+    initial = getattr(problem, "initial_values", {}) or {}
+    initial_items = tuple(sorted((str(k), str(v)) for k, v in initial.items()))
+    goals = getattr(problem, "goals", []) or []
+    goals_tuple = tuple(sorted(str(g) for g in goals))
+    return (initial_items, goals_tuple)
 
 def get_planner_name(problem: up.model.Problem) -> str:
     planner_name: str = "fast-downward-opt"
@@ -34,7 +45,7 @@ def create_trace(plan, chkpts) -> None:
         plan.transitions.append(trans)
 
 
-def plan(aut: Automaton) -> PlanResult:
+def plan(aut: Automaton, cache=False) -> PlanResult:
     """
     Checks aut for if plan can be created.
     If so, returns a plan.
@@ -105,9 +116,14 @@ def plan(aut: Automaton) -> PlanResult:
         # invoke the planner
         pr = PlanResult()
         planner_name = get_planner_name(problem)
-        up.shortcuts.get_environment().credits_stream = None
-        with OneshotPlanner(name=planner_name) as planner:
-            result = planner.solve(aut.problem.problem)
+        key = _make_problem_key(aut.problem.problem)
+        if cache and key in _planner_cache:
+            result = _planner_cache[key]
+        else:
+            up.shortcuts.get_environment().credits_stream = None
+            with OneshotPlanner(name=planner_name) as planner:
+                result = planner.solve(aut.problem.problem)
+            _planner_cache[key] = result
             if len(result.plan.actions) == 0:
                 return PlanResult.nosat()
 
@@ -142,9 +158,14 @@ def plan(aut: Automaton) -> PlanResult:
                 problem.add_goal(pred.fnode)
             planner_name = get_planner_name(problem)
             pr = PlanResult()
-            up.shortcuts.get_environment().credits_stream = None
-            with OneshotPlanner(name=planner_name) as planner:
-                result = planner.solve(aut.problem.problem)
+            key = _make_problem_key(aut.problem.problem)
+            if cache and key in _planner_cache:
+                result = _planner_cache[key]
+            else:
+                up.shortcuts.get_environment().credits_stream = None
+                with OneshotPlanner(name=planner_name) as planner:
+                    result = planner.solve(aut.problem.problem)
+                _planner_cache[key] = result
                 if len(result.plan.actions) == 0:
                     return PlanResult.nosat()
 
@@ -240,7 +261,7 @@ def distill(aut: Automaton) -> PlanResult:
         temp_aut.build()
 
         # plan and extract to a list
-        pr: PlanResult = plan(temp_aut)
+        pr: PlanResult = plan(temp_aut, cache=True)
         plan_list: List[State] = []
         plan_curr = pr.plan.init
         while len(plan_curr.out_trans) > 0:
