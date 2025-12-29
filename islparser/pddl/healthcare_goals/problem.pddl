@@ -27,7 +27,7 @@
 	(:init 
 		; Robot initial state
 		(entity_in stretch robotdock)
-		(agent_has_drawer stretch robotdrawer)
+		; (agent_has_drawer stretch robotdrawer)
 		(can_carry stretch)
 
 		;person initial state
@@ -159,9 +159,9 @@
 		(is_closed trashbin)
 		(is_closed robotdrawer)
 		(not (agent_near stretch robotdrawer))
-		(is_openable medicinecabinet)
-		(is_openable storagecabinet)
-		(is_openable trashbin)
-		(is_openable robotdrawer)
+		; (is_openable medicinecabinet)
+		; (is_openable storagecabinet)
+		; (is_openable trashbin)
+		; (is_openable robotdrawer)
 	)
 	(:goal (entity_in stretch lab)))

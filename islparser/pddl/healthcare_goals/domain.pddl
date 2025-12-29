@@ -25,7 +25,7 @@
 
         ; General requirements - DO NOT
         ; MODIFY THE FOLLOWING LINE!
-        :negative-preconditions :typing :conditional-effects
+        :negative-preconditions :typing
 
         ; =============================
         ; USER: Add custom requirements here
@@ -56,8 +56,7 @@
     )
 
     ; any region that is not labeled defaults to "unknown"
-    (:constants unknown_region - region
-                robotdrawer - container  ; The robot's drawer as a constant
+    (:constants robotdrawer - container  ; The robot's drawer as a constant
     )
 
     (:predicates
@@ -99,7 +98,7 @@
         (agent_near ?agent - robot ?entity - entity)       ; NL: [0] near [1]
         (agent_is_near_something)  ; INTERNAL
 
-        (agent_has_drawer ?agent - robot ?cont - container) ; INTERNAL
+        ; (agent_has_drawer ?agent - robot ?cont - container) ; INTERNAL
 
         ; OBJECTS
         ; an object can theoretically be at any location.
@@ -112,7 +111,7 @@
         ; (accessible ?location - entity)                       ; INTERNAL
         
         ; ITEM ATTRIBUTES
-        (is_openable ?cont - container)                             ; INTERNAL
+        ; (is_openable ?cont - container)                             ; INTERNAL
 
         ;surface is dirty
         (is_clean ?world - world)                             ; NL: [0] is dirty
@@ -135,10 +134,6 @@
         (is_delivering) ; NL: is delivering
         (is_wiping) ; NL: is wiping
         (is_vacuuming) ; NL: is vacuuming
-
-        ; DUMMY predicate
-        ; required for certain parsers
-        (default)                                                ; NL: no change
     )
 
 
@@ -314,7 +309,7 @@
         :parameters (?agent - robot ?item - item)
         :precondition (and (is_open robotdrawer)
                         (can_carry ?agent)
-                        (agent_has_drawer ?agent robotdrawer)
+                        ; (agent_has_drawer ?agent robotdrawer)
                         (item_inside ?item robotdrawer))
         :effect (and (agent_has ?agent ?item)
                     (not (can_carry ?agent))
@@ -365,7 +360,7 @@
         :precondition (and (not (item_inside ?item robotdrawer))
                         (not (can_carry ?agent))
                         (agent_has ?agent ?item)
-                        (agent_has_drawer ?agent robotdrawer)
+                        ; (agent_has_drawer ?agent robotdrawer)
                         (is_open robotdrawer)
                         (not (is_tool ?item)))
         :effect (and (not (agent_has ?agent ?item))
@@ -416,8 +411,10 @@
   (:action open ; NL: [0] opens [1]
         :parameters (?agent - robot ?cont - container)
         :precondition (and (agent_near ?agent ?cont)
-                           (is_openable ?cont)
-                           (is_closed ?cont))
+                           ; (is_openable ?cont)
+                           (is_closed ?cont)
+                           (not (= ?cont robotdrawer)))
+                           ; (not (agent_has_drawer ?agent ?cont)))
         :effect (and (is_open ?cont)
                      (not (is_closed ?cont))
                      (not (is_moving))
@@ -434,9 +431,9 @@
 
   (:action open_robotdrawer ; NL: [0] opens ROBOTDRAWER
     :parameters (?agent - robot)
-    :precondition (and (is_openable robotdrawer)
-                       (is_closed robotdrawer)
-                       (agent_has_drawer ?agent robotdrawer))
+    :precondition (and ; (is_openable robotdrawer)
+                       (is_closed robotdrawer))
+                       ;  ?agent robotdrawer))
     :effect (and (is_open robotdrawer)
                  (not (is_closed robotdrawer))
                  (not (is_moving))
@@ -455,9 +452,10 @@
     ;; close the container and make all items inside are not accessible
     (:action close ; NL: [0] closes [1]
         :parameters (?agent - robot ?cont - container)
-        :precondition (and (is_openable ?cont)
+        :precondition (and ; (is_openable ?cont)
                            (is_open ?cont)
-                           (not (agent_has_drawer ?agent ?cont))
+                           (not (= ?cont robotdrawer))
+                           ; (not (agent_has_drawer ?agent ?cont))
                            (agent_near ?agent ?cont))
         :effect (and (not (is_open ?cont))
                      (is_closed ?cont)
@@ -475,9 +473,9 @@
 
   (:action close_robotdrawer ; NL: [0] closes ROBOTDRAWER
     :parameters (?agent - robot)
-    :precondition (and (is_openable robotdrawer)
-                       (is_open robotdrawer)
-                       (agent_has_drawer ?agent robotdrawer))
+    :precondition (and ; (is_openable robotdrawer)
+                       (is_open robotdrawer))
+                       ; (agent_has_drawer ?agent robotdrawer))
     :effect (and (not (is_open robotdrawer))
                  (is_closed robotdrawer)
                  (not (is_moving))
