@@ -85,7 +85,7 @@
         ; USER: Add custom predicates here
         ;  |
         ;  v
-        (can_carry ?agent)                        ; INTERNAL
+        (can_carry)                        ; INTERNAL
         (agent_has ?agent - agent ?object - item)              ; NL: [0] is carrying [1]
         (is_open ?cont - container) ; NL: [0] is open
         (is_closed ?cont - container) ; NL: [0] is closed
@@ -254,14 +254,14 @@
     (:action grab ; NL: [0] grabs [1] from [2] in [3]
         :parameters (?agent - robot ?item - item ?surface - surface ?region - region)
         :precondition (and (agent_near ?agent ?item)
-                       (can_carry ?agent)
+                       (can_carry)
                        ; (accessible ?item)
                        (entity_in ?item ?region)
                        (entity_in ?agent ?region)
                        (entity_in ?surface ?region)
                        (object_at ?item ?surface))
         :effect (and (agent_has ?agent ?item)
-                 (not (can_carry ?agent))
+                 (not (can_carry))
                  ; (not (accessible ?item))
                  (agent_near ?agent ?surface)      ;when grab, the robot near the surface, but when put_on surface, agent is not near the surface? make the agent only near one entity at a time? 
                  (not (object_at ?item ?surface))
@@ -281,7 +281,7 @@
     (:action grab_from_inside ; NL: [0] grabs [1] from [2] in [3]
         :parameters (?agent - robot ?item - item ?container - container ?region - region)
         :precondition (and (agent_near ?agent ?item)
-                       (can_carry ?agent)
+                       (can_carry)
                        ; (accessible ?item)
                        (entity_in ?item ?region)
                        (entity_in ?agent ?region)
@@ -289,7 +289,7 @@
                        (is_open ?container)
                        (item_inside ?item ?container))
         :effect (and (agent_has ?agent ?item)
-                 (not (can_carry ?agent))
+                 (not (can_carry))
                  ; (not (accessible ?item))
                  (agent_near ?agent ?container)
                  (not (item_inside ?item ?container))
@@ -310,11 +310,11 @@
     (:action grab_from_robotdrawer ; NL: [0] grabs [1] from ROBOTDRAWER
         :parameters (?agent - robot ?item - item)
         :precondition (and (is_open robotdrawer)
-                        (can_carry ?agent)
+                        (can_carry)
                         ; (agent_has_drawer ?agent robotdrawer)
                         (item_inside ?item robotdrawer))
         :effect (and (agent_has ?agent ?item)
-                    (not (can_carry ?agent))
+                    (not (can_carry))
                     (not (item_inside ?item robotdrawer))
                     (not (agent_near ?agent ?item))
                     (not (is_moving))
@@ -333,11 +333,11 @@
         :precondition (and (agent_near ?agent ?surface)
                        (not (object_at ?item ?surface))
                        (not (= ?item vacuum))  ; vacuum can not be put on surface
-                       (not (can_carry ?agent))
+                       (not (can_carry))
                        (agent_has ?agent ?item)
                        (entity_in ?surface ?region))
         :effect (and (not (agent_has ?agent ?item))
-                 (can_carry ?agent)
+                 (can_carry)
                  ; (accessible ?item)
                  ;(is_grabbable ?item)
                  (not (agent_near ?agent ?surface))
@@ -360,13 +360,13 @@
     (:action put_in_robotdrawer ; NL: [0] puts [1] in ROBOTDRAWER
         :parameters (?agent - robot ?item - item)
         :precondition (and (not (item_inside ?item robotdrawer))
-                        (not (can_carry ?agent))
+                        (not (can_carry))
                         (agent_has ?agent ?item)
                         ; (agent_has_drawer ?agent robotdrawer)
                         (is_open robotdrawer)
                         (not (= ?item vacuum)))
         :effect (and (not (agent_has ?agent ?item))
-                    (can_carry ?agent)
+                    (can_carry)
                     (agent_near ?agent ?item)
                     (item_inside ?item robotdrawer)
                     (not (is_moving))
@@ -413,7 +413,7 @@
   (:action open ; NL: [0] opens [1]
         :parameters (?agent - robot ?cont - container)
         :precondition (and (agent_near ?agent ?cont)
-                           (can_carry ?agent)
+                           (can_carry)
                            ; (is_openable ?cont)
                            (is_closed ?cont)
                            (not (= ?cont robotdrawer)))
@@ -456,7 +456,7 @@
     (:action close ; NL: [0] closes [1]
         :parameters (?agent - robot ?cont - container)
         :precondition (and ; (is_openable ?cont)
-                           (can_carry ?agent)
+                           (can_carry)
                            (is_open ?cont)
                            (not (= ?cont robotdrawer))
                            ; (not (agent_has_drawer ?agent ?cont))
@@ -518,14 +518,14 @@
         :parameters (?agent - robot ?item - item ?giver - person);  ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
                            (agent_has ?giver ?item)
-                           (can_carry ?agent)
+                           (can_carry)
                            (agent_near ?agent ?giver)
                            ; (entity_in ?agent ?region)
                            ; (entity_in ?giver ?region)
                            )
                           
         :effect (and (agent_has ?agent ?item)
-                     (not (can_carry ?agent))
+                     (not (can_carry))
                      ;(not (accessible ?item))
                      (not (agent_has ?giver ?item))
                      (not (requested ?agent ?item ?giver))
@@ -547,10 +547,10 @@
         :precondition (and (agent_has ?agent ?item)
                            (agent_near ?agent ?person)
                            (is_closed robotdrawer)
-                           (not (can_carry ?agent)))
+                           (not (can_carry)))
     :effect (and (agent_has ?person ?item)
                  (not (agent_has ?agent ?item))
-                 (can_carry ?agent)
+                 (can_carry)
                  ;(not (accessible ?item))
                  (not (is_moving))
                  (not (is_approaching))

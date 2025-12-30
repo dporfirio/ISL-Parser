@@ -1,5 +1,5 @@
 import re
-from typing import Dict
+from typing import Dict, List
 from unified_planning.io import (  # type: ignore[import-untyped]
     PDDLReader as UPReader
 )
@@ -14,6 +14,35 @@ def parse_to_unified_planner(domain_filename: str,
     reader = UPReader()
     return reader.parse_problem(domain_filename,
                                 problem_filename)
+
+
+def parse_pddl_constants(domain_filename: str) -> List[str]:
+    """Parse constants from domain file."""
+    constants: List[str] = []
+    with open(domain_filename, "r") as infile:
+        const_flag = False
+        for i, line in enumerate(infile):
+            line = line.strip()
+            if len(line) == 0:  # ignore empty lines
+                continue
+            if line[0] == ";":  # ignore full-line comments
+                continue
+            if ":constants" in line:
+                const_flag = True
+                line = line.replace(":constants", "").strip()
+            if const_flag:
+                if ":" in line:  # end of constants section
+                    const_flag = False
+                    line = line.split(":")[0].strip()
+                line = line.replace("(", "").replace(")", "")
+                parts = line.split("-")
+                if len(parts) < 2:
+                    const_names = parts[0].strip().split()
+                else:
+                    const_names = parts[0].strip().split()
+                for name in const_names:
+                    constants.append(name.strip())
+    return constants
 
 
 def parse_pddl_comments(domain_filename: str,

@@ -1,14 +1,19 @@
 from __future__ import annotations
-from typing import Dict
+from typing import Dict, Iterable, List, Set
 import inflect
 from islparser.model.state import Predicate
-from islparser.parser.pddl_parser import parse_to_unified_planner, parse_pddl_comments
+from islparser.parser.pddl_parser import (
+    parse_to_unified_planner,
+    parse_pddl_comments,
+    parse_pddl_constants
+)
 import unified_planning as up  # type: ignore[import-untyped]
 from unified_planning.model import (  # type: ignore[import-untyped]
     Problem,
     Fluent,
     Action,
-    FNode
+    FNode,
+    Object
 )
 from unified_planning.plans import (  # type: ignore[import-untyped]
     ActionInstance
@@ -25,6 +30,7 @@ class ISLProblem:
     action_to_internal: Dict[str, bool]
     predicate_to_nl: Dict[str, str]
     predicate_to_internal: Dict[str, bool]
+    constants: List[str]
 
     def __init__(self) -> None:
         """Polaris Problem wraps the unified-planning problem class."""
@@ -48,6 +54,7 @@ class ISLProblem:
                             self.predicate_to_internal,
                             self.action_to_nl,
                             self.action_to_internal)
+        self.constants = parse_pddl_constants(domain_fn)
 
     def replace_initial_state(self, state_dict: Dict[FNode, FNode]) -> None:
         self.problem.explicit_initial_values.clear()
@@ -94,6 +101,63 @@ class ISLProblem:
                 s = "       <<{}>>".format(s)
                 return s
         return str(pred.fnode)
+
+    def _objects_in_expr(self, expr: FNode) -> Set[Object]:
+        """Collect all Objects appearing as OBJECT_EXP nodes in an expression DAG."""
+        seen: Set[int] = set()
+        stack = [expr]
+        out: Set[Object] = set()
+
+        while stack:
+            n = stack.pop()
+            if n.node_id in seen:
+                continue
+            seen.add(n.node_id)
+
+            if n.is_object_exp():
+                out.add(n.object())  # object() is defined for OBJECT_EXP nodes
+                continue
+
+            # Recurse into children
+            stack.extend(n.args)
+
+        return out
+
+    def rebuild_problem_pruning_objects(
+            self,
+            keep_objects: Iterable[Object]) -> None:
+        """
+        Rebuilds a new Problem:
+        - same environment
+        - copies user types, fluents, actions
+        - keeps only keep_objects
+        - copies explicit initial values that don't mention removed objects (in key or value)
+        """
+        problem = self.problem
+        keep_objects = set(keep_objects)
+
+        # Collect all objects from the original problem
+        all_objects: Set[Object] = set(problem.all_objects)
+        removed = all_objects - keep_objects
+
+        # Create new problem in the SAME environment
+        p2 = up.model.Problem(problem.name, environment=problem.environment)
+
+        # Copy fluents and actions (this implicitly registers types)
+        for fluent in problem.fluents:
+            p2.add_fluent(fluent, default_initial_value=False)
+        p2.add_actions(problem.actions)
+
+        # Add only the desired objects
+        p2.add_objects(sorted(keep_objects, key=lambda o: o.name))
+
+        # Copy initial values that do not mention removed objects
+        for lhs, rhs in problem.explicit_initial_values.items():
+            if (self._objects_in_expr(lhs) & removed) or (self._objects_in_expr(rhs) & removed):
+                continue
+            p2.set_initial_value(lhs, rhs)
+
+        self.problem = p2
 
     def clone(self) -> ISLProblem:
         new_problem = ISLProblem()

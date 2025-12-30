@@ -98,6 +98,25 @@ def main(args) -> TestOutput:
             plan.add_init()
             classical.create_trace(plan, chkpts)
             plan.build()
+            # Prune problem objects to only those used in the classical plan
+            # Gather object names used in the plan actions
+            used_objs = set()
+            if pr is not None and getattr(pr, 'plan', None) is not None:
+                for st in pr.plan.states:
+                    act = getattr(st, 'action', None)
+                    # action actual parameters may be on the action wrapper
+                    params = getattr(act, 'actual_parameters', None)
+                    if params is None:
+                        params = getattr(act, 'action', None)
+                    if params is None:
+                        continue
+                    for p in params:
+                        used_objs.add(p.object())
+            for const in plan.problem.constants:
+                used_objs.add(plan.problem.get_object(const))
+
+            # Remove unused objects
+            plan.problem.rebuild_problem_pruning_objects(used_objs)
             aut = plan
         while True:
             pr = classical.distill(aut)

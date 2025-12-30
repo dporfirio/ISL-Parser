@@ -21,14 +21,14 @@
 		stretch - robot
 
 		; Person
-		icudoctor icupatient nurse patient pharmacist emdoctor labtech  - person
+		icudoctor icupatient nurse patient pharmacist emdoctor labtech - person
 	)
 	
 	(:init 
 		; Robot initial state
 		(entity_in stretch robotdock)
 		; (agent_has_drawer stretch robotdrawer)
-		(can_carry stretch)
+		(can_carry)
 
 		;person initial state
 		(entity_in icudoctor icu)
