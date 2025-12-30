@@ -16,6 +16,12 @@ from unified_planning.engines.compilers import (  # type: ignore
 )
 from typing import List
 
+
+class DistillerException(Exception):
+    """Exception raised for errors during plan distillation."""
+    pass
+
+
 # Simple in-memory cache for planner results keyed by (initial_state, goals)
 _planner_cache = {}
 

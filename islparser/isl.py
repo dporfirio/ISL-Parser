@@ -89,41 +89,44 @@ def main(args) -> TestOutput:
             plan_out += str_aut
 
     if 'distill' in arg_task:
-        # we cannot distill goals, so convert to plan if needed
-        if aut.contains_goals():
-            if pr is None:
-                pr = classical.plan(aut)
-            chkpts = pr.checkpoints if pr.checkpoints is not None else []
-            plan = Automaton(aut.problem)
-            plan.add_init()
-            classical.create_trace(plan, chkpts)
-            plan.build()
-            # Prune problem objects to only those used in the classical plan
-            # Gather object names used in the plan actions
-            used_objs = set()
-            if pr is not None and getattr(pr, 'plan', None) is not None:
-                for st in pr.plan.states:
-                    act = getattr(st, 'action', None)
-                    # action actual parameters may be on the action wrapper
-                    params = getattr(act, 'actual_parameters', None)
-                    if params is None:
-                        params = getattr(act, 'action', None)
-                    if params is None:
-                        continue
-                    for p in params:
-                        used_objs.add(p.object())
-            for const in plan.problem.constants:
-                used_objs.add(plan.problem.get_object(const))
+        try:
+            # we cannot distill goals, so convert to plan if needed
+            if aut.contains_goals():
+                if pr is None:
+                    pr = classical.plan(aut)
+                chkpts = pr.checkpoints if pr.checkpoints is not None else []
+                plan = Automaton(aut.problem)
+                plan.add_init()
+                classical.create_trace(plan, chkpts)
+                plan.build()
+                # Prune problem objects to only those used in the classical plan
+                # Gather object names used in the plan actions
+                used_objs = set()
+                if pr is not None and getattr(pr, 'plan', None) is not None:
+                    for st in pr.plan.states:
+                        act = getattr(st, 'action', None)
+                        # action actual parameters may be on the action wrapper
+                        params = getattr(act, 'actual_parameters', None)
+                        if params is None:
+                            params = getattr(act, 'action', None)
+                        if params is None:
+                            continue
+                        for p in params:
+                            used_objs.add(p.object())
+                for const in plan.problem.constants:
+                    used_objs.add(plan.problem.get_object(const))
 
-            # Remove unused objects
-            plan.problem.rebuild_problem_pruning_objects(used_objs)
-            aut = plan
-        while True:
-            pr = classical.distill(aut)
-            if str(pr.plan) == distill_out:
-                break
-            distill_out = str(pr.plan)
-        distill_out = distill_out.strip()
+                # Remove unused objects
+                plan.problem.rebuild_problem_pruning_objects(used_objs)
+                aut = plan
+            while True:
+                pr = classical.distill(aut)
+                if str(pr.plan) == distill_out:
+                    break
+                distill_out = str(pr.plan)
+            distill_out = distill_out.strip()
+        except classical.DistillerException:
+            distill_out = "Distillation failed."
     os.chdir(curr_dir)
 
     # assemble result
