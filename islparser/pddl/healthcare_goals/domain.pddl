@@ -496,10 +496,10 @@
 
    ;; request from person for a item
    (:action request ; NL: [0] requests [1] from [2]
-        :parameters (?agent - robot ?item - item ?giver - person ?region - region)
+        :parameters (?agent - robot ?item - item ?giver - person);  ?region - region)
         :precondition (and (agent_near ?agent ?giver)
-                          (entity_in ?agent ?region)
-                          (entity_in ?giver ?region)
+                          ; (entity_in ?agent ?region)
+                          ; (entity_in ?giver ?region)
                           (not (requested ?agent ?item ?giver))) ;can't request twice
         :effect (and (requested ?agent ?item ?giver)
                      (not (is_moving))
@@ -515,13 +515,14 @@
 
   ;; receive an item from a person, only happen after request, the agent can no longer carry anything and the item is not accessible anymore. The item is also not inside the container anymore and is not in any region.
   (:action receive ; NL: [0] receives [1] from [2]
-        :parameters (?agent - robot ?item - item ?giver - person ?region - region)
+        :parameters (?agent - robot ?item - item ?giver - person);  ?region - region)
         :precondition (and (requested ?agent ?item ?giver)
                            (agent_has ?giver ?item)
                            (can_carry ?agent)
                            (agent_near ?agent ?giver)
-                           (entity_in ?agent ?region)
-                           (entity_in ?giver ?region))
+                           ; (entity_in ?agent ?region)
+                           ; (entity_in ?giver ?region)
+                           )
                           
         :effect (and (agent_has ?agent ?item)
                      (not (can_carry ?agent))
@@ -566,10 +567,10 @@
   
   ;; wipe action from cleaning, do we need to assume that the area was dirty and now is clean? or just perfor the action?
 (:action wipe ; NL: [0] wipes [1]
-    :parameters (?agent - robot ?world - surface ?region - region)
+    :parameters (?agent - robot ?world - surface);  ?region - region)
     :precondition (and (agent_near ?agent ?world)
-                       (entity_in ?agent ?region)
-                       (entity_in ?world ?region)
+                       ; (entity_in ?agent ?region)
+                       ; (entity_in ?world ?region)
                        (agent_has ?agent wiper))
     :effect (and (is_clean ?world)
                  (not (is_moving))
