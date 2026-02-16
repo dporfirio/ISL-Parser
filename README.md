@@ -60,6 +60,7 @@ Version 1.1 is backwards compatible in that ISL script written for 1.0 will stil
 
 - Added classical planner for linear traces comprised of actions
 - Added reverse planner (distiller) that distills plans to their underlying checkpoints
+- Added a new batch of tests
 - Bug fixes
 
 ## Citing the ISL
