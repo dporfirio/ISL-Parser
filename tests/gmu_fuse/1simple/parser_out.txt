@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (delivered):
+         <<towels is on countertop>>
+
+  t: 0 -> 1
