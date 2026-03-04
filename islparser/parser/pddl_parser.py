@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List
+from typing import List
 from unified_planning.io import (  # type: ignore[import-untyped]
     PDDLReader as UPReader
 )
@@ -46,10 +46,7 @@ def parse_pddl_constants(domain_filename: str) -> List[str]:
 
 
 def parse_pddl_comments(domain_filename: str,
-                        pred_to_nl: Dict[str, str],
-                        pred_to_internal: Dict[str, bool],
-                        act_to_nl: Dict[str, str],
-                        act_to_internal: Dict[str, bool]) -> None:
+                        problem) -> None:
     """Parse NL data from domain file."""
     with open(domain_filename, "r") as infile:
         pred_flag = False
@@ -72,20 +69,26 @@ def parse_pddl_comments(domain_filename: str,
             regx = nl_regx if nl_regx is not None else in_regx
             if pred_flag and line[0] == "(":
                 line = line.replace("(", "").replace(")", "")
-                assert regx is not None, \
-                       "Predicates must have a valid comment."
                 pred_name = line.split()[0]
-                pred_to_internal[pred_name] = False
+                problem.predicate_to_internal[pred_name] = False
+                if regx is None:
+                    problem.predicate_to_nl[pred_name] =\
+                        pred_name + " " +\
+                        " ".join('[{}]'.format(i) for i in range(
+                                problem.get_fluent(pred_name).arity))
                 if nl_regx is not None:
-                    pred_to_nl[pred_name] = line[regx.span()[1]:].strip()
+                    problem.predicate_to_nl[pred_name] = line[nl_regx.span()[1]:].strip()
                 else:
-                    pred_to_internal[pred_name] = True
+                    problem.predicate_to_internal[pred_name] = True
             if "(:action" in line:
-                assert regx is not None, \
-                       "Actions must have a valid comment."
                 action_name = line.split()[1]
-                act_to_internal[action_name] = False
-                if nl_regx is not None:
-                    act_to_nl[action_name] = line[regx.span()[1]+1:].strip()
+                problem.action_to_internal[action_name] = False
+                if nl_regx is None:
+                    problem.action_to_nl[action_name] =\
+                        action_name + " " +\
+                        " ".join('[{}]'.format(i) for i in range(
+                                len(problem.get_action(action_name).parameters)))
+                elif nl_regx is not None:
+                    problem.action_to_nl[action_name] = line[nl_regx.span()[1]+1:].strip()
                 else:
-                    act_to_internal[action_name] = True
+                    problem.action_to_internal[action_name] = True

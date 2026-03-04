@@ -49,11 +49,7 @@ class ISLProblem:
 
     def add_pddl(self, domain_fn, problem_fn):
         self.problem = parse_to_unified_planner(domain_fn, problem_fn)
-        parse_pddl_comments(domain_fn,
-                            self.predicate_to_nl,
-                            self.predicate_to_internal,
-                            self.action_to_nl,
-                            self.action_to_internal)
+        parse_pddl_comments(domain_fn, self)
         self.constants = parse_pddl_constants(domain_fn)
 
     def replace_initial_state(self, state_dict: Dict[FNode, FNode]) -> None:
