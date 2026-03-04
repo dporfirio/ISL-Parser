@@ -224,7 +224,7 @@ def plan(aut: Automaton, cache=False) -> PlanResult:
                 with OneshotPlanner(name=planner_name) as planner:
                     result = planner.solve(aut.problem.problem)
                 _planner_cache[key] = result
-                if len(result.plan.actions) == 0:
+                if result.plan is None or len(result.plan.actions) == 0:
                     return PlanResult.nosat()
 
                 # Run simulator, cache intermediate states (remaining actions) and

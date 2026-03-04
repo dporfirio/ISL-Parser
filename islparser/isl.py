@@ -2,6 +2,7 @@ import argparse
 import os
 import islparser.parser.lexer_and_parser as aut_reader
 import islparser.planner.classical as classical
+from islparser.planner.simulate import Simulator
 from islparser.planner.plan_result import PlanResult
 from islparser.parser.lexer_and_parser import (  # type: ignore[import-untyped]
     ParseResult,
@@ -53,6 +54,7 @@ def main(args) -> TestOutput:
     arg_task: List[str] = args.task
     arg_plan_dir: str = args.exec_dir
     arg_verbosity: str = args.verbosity
+    arg_execute: bool = args.execute
     Logger.instance(arg_verbosity)
 
     # outputs
@@ -72,6 +74,12 @@ def main(args) -> TestOutput:
     elif parse_result.status == ParseResultStatus.WARNING:
         parse_out += parse_result.msg
     aut: Automaton = cast(Automaton, parse_result.automaton)
+
+    # if execute, do only that
+    if arg_execute:
+        sim = Simulator()
+        sim.simulate(aut)
+        return TestOutput("Execution completed.")
 
     # parser output
     str_aut = str(aut).strip()
@@ -156,6 +164,9 @@ if __name__ == "__main__":
                              "\'test\', or \'debug\'",
                         type=str,
                         default='test')
+    parser.add_argument("-e", "--execute",
+                        help="Execute the plan",
+                        action='store_true')
     args = parser.parse_args()
     if args.file is None and args.testcase is None:
         parser.print_usage()

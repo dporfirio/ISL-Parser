@@ -17,6 +17,7 @@ class Args:
         self.file = file
         self.task = task
         self.exec_dir = exec_dir
+        self.execute = False
         self.verbosity = 'silent'
 
 
@@ -46,7 +47,10 @@ def run(_folder: str, fullpath: str, app_scenario: str, RED: str, YELLOW: str,
 
     # execute the ISL tasks
     start = time.time()
-    result = islwrapper(Args(_file, tasks, "tmp_test_store/{}".format(i)))
+    if num_cores > 1:
+        result = islwrapper(Args(_file, tasks, "tmp_test_store/{}".format(i)))
+    else:
+        result = islwrapper(Args(_file, tasks))
     end = time.time()
     runtime = "(" + "%.5f" % (end - start) + " seconds)"
     result_str = _folder
@@ -254,21 +258,6 @@ if __name__ == '__main__':
         print("Coverage analysis:")
         cov.html_report()
         cov_val = cov.report()
-
-    color = NC
-    if results.parser_count == results.parser_total:
-        if results.parser_total > 0:
-            color = GREEN
-    elif results.parser_count == 0:
-        color = RED
-    else:
-        color = YELLOW
-    print("\n\n{}{: <17}{} {: <50}\n".format(color,
-                                             "Parser Result:", NC,
-                                             "{} out of {} tests passed."
-                                             .format(results.parser_count,
-                                                     results.parser_total)),
-          end="")
 
     if num_cores == 1:
         color = NC
