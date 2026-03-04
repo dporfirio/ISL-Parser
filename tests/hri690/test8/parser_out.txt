@@ -1,0 +1,10 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (goal):
+         <<is_open refrigerator>>
+         <<is_open entry_closet>>
+         <<is_open stove>>
+
+  t: 0 -> 1

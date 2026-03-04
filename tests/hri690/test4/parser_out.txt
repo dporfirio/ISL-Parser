@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (goal):
+         <<item_at water refrigerator>>
+
+  t: 0 -> 1

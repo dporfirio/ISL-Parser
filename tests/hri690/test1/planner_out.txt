@@ -1,0 +1,16 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  move_from_to LIVING_ROOM PASSAGE
+
+  state "step_2":
+    -->  move_from_to PASSAGE DINING_TABLE
+
+  state "goal":
+    -->  move_from_to DINING_TABLE REFRIGERATOR
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3

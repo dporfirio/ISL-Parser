@@ -1,0 +1,24 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  move_from_to LIVING_ROOM PASSAGE
+
+  state "step_2":
+    -->  move_from_to PASSAGE DINING_TABLE
+
+  state "step_3":
+    -->  move_from_to DINING_TABLE ENTRY
+
+  state "step_4":
+    -->  move_from_to ENTRY ENTRY_TABLE
+
+  state "goal":
+    -->  pickup_item_from WATER ENTRY_TABLE
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5

@@ -1,0 +1,84 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  move_from_to LIVING_ROOM PASSAGE
+
+  state "step_2":
+    -->  move_from_to PASSAGE DINING_TABLE
+
+  state "step_3":
+    -->  move_from_to DINING_TABLE REFRIGERATOR
+
+  state "step_4":
+    -->  open_storage REFRIGERATOR
+
+  state "step_5":
+    -->  move_from_to REFRIGERATOR DINING_TABLE
+
+  state "step_6":
+    -->  move_from_to DINING_TABLE ENTRY
+
+  state "step_7":
+    -->  move_from_to ENTRY ENTRY_TABLE
+
+  state "step_8":
+    -->  pickup_item_from GROCERIES ENTRY_TABLE
+
+  state "step_9":
+    -->  move_from_to ENTRY_TABLE ENTRY
+
+  state "step_10":
+    -->  move_from_to ENTRY DINING_TABLE
+
+  state "step_11":
+    -->  move_from_to DINING_TABLE REFRIGERATOR
+
+  state "step_12":
+    -->  store_item_in GROCERIES REFRIGERATOR
+
+  state "step_13":
+    -->  move_from_to REFRIGERATOR DINING_TABLE
+
+  state "step_14":
+    -->  move_from_to DINING_TABLE ENTRY
+
+  state "step_15":
+    -->  move_from_to ENTRY ENTRY_TABLE
+
+  state "step_16":
+    -->  pickup_item_from WATER ENTRY_TABLE
+
+  state "step_17":
+    -->  move_from_to ENTRY_TABLE ENTRY
+
+  state "step_18":
+    -->  move_from_to ENTRY DINING_TABLE
+
+  state "step_19":
+    -->  move_from_to DINING_TABLE REFRIGERATOR
+
+  state "goal":
+    -->  store_item_in WATER REFRIGERATOR
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13
+  t: 13 -> 14
+  t: 14 -> 15
+  t: 15 -> 16
+  t: 16 -> 17
+  t: 17 -> 18
+  t: 18 -> 19
+  t: 19 -> 20
