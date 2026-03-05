@@ -2,7 +2,10 @@ import argparse
 import os
 import islparser.parser.lexer_and_parser as aut_reader
 import islparser.planner.classical as classical
-from islparser.planner.simulate import Simulator
+try:
+    from islparser.planner.simulate import Simulator
+except ImportError as e:
+    print(f"Error importing Simulator: {e}")
 from islparser.planner.plan_result import PlanResult
 from islparser.parser.lexer_and_parser import (  # type: ignore[import-untyped]
     ParseResult,
