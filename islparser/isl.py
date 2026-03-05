@@ -2,10 +2,6 @@ import argparse
 import os
 import islparser.parser.lexer_and_parser as aut_reader
 import islparser.planner.classical as classical
-try:
-    from islparser.planner.simulate import Simulator
-except ImportError as e:
-    print(f"Error importing Simulator: {e}")
 from islparser.planner.plan_result import PlanResult
 from islparser.parser.lexer_and_parser import (  # type: ignore[import-untyped]
     ParseResult,
@@ -77,12 +73,6 @@ def main(args) -> TestOutput:
     elif parse_result.status == ParseResultStatus.WARNING:
         parse_out += parse_result.msg
     aut: Automaton = cast(Automaton, parse_result.automaton)
-
-    # if execute, do only that
-    if arg_execute:
-        sim = Simulator()
-        sim.simulate(aut)
-        return TestOutput("Execution completed.")
 
     # parser output
     str_aut = str(aut).strip()
