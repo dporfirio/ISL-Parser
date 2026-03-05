@@ -1,6 +1,9 @@
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
+try:
+    import rclpy
+    from rclpy.node import Node
+    from std_msgs.msg import String
+except ImportError as e:
+    print(f"Error importing ROS2 modules: {e}")
 from unified_planning.shortcuts import SequentialSimulator  # type: ignore[import-untyped]
 from islparser.model.automata import Automaton
 from islparser.planner.classical import plan
