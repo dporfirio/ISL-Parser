@@ -1,0 +1,10 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (delivered):
+         <<item_at peanutbutter locatione>>
+         <<item_at jelly locatione>>
+         <<item_at bread locatione>>
+
+  t: 0 -> 1
