@@ -13,8 +13,8 @@ class SimulatorNode(Node):
     def __init__(self, simulator) -> None:
         super().__init__('isl_simulator')
         self.simulator = simulator
-        print("[ROS2] Creating publisher on topic 'isl_send'")
-        self.publisher = self.create_publisher(String, 'isl_send', 10)
+        print("[ROS2] Creating publisher on topic '/isl_send'")
+        self.publisher = self.create_publisher(String, '/isl_send', 10)
         print("[ROS2] Creating subscriber on topic '/isl_receive'")
         self.subscriber = self.create_subscription(String, '/isl_receive', self.finished_action, 10)
         print("[ROS2] Node initialized successfully")
@@ -123,6 +123,28 @@ class Simulator:
             import traceback
             traceback.print_exc()
             return
+
+        # Check if the current checkpoint's goals are already satisfied
+        # and advance the automaton past achieved checkpoints
+        while self.aut.init is not None and len(self.aut.init.out_trans) > 0:
+            next_checkpoint = self.aut.init.out_trans[0].target
+            if not next_checkpoint.predicates:
+                break
+            initial_values = self.aut.problem.problem.initial_values
+            all_satisfied = True
+            for pred in next_checkpoint.predicates:
+                if pred.fnode in initial_values:
+                    if not initial_values[pred.fnode].is_true():
+                        all_satisfied = False
+                        break
+                else:
+                    all_satisfied = False
+                    break
+            if all_satisfied:
+                print(f"[Simulator] Checkpoint '{next_checkpoint.name}' already achieved, advancing...")
+                self.aut.init = next_checkpoint
+            else:
+                break
 
         # Replan from the new state
         print("[Simulator] Replanning from new state...")
