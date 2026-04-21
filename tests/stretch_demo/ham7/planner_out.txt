@@ -3,40 +3,40 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  move LOCATIONA LOCATIONB
+    -->  move LOCATIONA LOCATIONC
 
   state "step_2":
-    -->  grab JELLY LOCATIONB
-
-  state "step_3":
-    -->  move LOCATIONB LOCATIONE
-
-  state "step_4":
-    -->  put JELLY LOCATIONE
-
-  state "step_5":
-    -->  move LOCATIONE LOCATIONC
-
-  state "step_6":
     -->  grab BREAD LOCATIONC
 
-  state "step_7":
+  state "step_3":
     -->  move LOCATIONC LOCATIONE
 
-  state "step_8":
+  state "one":
     -->  put BREAD LOCATIONE
+
+  state "step_5":
+    -->  move LOCATIONE LOCATIONB
+
+  state "step_6":
+    -->  grab CHEESE LOCATIONB
+
+  state "step_7":
+    -->  move LOCATIONB LOCATIONE
+
+  state "two":
+    -->  put CHEESE LOCATIONE
 
   state "step_9":
     -->  move LOCATIONE LOCATIOND
 
   state "step_10":
-    -->  grab PEANUTBUTTER LOCATIOND
+    -->  grab HAM LOCATIOND
 
   state "step_11":
     -->  move LOCATIOND LOCATIONE
 
-  state "delivered":
-    -->  put PEANUTBUTTER LOCATIONE
+  state "three":
+    -->  put HAM LOCATIONE
 
   t: 0 -> 1
   t: 1 -> 2

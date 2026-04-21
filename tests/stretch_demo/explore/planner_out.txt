@@ -11,6 +11,14 @@ Automata.
   state "third":
     -->  move LOCATIONB LOCATIONC
 
+  state "fourth":
+    -->  move LOCATIONC LOCATIOND
+
+  state "fifth":
+    -->  move LOCATIOND LOCATIONA
+
   t: 0 -> 1
   t: 1 -> 2
   t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
