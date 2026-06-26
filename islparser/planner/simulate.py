@@ -1,11 +1,29 @@
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
+from __future__ import annotations
+
 from unified_planning.shortcuts import SequentialSimulator  # type: ignore[import-untyped]
-from islparser.model.automata import Automaton
-from islparser.planner.classical import plan
 import threading
 import time
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from islparser.model.automata import Automaton
+
+try:
+    import rclpy
+    from rclpy.node import Node
+    from std_msgs.msg import String
+except ModuleNotFoundError:
+    rclpy = None  # type: ignore[assignment]
+    Node = object  # type: ignore[misc,assignment]
+    String = Any  # type: ignore[misc,assignment]
+
+
+def _require_ros() -> None:
+    if rclpy is None:
+        raise RuntimeError(
+            "ROS 2 support requires the optional dependencies 'rclpy' and "
+            "'std_msgs'. Install/source ROS 2 before using execution mode."
+        )
 
 
 class SimulatorNode(Node):
@@ -37,6 +55,7 @@ class SimulatorNode(Node):
 class Simulator:
 
     def __init__(self) -> None:
+        _require_ros()
         print("[Simulator] Initializing ROS2...")
         rclpy.init()
         print("[Simulator] Creating SimulatorNode...")
@@ -59,6 +78,8 @@ class Simulator:
             print(f"[ROS2 Thread] Error during spin: {e}")
 
     def simulate(self, aut: Automaton) -> None:
+        from islparser.planner.classical import plan
+
         print("[Simulator] Starting simulation...")
         self.aut = aut
         pr = plan(aut)
@@ -149,12 +170,15 @@ class Simulator:
         # Replan from the new state
         print("[Simulator] Replanning from new state...")
         try:
+            from islparser.planner.classical import plan
+
             pr = plan(self.aut)
             self.plan_result = pr
 
             if pr.plan.init.out_trans:
                 next_act = pr.plan.init.out_trans[0].target.action
                 print(f'[Simulator] Next action: {next_act}')
+                time.sleep(4)
                 self.publish_action(str(next_act))
             else:
                 print('[Simulator] No more actions available')
