@@ -1,5 +1,10 @@
 import argparse
 import os
+import sys
+
+if __package__ is None or __package__ == "":
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import islparser.parser.lexer_and_parser as aut_reader
 import islparser.planner.classical as classical
 from islparser.planner.simulate import Simulator
@@ -170,7 +175,7 @@ if __name__ == "__main__":
                         help="Execute the plan",
                         action='store_true')
     args = parser.parse_args()
-    if args.file is None and args.testcase is None:
+    if args.file is None:
         parser.print_usage()
     else:
         main(args)
