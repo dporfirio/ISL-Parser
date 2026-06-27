@@ -1,5 +1,10 @@
 import argparse
 import os
+import sys
+
+if __package__ is None or __package__ == "":
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import islparser.parser.lexer_and_parser as aut_reader
 import islparser.planner.classical as classical
 from islparser.planner.simulate import Simulator
@@ -88,54 +93,56 @@ def main(args) -> TestOutput:
     # planner output
     curr_dir: str = os.getcwd()
     os.chdir(arg_plan_dir)
-    pr: PlanResult | None = None
-    classical._planner_cache.clear()
-    if 'plan' in arg_task:
-        pr = classical.plan(aut)
-        if pr.sat:
-            str_aut = str(pr.plan).strip()
-            plan_out += str_aut
+    try:
+        pr: PlanResult | None = None
+        classical._planner_cache.clear()
+        if 'plan' in arg_task:
+            pr = classical.plan(aut)
+            if pr.sat:
+                str_aut = str(pr.plan).strip()
+                plan_out += str_aut
 
-    if 'distill' in arg_task:
-        try:
-            # we cannot distill goals, so convert to plan if needed
-            if aut.contains_goals():
-                if pr is None:
-                    pr = classical.plan(aut)
-                chkpts = pr.checkpoints if pr.checkpoints is not None else []
-                plan = Automaton(aut.problem)
-                plan.add_init()
-                classical.create_trace(plan, chkpts)
-                plan.build()
-                # Prune problem objects to only those used in the classical plan
-                # Gather object names used in the plan actions
-                used_objs = set()
-                if pr is not None and getattr(pr, 'plan', None) is not None:
-                    for st in pr.plan.states:
-                        act = getattr(st, 'action', None)
-                        # action actual parameters may be on the action wrapper
-                        params = getattr(act, 'actual_parameters', None)
-                        if params is None:
-                            params = getattr(act, 'action', None)
-                        if params is None:
-                            continue
-                        for p in params:
-                            used_objs.add(p.object())
-                for const in plan.problem.constants:
-                    used_objs.add(plan.problem.get_object(const))
+        if 'distill' in arg_task:
+            try:
+                # we cannot distill goals, so convert to plan if needed
+                if aut.contains_goals():
+                    if pr is None:
+                        pr = classical.plan(aut)
+                    chkpts = pr.checkpoints if pr.checkpoints is not None else []
+                    plan = Automaton(aut.problem)
+                    plan.add_init()
+                    classical.create_trace(plan, chkpts)
+                    plan.build()
+                    # Prune problem objects to only those used in the classical plan
+                    # Gather object names used in the plan actions
+                    used_objs = set()
+                    if pr is not None and getattr(pr, 'plan', None) is not None:
+                        for st in pr.plan.states:
+                            act = getattr(st, 'action', None)
+                            # action actual parameters may be on the action wrapper
+                            params = getattr(act, 'actual_parameters', None)
+                            if params is None:
+                                params = getattr(act, 'action', None)
+                            if params is None:
+                                continue
+                            for p in params:
+                                used_objs.add(p.object())
+                    for const in plan.problem.constants:
+                        used_objs.add(plan.problem.get_object(const))
 
-                # Remove unused objects
-                plan.problem.rebuild_problem_pruning_objects(used_objs)
-                aut = plan
-            while True:
-                pr = classical.distill(aut)
-                if str(pr.plan) == distill_out:
-                    break
-                distill_out = str(pr.plan)
-            distill_out = distill_out.strip()
-        except classical.DistillerException:
-            distill_out = "Distillation failed."
-    os.chdir(curr_dir)
+                    # Remove unused objects
+                    plan.problem.rebuild_problem_pruning_objects(used_objs)
+                    aut = plan
+                while True:
+                    pr = classical.distill(aut)
+                    if str(pr.plan) == distill_out:
+                        break
+                    distill_out = str(pr.plan)
+                distill_out = distill_out.strip()
+            except classical.DistillerException:
+                distill_out = "Distillation failed."
+    finally:
+        os.chdir(curr_dir)
 
     # assemble result
     out = TestOutput(parse_out, plan_out, distill_out)
@@ -168,7 +175,7 @@ if __name__ == "__main__":
                         help="Execute the plan",
                         action='store_true')
     args = parser.parse_args()
-    if args.file is None and args.testcase is None:
+    if args.file is None:
         parser.print_usage()
     else:
         main(args)

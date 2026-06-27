@@ -1,4 +1,6 @@
 unified_planning == 1.2.0
+up-fast-downward
+up-symk
 coverage
 ply
 inflect

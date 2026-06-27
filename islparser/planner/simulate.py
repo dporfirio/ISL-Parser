@@ -1,11 +1,29 @@
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
+from __future__ import annotations
+
 from unified_planning.shortcuts import SequentialSimulator  # type: ignore[import-untyped]
-from islparser.model.automata import Automaton
-from islparser.planner.classical import plan
 import threading
 import time
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from islparser.model.automata import Automaton
+
+try:
+    import rclpy
+    from rclpy.node import Node
+    from std_msgs.msg import String
+except ModuleNotFoundError:
+    rclpy = None  # type: ignore[assignment]
+    Node = object  # type: ignore[misc,assignment]
+    String = Any  # type: ignore[misc,assignment]
+
+
+def _require_ros() -> None:
+    if rclpy is None:
+        raise RuntimeError(
+            "ROS 2 support requires the optional dependencies 'rclpy' and "
+            "'std_msgs'. Install/source ROS 2 before using execution mode."
+        )
 
 
 class SimulatorNode(Node):
@@ -13,8 +31,8 @@ class SimulatorNode(Node):
     def __init__(self, simulator) -> None:
         super().__init__('isl_simulator')
         self.simulator = simulator
-        print("[ROS2] Creating publisher on topic 'isl_send'")
-        self.publisher = self.create_publisher(String, 'isl_send', 10)
+        print("[ROS2] Creating publisher on topic '/isl_send'")
+        self.publisher = self.create_publisher(String, '/isl_send', 10)
         print("[ROS2] Creating subscriber on topic '/isl_receive'")
         self.subscriber = self.create_subscription(String, '/isl_receive', self.finished_action, 10)
         print("[ROS2] Node initialized successfully")
@@ -37,6 +55,7 @@ class SimulatorNode(Node):
 class Simulator:
 
     def __init__(self) -> None:
+        _require_ros()
         print("[Simulator] Initializing ROS2...")
         rclpy.init()
         print("[Simulator] Creating SimulatorNode...")
@@ -59,6 +78,8 @@ class Simulator:
             print(f"[ROS2 Thread] Error during spin: {e}")
 
     def simulate(self, aut: Automaton) -> None:
+        from islparser.planner.classical import plan
+
         print("[Simulator] Starting simulation...")
         self.aut = aut
         pr = plan(aut)
@@ -124,15 +145,40 @@ class Simulator:
             traceback.print_exc()
             return
 
+        # Check if the current checkpoint's goals are already satisfied
+        # and advance the automaton past achieved checkpoints
+        while self.aut.init is not None and len(self.aut.init.out_trans) > 0:
+            next_checkpoint = self.aut.init.out_trans[0].target
+            if not next_checkpoint.predicates:
+                break
+            initial_values = self.aut.problem.problem.initial_values
+            all_satisfied = True
+            for pred in next_checkpoint.predicates:
+                if pred.fnode in initial_values:
+                    if not initial_values[pred.fnode].is_true():
+                        all_satisfied = False
+                        break
+                else:
+                    all_satisfied = False
+                    break
+            if all_satisfied:
+                print(f"[Simulator] Checkpoint '{next_checkpoint.name}' already achieved, advancing...")
+                self.aut.init = next_checkpoint
+            else:
+                break
+
         # Replan from the new state
         print("[Simulator] Replanning from new state...")
         try:
+            from islparser.planner.classical import plan
+
             pr = plan(self.aut)
             self.plan_result = pr
 
             if pr.plan.init.out_trans:
                 next_act = pr.plan.init.out_trans[0].target.action
                 print(f'[Simulator] Next action: {next_act}')
+                time.sleep(4)
                 self.publish_action(str(next_act))
             else:
                 print('[Simulator] No more actions available')

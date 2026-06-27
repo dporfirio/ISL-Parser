@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<robot_at locatione>>
+
+  t: 0 -> 1

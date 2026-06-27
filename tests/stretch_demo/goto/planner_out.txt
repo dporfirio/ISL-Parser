@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "first":
+    -->  move LOCATIONA LOCATIONB
+
+  t: 0 -> 1

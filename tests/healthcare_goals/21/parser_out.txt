@@ -1,0 +1,14 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<is approaching>>
+         <<stretch near emtray>>
+
+  checkpoint 2 (two):
+         <<is grabbing>>
+         <<stretch is carrying bloodsample>>
+
+  t: 0 -> 1
+  t: 1 -> 2

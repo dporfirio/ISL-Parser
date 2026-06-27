@@ -1,0 +1,68 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  move LOCATIONA LOCATIONC
+
+  state "step_2":
+    -->  grab BREAD LOCATIONC
+
+  state "step_3":
+    -->  move LOCATIONC LOCATIONE
+
+  state "one":
+    -->  put BREAD LOCATIONE
+
+  state "step_5":
+    -->  move LOCATIONE LOCATIONB
+
+  state "step_6":
+    -->  grab CHEESE LOCATIONB
+
+  state "step_7":
+    -->  move LOCATIONB LOCATIONE
+
+  state "two":
+    -->  put CHEESE LOCATIONE
+
+  state "step_9":
+    -->  move LOCATIONE LOCATIOND
+
+  state "step_10":
+    -->  grab PEANUTBUTTER LOCATIOND
+
+  state "step_11":
+    -->  move LOCATIOND LOCATIONE
+
+  state "three":
+    -->  put PEANUTBUTTER LOCATIONE
+
+  state "step_13":
+    -->  move LOCATIONE LOCATIONB
+
+  state "step_14":
+    -->  grab JELLY LOCATIONB
+
+  state "step_15":
+    -->  move LOCATIONB LOCATIONE
+
+  state "four":
+    -->  put JELLY LOCATIONE
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13
+  t: 13 -> 14
+  t: 14 -> 15
+  t: 15 -> 16

@@ -1,0 +1,8 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (one):
+         <<item_at peanutbutter locatione>>
+
+  t: 0 -> 1

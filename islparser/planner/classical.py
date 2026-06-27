@@ -14,6 +14,7 @@ from unified_planning.engines.compilers import (  # type: ignore
     Grounder,
     GrounderHelper
 )
+from unified_planning.engines.factory import DEFAULT_ENGINES  # type: ignore
 from typing import List
 
 
@@ -91,6 +92,19 @@ def get_planner_name(problem: up.model.Problem) -> str:
     if problem.kind.has_conditional_effects():
         planner_name = "symk-opt"
     return planner_name
+
+
+def ensure_planner_registered(planner_name: str) -> None:
+    """Register a UP default planner if the package is available."""
+    factory = up.shortcuts.get_environment().factory
+    if planner_name in factory.engines or planner_name not in DEFAULT_ENGINES:
+        return
+
+    module_name, class_name = DEFAULT_ENGINES[planner_name]
+    try:
+        factory.add_engine(planner_name, module_name, class_name)
+    except ImportError:
+        pass
 
 
 def create_trace(plan, chkpts) -> None:
@@ -174,6 +188,7 @@ def plan(aut: Automaton, cache=False) -> PlanResult:
         # invoke the planner
         pr = PlanResult()
         planner_name = get_planner_name(problem)
+        ensure_planner_registered(planner_name)
         key = _make_problem_key(aut.problem.problem)
         if cache and key in _planner_cache:
             result = _planner_cache[key]
@@ -215,6 +230,7 @@ def plan(aut: Automaton, cache=False) -> PlanResult:
             for pred in curr.predicates:
                 problem.add_goal(pred.fnode)
             planner_name = get_planner_name(problem)
+            ensure_planner_registered(planner_name)
             pr = PlanResult()
             key = _make_problem_key(aut.problem.problem)
             if cache and key in _planner_cache:

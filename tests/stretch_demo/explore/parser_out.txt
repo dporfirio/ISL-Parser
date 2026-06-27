@@ -1,0 +1,24 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (first):
+         <<robot_at locatione>>
+
+  checkpoint 2 (second):
+         <<robot_at locationb>>
+
+  checkpoint 3 (third):
+         <<robot_at locationc>>
+
+  checkpoint 4 (fourth):
+         <<robot_at locationd>>
+
+  checkpoint 5 (fifth):
+         <<robot_at locationa>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5

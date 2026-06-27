@@ -2,13 +2,35 @@ import os
 import coverage
 import time
 import argparse
+import traceback
 from multiprocessing import Lock
 from multiprocessing import Pool
 from functools import partial
 from typing import List, Any
-import islparser.isl as isl  # noqa: E402
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
+def start_coverage(data_suffix: bool = False) -> coverage.Coverage:
+    cov = coverage.Coverage(data_suffix=data_suffix)
+    cov.start()
+    return cov
+
+
+def stop_coverage(cov: coverage.Coverage | None) -> None:
+    if cov is not None:
+        cov.stop()
+        cov.save()
+
+
+def erase_parallel_coverage_files() -> None:
+    for filename in os.listdir("."):
+        if filename.startswith(".coverage."):
+            path = os.path.join(".", filename)
+            if os.path.isfile(path):
+                os.remove(path)
 
 
 class Args:
@@ -22,11 +44,48 @@ class Args:
 
 
 def islwrapper(args: Args) -> Any:
+    import islparser.isl as isl
+
     return isl.main(args)
 
 
+def planner_engine_diagnostics() -> str:
+    try:
+        from unified_planning.shortcuts import get_environment
+
+        engines = get_environment().factory.engines
+        return "\nRegistered Unified Planning engines:\n{}\n".format(engines)
+    except Exception:
+        return ""
+
+
+def error_output_path(app_scenario: str, folder: str) -> str:
+    filename = "{}.{}.error.txt".format(app_scenario, folder.rstrip('/'))
+    return os.path.join(PROJECT_ROOT, "tests", filename)
+
+
 def run(_folder: str, fullpath: str, app_scenario: str, RED: str, YELLOW: str,
-        GREEN: str, GRAY: str, NC: str, i: int) -> Any:
+        GREEN: str, GRAY: str, NC: str, i: int, parallel: bool,
+        collect_coverage: bool) -> Any:
+    os.chdir(PROJECT_ROOT)
+    # Import application modules before coverage to preserve the old worker
+    # initialization order, including any planner plugin registration side effects.
+    import islparser.isl  # noqa: F401
+    from unified_planning.shortcuts import get_environment
+
+    get_environment()
+
+    cov = start_coverage(data_suffix=True) if collect_coverage else None
+    try:
+        return run_test_case(_folder, fullpath, app_scenario, RED, YELLOW,
+                             GREEN, GRAY, NC, i, parallel)
+    finally:
+        stop_coverage(cov)
+
+
+def run_test_case(_folder: str, fullpath: str, app_scenario: str, RED: str,
+                  YELLOW: str, GREEN: str, GRAY: str, NC: str, i: int,
+                  parallel: bool) -> Any:
     parsetot = 0
     parsecount = 0
     plancount = 0
@@ -38,6 +97,10 @@ def run(_folder: str, fullpath: str, app_scenario: str, RED: str, YELLOW: str,
     if not os.path.isfile(_file):
         return ("", 0, 0, 0, 0)
 
+    stale_error = error_output_path(app_scenario, _folder)
+    if os.path.isfile(stale_error):
+        os.remove(stale_error)
+
     # decide on ISL tasks
     tasks: List[str] = []
     if os.path.exists(_dir + "/planner_out.txt"):
@@ -47,10 +110,36 @@ def run(_folder: str, fullpath: str, app_scenario: str, RED: str, YELLOW: str,
 
     # execute the ISL tasks
     start = time.time()
-    if num_cores > 1:
-        result = islwrapper(Args(_file, tasks, "tmp_test_store/{}".format(i)))
-    else:
-        result = islwrapper(Args(_file, tasks))
+    try:
+        if parallel:
+            result = islwrapper(Args(_file, tasks,
+                                     "tmp_test_store/{}".format(i)))
+        else:
+            result = islwrapper(Args(_file, tasks))
+    except Exception as e:
+        os.chdir(PROJECT_ROOT)
+        end = time.time()
+        runtime = "(" + "%.5f" % (end - start) + " seconds)"
+        error_name = type(e).__name__
+        outfile_name = os.path.basename(error_output_path(app_scenario,
+                                                          _folder))
+        with open(error_output_path(app_scenario, _folder), "w") as outfile:
+            outfile.write(traceback.format_exc())
+            outfile.write(planner_engine_diagnostics())
+        result_str = "{: <24}| {}{: <7}{} | {}{: <7}{} | {}{: <7}{} | {: <20}{}"\
+            .format(_folder,
+                    RED,
+                    "ERROR",
+                    NC,
+                    RED,
+                    "ERROR" if 'plan' in tasks else "no test",
+                    NC,
+                    RED if 'distill' in tasks else GRAY,
+                    "ERROR" if 'distill' in tasks else "no test",
+                    NC,
+                    runtime,
+                    " < {} written to {}.".format(error_name, outfile_name))
+        return (1, 0, 0, 0, result_str)
     end = time.time()
     runtime = "(" + "%.5f" % (end - start) + " seconds)"
     result_str = _folder
@@ -165,9 +254,11 @@ if __name__ == '__main__':
     # get the number of cores (for parallelization)
     num_cores: int = max(1, min(args.cores, os.cpu_count()))
 
-    # start coverage if running on one core
+    # start coverage; parallel runs write worker data with unique suffixes
+    erase_parallel_coverage_files()
+    cov = coverage.Coverage()
+    cov.erase()
     if num_cores == 1:
-        cov = coverage.Coverage()
         cov.start()
 
     # apply_async callback adds results to an array
@@ -231,7 +322,7 @@ if __name__ == '__main__':
                                          args=(_folder, fullpath,
                                                app_scenario,
                                                RED, YELLOW, GREEN,
-                                               GRAY, NC, i))
+                                               GRAY, NC, i, True, True))
                            for i, _folder in enumerate(folders)]
 
                 # make sure that each task has finished
@@ -246,29 +337,32 @@ if __name__ == '__main__':
         else:
             for i, _folder in enumerate(folders):
                 result = run(_folder, fullpath, app_scenario,
-                             RED, YELLOW, GREEN, GRAY, NC, i)
+                             RED, YELLOW, GREEN, GRAY, NC, i, False, False)
                 print(result[-1])
 
         print("------------------------------------------------------------------------\n\n")
 
-    if num_cores == 1:
+    if num_cores > 1:
+        cov.combine(data_paths=[PROJECT_ROOT])
+        cov.save()
+    else:
         cov.stop()
         cov.save()
-        print("-----------------------------------------------------")
-        print("Coverage analysis:")
-        cov.html_report()
-        cov_val = cov.report()
+    print("-----------------------------------------------------")
+    print("Coverage analysis:")
+    cov.html_report()
+    cov_val = cov.report()
 
-    if num_cores == 1:
-        color = NC
-        if cov_val > 95:
-            color = GREEN
-        elif cov_val > 90:
-            color = YELLOW
-        else:
-            color = RED
+    color = NC
+    if cov_val > 95:
+        color = GREEN
+    elif cov_val > 90:
+        color = YELLOW
+    else:
+        color = RED
 
-        print("{}{: <17}{: <50}{}".format(color,
-                                          "Coverage:",
-                                          " {}%".format("%.2f" % (cov_val)),
-                                          NC))
+    print("{}{: <17}{: <50}{}".format(color,
+                                      "Coverage:",
+                                      " {}%".format("%.2f" % (cov_val)),
+                                      NC))
+    erase_parallel_coverage_files()

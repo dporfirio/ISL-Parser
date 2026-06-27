@@ -1,0 +1,20 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  move LOCATIONA LOCATIOND
+
+  state "step_2":
+    -->  grab HAM LOCATIOND
+
+  state "step_3":
+    -->  move LOCATIOND LOCATIONE
+
+  state "one":
+    -->  put HAM LOCATIONE
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4

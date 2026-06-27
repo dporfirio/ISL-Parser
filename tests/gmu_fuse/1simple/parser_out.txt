@@ -3,6 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (delivered):
-         <<towels is on countertop>>
+         <<towels is inside pantry>>
+         <<yogurt is inside refrigerator>>
 
   t: 0 -> 1
