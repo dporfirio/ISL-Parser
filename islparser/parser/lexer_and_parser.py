@@ -58,37 +58,53 @@ class ParseResultStatus(Enum):
     SEMANTIC_ERROR = 3
 
 
-tokens = ('IMPORT', 'DOT',
-          'LABELS', 'ENDLABELS',
-          'MODULE', 'ENDMODULE',
-          'OPTIONS', 'ENDOPTIONS',
-          'OPTCONDEFFECTS',
-          'ACTION', 'PREDICATE', 'PARAMS',
-          'ST', 'GUARD', 'INIT',
-          'INT', 'ID',
-          'AND', 'NOT',
-          'EQUAL',
-          'COLON', 'SEMICOLON', 'OPENLIST', 'CLOSELIST', 'COMMA', 'ARROW',
-          )
+tokens = (
+    'IMPORT',
+    'DOT',
+    'LABELS',
+    'ENDLABELS',
+    'MODULE',
+    'ENDMODULE',
+    'OPTIONS',
+    'ENDOPTIONS',
+    'OPTCONDEFFECTS',
+    'ACTION',
+    'PREDICATE',
+    'PARAMS',
+    'ST',
+    'GUARD',
+    'INIT',
+    'INT',
+    'ID',
+    'AND',
+    'NOT',
+    'EQUAL',
+    'COLON',
+    'SEMICOLON',
+    'OPENLIST',
+    'CLOSELIST',
+    'COMMA',
+    'ARROW',
+)
 
 t_ignore = ' \t'
 
 reserved = {
-    'import': "IMPORT",
-    'labels': "LABELS",
-    'not': "NOT",
-    'action': "ACTION",
-    'predicate': "PREDICATE",
-    'params': "PARAMS",
-    'endlabels': "ENDLABELS",
-    'module': "MODULE",
-    'st': "ST",
-    'guard': "GUARD",
-    'init': "INIT",
-    'endmodule': "ENDMODULE",
+    'import': 'IMPORT',
+    'labels': 'LABELS',
+    'not': 'NOT',
+    'action': 'ACTION',
+    'predicate': 'PREDICATE',
+    'params': 'PARAMS',
+    'endlabels': 'ENDLABELS',
+    'module': 'MODULE',
+    'st': 'ST',
+    'guard': 'GUARD',
+    'init': 'INIT',
+    'endmodule': 'ENDMODULE',
     'options': 'OPTIONS',
-    'conditional_effects': 'OPTCONDEFFECTS',  # planner allows condit. effects
-    'endoptions': 'ENDOPTIONS'
+    'conditional_effects': 'OPTCONDEFFECTS',
+    'endoptions': 'ENDOPTIONS',
 }
 
 t_ARROW = r'->'
@@ -102,6 +118,18 @@ t_EQUAL = r'='
 t_DOT = r'\.'
 
 
+def _node(tag: str, *children: Any) -> Tuple[Any, ...]:
+    return (tag, *children)
+
+
+def _assignment_node(p) -> Tuple | None:
+    if len(p) == 4:
+        return _node('assg', p[1], p[3])
+    if len(p) == 6:
+        return _node('assgs', p[1], p[3], p[5])
+    return p[1]
+
+
 def t_NEWLINE(t):
     r'\n'
     t.lexer.lineno += 1
@@ -109,8 +137,7 @@ def t_NEWLINE(t):
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    if t.value in reserved:
-        t.type = reserved.get(t.value, 'ID')  # Check for reserved words
+    t.type = reserved.get(t.value, 'ID')
     return t
 
 
@@ -131,228 +158,205 @@ def t_error(t):
 
 
 def p_program(p):
-    '''
+    """
     program : import labels module options
-    '''
-    p[0] = ('program', p[1], p[2], p[3])
+    """
+    p[0] = _node('program', p[1], p[2], p[3])
 
 
 def p_nil(p):
-    '''
+    """
     nil :
-    '''
+    """
     pass
 
 
 def p_import(p):
-    '''
+    """
     import : IMPORT path
-    '''
+    """
     p[0] = p[2]
 
 
 def p_path(p):
-    '''
+    """
     path : ID path
          | DOT path
          | nil
-    '''
+    """
     if len(p) == 3:
-        p[0] = p[1] + (p[2] if p[2] is not None else "")
+        p[0] = p[1] + (p[2] or "")
 
 
 def p_labels(p):
-    '''
+    """
     labels : LABELS labellist ENDLABELS
-    '''
-    if p[2] is None:
-        p[0] = p[2]
-    else:
-        p[0] = ('labellist', p[2])
+    """
+    p[0] = None if p[2] is None else _node('labellist', p[2])
 
 
 def p_module(p):
-    '''
+    """
     module : MODULE automata ENDMODULE
-    '''
+    """
     p[0] = p[2]
 
 
 def p_options(p):
-    '''
+    """
     options : OPTIONS optionlist ENDOPTIONS
             | OPTIONS ENDOPTIONS
             | nil
-    '''
+    """
     pass
 
 
 def p_optionlist(p):
-    '''
+    """
     optionlist : option
                | option optionlist
-    '''
+    """
     pass
 
 
 def p_option(p):
-    '''
+    """
     option : OPTCONDEFFECTS SEMICOLON
-    '''
+    """
     Options.instance().setopt(p[1], True)
 
 
 def p_labellist(p):
-    '''
+    """
     labellist : label
               | label COMMA labellist
               | nil
-    '''
+    """
     if len(p) == 2:
-        if p[1] is None:
-            p[0] = p[1]
-        else:
-            p[0] = ('label', p[1])
+        p[0] = None if p[1] is None else _node('label', p[1])
     else:
-        p[0] = ('labels', p[1], p[3])
+        p[0] = _node('labels', p[1], p[3])
 
 
 def p_label(p):
-    '''
+    """
     label : ID COLON OPENLIST act_or_pred_list CLOSELIST
-    '''
-    p[0] = ('act_or_pred_list', p[1], p[4])
+    """
+    p[0] = _node('act_or_pred_list', p[1], p[4])
 
 
 def p_act_or_pred_list(p):
-    '''
+    """
     act_or_pred_list : act_or_pred
                      | act_or_pred AND act_or_pred_list
-    '''
+    """
     if len(p) == 2:
-        p[0] = ('act_or_pred', p[1])
+        p[0] = _node('act_or_pred', p[1])
     else:
-        p[0] = ('act_or_preds', p[1], p[3])
+        p[0] = _node('act_or_preds', p[1], p[3])
 
 
 def p_act_or_pred(p):
-    '''
+    """
     act_or_pred : ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
                 | PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
                 | PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST
                 | nil
-    '''
-    if p[1] == "action":
-        p[0] = ('action', p[3], p[8])
-    elif p[1] == "predicate":
-        p[0] = ('predicate', p[3], p[8])
-    else:
-        p[0] = None
+    """
+    if p[1] in ('action', 'predicate'):
+        p[0] = _node(p[1], p[3], p[8])
 
 
 def p_param_dec(p):
-    '''
+    """
     param_dec : ID
               | ID COMMA param_dec
               | nil
-    '''
+    """
     if len(p) == 2:
-        p[0] = ('param', p[1])
+        p[0] = _node('param', p[1])
     else:
-        p[0] = ('params', p[1], p[3])
+        p[0] = _node('params', p[1], p[3])
 
 
 def p_automata(p):
-    '''
+    """
     automata : state_dec_wrapper cond_dec_wrapper trel
              | state_dec_wrapper trel
              | nil
-    '''
+    """
     if len(p) == 4:
-        p[0] = ('automata', p[1], p[2], p[3])
+        p[0] = _node('automata', p[1], p[2], p[3])
     elif len(p) == 3:
-        p[0] = ('automata', p[1], None, p[2])
+        p[0] = _node('automata', p[1], None, p[2])
     else:
         p[0] = p[1]
 
 
 def p_cond_dec_wrapper(p):
-    '''
+    """
     cond_dec_wrapper : GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON
-    '''
-    p[0] = ('cond_dec', p[4])
+    """
+    p[0] = _node('cond_dec', p[4])
 
 
 def p_cond_dec(p):
-    '''
+    """
     cond_dec : INT COLON ID
              | INT COLON INIT
              | INT COLON ID COMMA cond_dec
              | INT COLON INIT COMMA cond_dec
              | nil
-    '''
-    if len(p) == 4:
-        p[0] = ('assg', p[1], p[3])
-    elif len(p) == 6:
-        p[0] = ('assgs', p[1], p[3], p[5])
-    else:
-        p[0] = p[1]
+    """
+    p[0] = _assignment_node(p)
 
 
 def p_state_dec_wrapper(p):
-    '''
+    """
     state_dec_wrapper : ST COLON OPENLIST state_dec CLOSELIST SEMICOLON
-    '''
-    p[0] = ('state_dec', p[4])
+    """
+    p[0] = _node('state_dec', p[4])
 
 
 def p_state_dec(p):
-    '''
+    """
     state_dec : INT COLON ID
               | INT COLON INIT
               | INT COLON ID COMMA state_dec
               | INT COLON INIT COMMA state_dec
               | nil
-    '''
-    if len(p) == 4:
-        p[0] = ('assg', p[1], p[3])
-    elif len(p) == 6:
-        p[0] = ('assgs', p[1], p[3], p[5])
-    else:
-        p[0] = p[1]
+    """
+    p[0] = _assignment_node(p)
 
 
 def p_trel(p):
-    '''
+    """
     trel : event boolexp ARROW INT SEMICOLON trel
          | nil
-    '''
+    """
     if len(p) == 7:
         if p[6] is None:
-            p[0] = ('trel', p[1], p[2], p[4])
+            p[0] = _node('trel', p[1], p[2], p[4])
         else:
-            p[0] = ('trels', p[1], p[2], p[4], p[6])
+            p[0] = _node('trels', p[1], p[2], p[4], p[6])
     else:
         p[0] = p[1]
 
 
 def p_event(p):
-    '''
+    """
     event : OPENLIST CLOSELIST
           | OPENLIST ID CLOSELIST
-    '''
-    if len(p) == 3:
-        p[0] = ("event", None)
-    else:
-        p[0] = ("event", p[2])
+    """
+    p[0] = _node('event', None if len(p) == 3 else p[2])
 
 
 def p_boolexp_wrapper(p):
-    '''
+    """
     boolexp : INT AND GUARD EQUAL ID
             | INT AND GUARD EQUAL INT
             | INT
-    '''
+    """
     if len(p) == 6:
         p[0] = (Eq('st', p[1]), p[5])
     else:
@@ -367,8 +371,7 @@ def p_error(p):
 
 def parse_file(aut_filename: str) -> ParseResult:
     with open(aut_filename) as infile:
-        contents = infile.read()
-        return parse_string(contents)
+        return parse_string(infile.read())
 
 
 def parse_string(to_parse: str) -> ParseResult:
@@ -387,9 +390,7 @@ def parse_program(ast: Tuple) -> ParseResult:
     if ast is None:
         return ParseResult.instance()
     assert ast[0] == 'program', "AST error at root."
-    pddl_import = ast[1]
-    label_list_ast = ast[2]
-    automata_ast = ast[3]
+    _, pddl_import, label_list_ast, automata_ast = ast
     labeled_formulae: List[LabeledFormula] = []
     problem: ISLProblem = ISLProblemFactory.make()
     pddl_path: str = pddl_import.replace(".", "/")
@@ -405,37 +406,49 @@ def parse_program(ast: Tuple) -> ParseResult:
     return ParseResult.instance()
 
 
+def expect_ast(ast: Tuple, *tags: str, context: str = "AST") -> None:
+    assert ast[0] in tags, "{} error at {}.".format(context, "/".join(tags))
+
+
+def find_label(name: str,
+               labeled_formulae: List[LabeledFormula]) -> LabeledFormula | None:
+    candidates: List[LabeledFormula] = [lf for lf in labeled_formulae
+                                        if lf.name == name]
+    if len(candidates) == 0:
+        throw_semantic_error("no such label \'{}\'".format(name))
+        return None
+    if len(candidates) > 1:
+        throw_semantic_error("more than one label with name \'{}\'".format(name))
+        return None
+    return candidates[0]
+
+
 def parse_label_list(ast: Tuple,
                      labeled_formulae: List[LabeledFormula],
                      automaton: Automaton) -> None:
-    assert ast[0] == 'labellist', "AST error at label_list."
-    labels_ast = ast[1]
-    parse_labels(labels_ast, labeled_formulae, automaton)
+    expect_ast(ast, 'labellist', context="AST")
+    parse_labels(ast[1], labeled_formulae, automaton)
 
 
 def parse_labels(ast: Tuple,
                  labeled_formulae: List[LabeledFormula],
                  automaton: Automaton) -> None:
-    assert ast[0] == "label" or ast[0] == "labels", \
-           "AST error at label/labels."
-    parse_label(ast[1], labeled_formulae, automaton)
-    if ast[0] == "labels":
-        parse_labels(ast[2], labeled_formulae, automaton)
+    while ast is not None:
+        expect_ast(ast, 'label', 'labels', context="AST")
+        parse_label(ast[1], labeled_formulae, automaton)
+        ast = ast[2] if ast[0] == 'labels' else None
 
 
 def parse_label(ast: Tuple,
                 labeled_formulae: List[LabeledFormula],
                 automaton: Automaton) -> None:
     name = ast[1]
-    label_data = ast[2]
     predicates: List[Predicate] = []
     actions: List[up.plans.ActionInstance] = []
-    parse_act_or_preds(label_data, predicates, automaton, actions)
-    action = None
+    parse_act_or_preds(ast[2], predicates, automaton, actions)
     if len(actions) > 1:
         throw_semantic_error("label \'{}\' has >1 action".format(name))
-    if len(actions) > 0:
-        action = actions[0]
+    action = actions[0] if len(actions) > 0 else None
     labeled_formulae.append(LabeledFormula(name, predicates, action))
 
 
@@ -443,55 +456,54 @@ def parse_act_or_preds(ast: Tuple,
                        predicates: List[Predicate],
                        automaton: Automaton,
                        actions: List[up.plans.ActionInstance]) -> None:
-    header = ast[0]
-    label_data = ast[1]
-    if label_data is None:
-        return
-    _type = label_data[0]
-    assert _type == "predicate" or _type == "action", \
-           "Goal automata must be composed of actions and predicates."
-    params: List[FNode] = []
-    if _type == "predicate":
-        fluent = automaton.problem.get_fluent(label_data[1])
-        parse_params(label_data[2], params, automaton)
-        if fluent is None:
-            throw_semantic_error("no such predicate: \'{}\'".format(label_data[1]))
+    while ast is not None:
+        header, label_data = ast[0], ast[1]
+        if label_data is None:
             return
-        predicate = Predicate(fluent(*params))
-        automaton.get_predicate_id(predicate)  # adds a new mapping
-        predicates.append(predicate)
-    elif _type == "action":
-        action = automaton.problem.get_action(label_data[1])
-        parse_params(label_data[2], params, automaton)
-        if action is None:
-            throw_semantic_error("no such action: \'{}\'".format(label_data[1]))
-            return
-        actions.append(up.plans.ActionInstance(action, params))
-    if header == "act_or_preds":
-        parse_act_or_preds(ast[2], predicates, automaton, actions)
+        _type, name, params_ast = label_data
+        assert _type in ("predicate", "action"), \
+               "Goal automata must be composed of actions and predicates."
+        params = parse_params(params_ast, automaton)
+        if _type == "predicate":
+            fluent = automaton.problem.get_fluent(name)
+            if fluent is None:
+                throw_semantic_error("no such predicate: \'{}\'".format(name))
+                return
+            predicate = Predicate(fluent(*params))
+            automaton.get_predicate_id(predicate)  # adds a new mapping
+            predicates.append(predicate)
+        else:
+            action = automaton.problem.get_action(name)
+            if action is None:
+                throw_semantic_error("no such action: \'{}\'".format(name))
+                return
+            actions.append(up.plans.ActionInstance(action, params))
+        ast = ast[2] if header == "act_or_preds" else None
 
 
 def parse_params(ast: Tuple,
-                 params: List[FNode],
-                 automaton: Automaton) -> None:
-    assert ast[0] == "params" or ast[0] == "param", "AST error at param/params"
-    if ast[0] == "param" and ast[1] is None:
-        return
-    param: Object = automaton.problem.get_object(ast[1])
-    if param is None:
-        throw_semantic_error("no such entity: \'{}\'".format(ast[1]))
-        return
-    params.append(param)
-    if ast[0] == "params":
-        parse_params(ast[2], params, automaton)
+                 automaton: Automaton) -> List[FNode]:
+    params: List[FNode] = []
+    while ast is not None:
+        expect_ast(ast, 'param', 'params', context="AST")
+        name = ast[1]
+        if name is None:
+            break
+        param: Object = automaton.problem.get_object(name)
+        if param is None:
+            throw_semantic_error("no such entity: \'{}\'".format(name))
+            break
+        params.append(param)
+        ast = ast[2] if ast[0] == "params" else None
+    return params
 
 
 def parse_automata(ast: Tuple,
                    labeled_formulae: List[LabeledFormula],
                    automaton: Automaton) -> None:
-    assert ast[0] == 'automata', "AST error at automata."
-    state_dec_ast = ast[1]
+    expect_ast(ast, 'automata', context="AST")
     id_to_guard: Dict[str, Any] = {}
+    state_dec_ast = ast[1]
     if state_dec_ast is not None:
         parse_state_dec(state_dec_ast, labeled_formulae, automaton)
     cond_dec_ast = ast[2]
@@ -506,7 +518,7 @@ def parse_cond_dec(ast: Tuple,
                    labeled_formulae: List[LabeledFormula],
                    id_to_guard: Dict[str, Any],
                    automaton: Automaton) -> None:
-    assert ast[0] == 'cond_dec', "AST error at cond dec"
+    expect_ast(ast, 'cond_dec', context="AST")
     assg_ast = ast[1]
     if assg_ast is not None:
         parse_cond_assg(assg_ast, labeled_formulae, id_to_guard, automaton)
@@ -516,38 +528,28 @@ def parse_cond_assg(ast: Tuple,
                     labeled_formulae: List[LabeledFormula],
                     id_to_guard: Dict[str, Any],
                     automaton: Automaton) -> None:
-    assert ast[0] == "assg" or\
-           ast[0] == "assgs", "AST error at cond assg/assgs."
-    if "assg" in ast[0]:
-        _id = ast[1]
+    while ast is not None:
+        expect_ast(ast, 'assg', 'assgs', context="AST")
+        _id, name = ast[1], ast[2]
         if _id in id_to_guard:
             throw_semantic_error("duplicate guard \'{}\'".format(_id))
             return
-        name = ast[2]
         if GoalSat.is_token(name):
             id_to_guard[_id] = GoalSat.get_goalsat(name)
         elif GuardEnum.is_token(name):
             id_to_guard[_id] = GuardEnum.get_guardenum(name)
         else:
-            candidates: List[LabeledFormula] = [lf for lf in labeled_formulae
-                                                if lf.name == name]
-            if len(candidates) == 0:
-                throw_semantic_error("no such label \'{}\'".format(name))
+            lf = find_label(name, labeled_formulae)
+            if lf is None:
                 return
-            elif len(candidates) > 1:
-                throw_semantic_error("more than one label with name \'{}\'"
-                                     .format(name))
-                return
-            lf: LabeledFormula = candidates[0]
             id_to_guard[_id] = lf.copy()
-        if ast[0] == "assgs":
-            parse_cond_assg(ast[3], labeled_formulae, id_to_guard, automaton)
+        ast = ast[3] if ast[0] == 'assgs' else None
 
 
 def parse_state_dec(ast: Tuple,
                     labeled_formulae: List[LabeledFormula],
                     automaton: Automaton) -> None:
-    assert ast[0] == 'state_dec', "AST error at state dec."
+    expect_ast(ast, 'state_dec', context="AST")
     assg_ast = ast[1]
     if assg_ast is not None:
         parse_assg(assg_ast, labeled_formulae, automaton)
@@ -559,10 +561,9 @@ def parse_state_dec(ast: Tuple,
 def parse_assg(ast: Tuple,
                labeled_formulae: List[LabeledFormula],
                automaton: Automaton) -> None:
-    assert ast[0] == "assg" or ast[0] == "assgs", "AST error at st assg/assgs."
-    if "assg" in ast[0]:
-        _id = ast[1]
-        name = ast[2]
+    while ast is not None:
+        expect_ast(ast, 'assg', 'assgs', context="AST")
+        _id, name = ast[1], ast[2]
         if name == "init":
             if automaton.init is not None:
                 throw_semantic_error("module contains more than one \'init\'")
@@ -571,54 +572,46 @@ def parse_assg(ast: Tuple,
         else:
             if _id in [state._id for state in automaton.states]:
                 throw_semantic_error("duplicate state \'{}\'".format(_id))
-            candidates: List[LabeledFormula] = [lf for lf in labeled_formulae
-                                                if lf.name == name]
-            if len(candidates) == 0:
-                throw_semantic_error("no such label \'{}\'".format(name))
+            lf = find_label(name, labeled_formulae)
+            if lf is None:
                 return
-            elif len(candidates) > 1:
-                throw_semantic_error("more than one label with name \'{}\'"
-                                     .format(name))
-                return
-            lf: LabeledFormula = candidates[0]
             state = CheckpointFactory.make(_id=_id,
                                            name=name,
                                            predicates=lf.predicates,
                                            action=lf.action)
             automaton.states.append(state)
-        if ast[0] == "assgs":
-            parse_assg(ast[3], labeled_formulae, automaton)
+        ast = ast[3] if ast[0] == 'assgs' else None
 
 
 def parse_trel(ast: Tuple,
                id_to_guard: Dict[str, Any],
                automaton: Automaton) -> None:
-    st1, cond = parse_bool_exp(ast[2], id_to_guard)
-    st2 = Eq('st', ast[3])
-    automaton.transitions.append(Transition(st1.val, st2.val, None, cond))
-    if ast[0] == 'trels':
-        parse_trel(ast[4], id_to_guard, automaton)
+    while ast is not None:
+        st1, cond = parse_bool_exp(ast[2], id_to_guard)
+        st2 = Eq('st', ast[3])
+        automaton.transitions.append(Transition(st1.val, st2.val, None, cond))
+        ast = ast[4] if ast[0] == 'trels' else None
 
 
 def parse_bool_exp(ast: Tuple,
-                   id_to_guard: Dict[str, Any]):
+                   id_to_guard: Dict[str, Any]) -> Tuple[Eq, Eq | None]:
     st: Eq = ast[0]
-    guard: Any = None
-    if len(ast) > 1:
-        val: Any = GuardEnum.DEFAULT
-        if isinstance(ast[1], str):
-            if GoalSat.is_token(ast[1]):
-                val = GoalSat.get_goalsat(ast[1])
-            elif GuardEnum.is_token(ast[1]):
-                val = GuardEnum.get_guardenum(ast[1])
-        else:
-            if ast[1] not in id_to_guard:
-                throw_semantic_error("guard \'{}\' not assigned"
-                                     .format(ast[1]))
-            else:
-                val = id_to_guard[ast[1]]
-        guard = Eq('guard', val)
-    return st, guard
+    if len(ast) == 1:
+        return st, None
+    return st, Eq('guard', parse_guard_value(ast[1], id_to_guard))
+
+
+def parse_guard_value(value: str | int, id_to_guard: Dict[str, Any]) -> Any:
+    if isinstance(value, str):
+        if GoalSat.is_token(value):
+            return GoalSat.get_goalsat(value)
+        if GuardEnum.is_token(value):
+            return GuardEnum.get_guardenum(value)
+        return GuardEnum.DEFAULT
+    if value not in id_to_guard:
+        throw_semantic_error("guard \'{}\' not assigned".format(value))
+        return GuardEnum.DEFAULT
+    return id_to_guard[value]
 
 
 def throw_semantic_error(msg: str) -> None:
