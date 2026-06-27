@@ -17,7 +17,6 @@ from islparser.model.automata import (
 from islparser.model.state import LabeledFormula, CheckpointFactory, Predicate
 from islparser.model.transition import Transition
 from islparser.model.conditionals import Eq, GoalSat, GuardEnum
-from islparser.util.options import Options
 
 
 class ParseResult:
@@ -67,7 +66,6 @@ tokens = (
     'ENDMODULE',
     'OPTIONS',
     'ENDOPTIONS',
-    'OPTCONDEFFECTS',
     'ACTION',
     'PREDICATE',
     'PARAMS',
@@ -103,7 +101,6 @@ reserved = {
     'init': 'INIT',
     'endmodule': 'ENDMODULE',
     'options': 'OPTIONS',
-    'conditional_effects': 'OPTCONDEFFECTS',
     'endoptions': 'ENDOPTIONS',
 }
 
@@ -204,26 +201,10 @@ def p_module(p):
 
 def p_options(p):
     """
-    options : OPTIONS optionlist ENDOPTIONS
-            | OPTIONS ENDOPTIONS
+    options : OPTIONS ENDOPTIONS
             | nil
     """
     pass
-
-
-def p_optionlist(p):
-    """
-    optionlist : option
-               | option optionlist
-    """
-    pass
-
-
-def p_option(p):
-    """
-    option : OPTCONDEFFECTS SEMICOLON
-    """
-    Options.instance().setopt(p[1], True)
 
 
 def p_labellist(p):

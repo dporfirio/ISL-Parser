@@ -25,6 +25,5 @@ endmodule
 
 options
 
-	conditional_effects;
 
 endoptions

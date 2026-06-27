@@ -110,7 +110,7 @@
       "patterns": [
         {
           "name": "constant.language.isl",
-          "match": "\\b(init|not|conditional_effects|SUCCESS|FAILURE|DEFAULT)\\b"
+          "match": "\\b(init|not|SUCCESS|FAILURE|DEFAULT)\\b"
         }
       ]
     },

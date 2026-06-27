@@ -29,6 +29,5 @@ class Options:
         self._options.clear()
         self._options = {
             "maintenance_goals": False,
-            "uncertain_item_locations": False,
-            "conditional_effects": False
+            "uncertain_item_locations": False
         }

@@ -27,6 +27,6 @@ Restart VS Code and open a `.isl` file.
 
 - ISL sections: `import`, `labels`, `module`, `options`, and matching end markers
 - Declarations: `action`, `predicate`, `params`, `st`, `guard`
-- Constants: `init`, `SUCCESS`, `FAILURE`, `DEFAULT`, `conditional_effects`
+- Constants: `init`, `SUCCESS`, `FAILURE`, `DEFAULT`
 - Comments beginning with `#`
 - Transitions, guards, numbers, labels, identifiers, and punctuation
