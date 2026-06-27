@@ -3,18 +3,50 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  STRETCH moves to TOWELS
+    -->  STRETCH moves to PANTRY
 
   state "step_2":
-    -->  STRETCH grabs TOWELS
+    -->  STRETCH opens PANTRY
 
   state "step_3":
-    -->  STRETCH moves from TABLE to COUNTERTOP
+    -->  STRETCH moves from PANTRY to TOWELS
+
+  state "step_4":
+    -->  STRETCH grabs TOWELS
+
+  state "step_5":
+    -->  STRETCH moves from TABLE to PANTRY
+
+  state "step_6":
+    -->  STRETCH places TOWELS inside PANTRY
+
+  state "step_7":
+    -->  STRETCH moves from TOWELS to REFRIGERATOR
+
+  state "step_8":
+    -->  STRETCH opens REFRIGERATOR
+
+  state "step_9":
+    -->  STRETCH moves from REFRIGERATOR to YOGURT
+
+  state "step_10":
+    -->  STRETCH grabs YOGURT
+
+  state "step_11":
+    -->  STRETCH moves from COUNTERTOP to REFRIGERATOR
 
   state "delivered":
-    -->  STRETCH places TOWELS on COUNTERTOP
+    -->  STRETCH places YOGURT inside REFRIGERATOR
 
   t: 0 -> 1
   t: 1 -> 2
   t: 2 -> 3
   t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12

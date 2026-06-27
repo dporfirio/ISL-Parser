@@ -1,0 +1,12 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "one":
+    -->  STRETCH approaches EMTRAY in EMERGENCYROOM
+
+  state "two":
+    -->  STRETCH grabs BLOODSAMPLE from EMTRAY in EMERGENCYROOM
+
+  t: 0 -> 1
+  t: 1 -> 2
