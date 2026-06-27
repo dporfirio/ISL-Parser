@@ -1,0 +1,36 @@
+{
+  "name": "isl-syntax",
+  "displayName": "ISL Syntax",
+  "description": "Syntax highlighting for ISL goal automata files.",
+  "version": "0.1.0",
+  "publisher": "isl-parser",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "isl",
+        "aliases": [
+          "ISL",
+          "isl"
+        ],
+        "extensions": [
+          ".isl"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "isl",
+        "scopeName": "source.isl",
+        "path": "./syntaxes/isl.tmLanguage.json"
+      }
+    ]
+  }
+}

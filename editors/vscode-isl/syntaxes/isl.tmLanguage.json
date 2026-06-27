@@ -1,0 +1,170 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "ISL",
+  "scopeName": "source.isl",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#sections"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#transitions"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#punctuation"
+    },
+    {
+      "include": "#identifiers"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.isl",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "sections": {
+      "patterns": [
+        {
+          "name": "keyword.control.section.isl",
+          "match": "\\b(import|labels|endlabels|module|endmodule|options|endoptions)\\b"
+        },
+        {
+          "match": "\\b(import)\\s+([A-Za-z_][A-Za-z_0-9]*(?:\\.[A-Za-z_][A-Za-z_0-9]*)*)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.section.isl"
+            },
+            "2": {
+              "name": "support.module.import.isl"
+            }
+          }
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "name": "storage.type.declaration.isl",
+          "match": "\\b(action|predicate|params|st|guard)\\b(?=\\s*:)"
+        },
+        {
+          "name": "entity.name.label.isl",
+          "match": "^\\s*([A-Za-z_][A-Za-z_0-9]*)\\s*(?=:)",
+          "captures": {
+            "1": {
+              "name": "entity.name.label.isl"
+            }
+          }
+        },
+        {
+          "match": "\\b(action|predicate)\\s*(:)\\s*([A-Za-z_][A-Za-z_0-9]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.declaration.isl"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.isl"
+            },
+            "3": {
+              "name": "entity.name.function.action-or-predicate.isl"
+            }
+          }
+        }
+      ]
+    },
+    "transitions": {
+      "patterns": [
+        {
+          "name": "keyword.operator.transition.isl",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.guard.isl",
+          "match": "\\bguard\\b\\s*="
+        },
+        {
+          "name": "variable.parameter.event.isl",
+          "match": "(?<=\\[)[A-Za-z_][A-Za-z_0-9]*(?=\\])"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.isl",
+          "match": "\\b(init|not|conditional_effects|SUCCESS|FAILURE|DEFAULT)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.isl",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.isl",
+          "match": "&"
+        },
+        {
+          "name": "keyword.operator.assignment.isl",
+          "match": "="
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.definition.list.begin.isl",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.definition.list.end.isl",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.separator.key-value.isl",
+          "match": ":"
+        },
+        {
+          "name": "punctuation.separator.sequence.isl",
+          "match": ","
+        },
+        {
+          "name": "punctuation.terminator.statement.isl",
+          "match": ";"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.identifier.isl",
+          "match": "\\b[A-Za-z_][A-Za-z_0-9]*\\b"
+        }
+      ]
+    }
+  }
+}

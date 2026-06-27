@@ -54,6 +54,12 @@ python test.py
 
 For details about creating tests, visit the `tests` directory.
 
+## Editor Support
+
+A VS Code syntax highlighter for `.isl` files is available in
+`editors/vscode-isl`. See `editors/vscode-isl/README.md` for local loading and
+installation instructions.
+
 ## Changes in Version 1.1
 
 Version 1.1 is backwards compatible in that ISL script written for 1.0 will still work.
