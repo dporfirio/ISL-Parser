@@ -62,29 +62,90 @@
     "declarations": {
       "patterns": [
         {
-          "name": "storage.type.declaration.isl",
-          "match": "\\b(action|predicate|params|st|guard)\\b(?=\\s*:)"
-        },
-        {
-          "name": "entity.name.label.isl",
-          "match": "^\\s*([A-Za-z_][A-Za-z_0-9]*)\\s*(?=:)",
+          "match": "^(\\s*)(action)\\s*(:)\\s*([A-Za-z_][A-Za-z_0-9]*)",
           "captures": {
-            "1": {
-              "name": "entity.name.label.isl"
+            "2": {
+              "name": "support.type.property-name.declaration.isl"
+            },
+            "3": {
+              "name": "punctuation.separator.key-value.isl"
+            },
+            "4": {
+              "name": "entity.name.function.action-or-predicate.isl"
             }
           }
         },
         {
-          "match": "\\b(action|predicate)\\s*(:)\\s*([A-Za-z_][A-Za-z_0-9]*)",
+          "match": "^(\\s*)(predicate)\\s*(:)\\s*([A-Za-z_][A-Za-z_0-9]*)",
+          "captures": {
+            "2": {
+              "name": "keyword.other.declaration-key.isl"
+            },
+            "3": {
+              "name": "punctuation.separator.key-value.isl"
+            },
+            "4": {
+              "name": "entity.name.function.action-or-predicate.isl"
+            }
+          }
+        },
+        {
+          "begin": "^(\\s*)(params)\\s*(:)\\s*(\\[)",
+          "beginCaptures": {
+            "2": {
+              "name": "keyword.other.declaration-key.isl"
+            },
+            "3": {
+              "name": "punctuation.separator.key-value.isl"
+            },
+            "4": {
+              "name": "punctuation.definition.list.begin.isl"
+            }
+          },
+          "end": "\\]",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.list.end.isl"
+            }
+          },
+          "patterns": [
+            {
+              "name": "entity.name.function.action-or-predicate.isl",
+              "match": "\\b[A-Za-z_][A-Za-z_0-9]*\\b"
+            },
+            {
+              "name": "punctuation.separator.sequence.isl",
+              "match": ","
+            }
+          ]
+        },
+        {
+          "match": "^(\\s*)(params|st|guard)\\b(?=\\s*:)",
+          "captures": {
+            "2": {
+              "name": "keyword.other.declaration-key.isl"
+            }
+          }
+        },
+        {
+          "match": "^\\s*([A-Za-z_][A-Za-z_0-9]*)\\s*(?=:)",
           "captures": {
             "1": {
-              "name": "storage.type.declaration.isl"
+              "name": "string.unquoted.label.isl"
+            }
+          }
+        },
+        {
+          "match": "\\b(\\d+)\\s*(:)\\s*(?!init\\b)([A-Za-z_][A-Za-z_0-9]*)",
+          "captures": {
+            "1": {
+              "name": "string.unquoted.numeric.isl"
             },
             "2": {
               "name": "punctuation.separator.key-value.isl"
             },
             "3": {
-              "name": "entity.name.function.action-or-predicate.isl"
+              "name": "string.unquoted.label.isl"
             }
           }
         }
@@ -97,8 +158,15 @@
           "match": "->"
         },
         {
-          "name": "keyword.operator.guard.isl",
-          "match": "\\bguard\\b\\s*="
+          "match": "\\b(guard)\\b\\s*(=)",
+          "captures": {
+            "1": {
+              "name": "keyword.other.declaration-key.isl"
+            },
+            "2": {
+              "name": "keyword.operator.assignment.isl"
+            }
+          }
         },
         {
           "name": "variable.parameter.event.isl",
@@ -117,7 +185,7 @@
     "numbers": {
       "patterns": [
         {
-          "name": "constant.numeric.integer.isl",
+          "name": "string.unquoted.numeric.isl",
           "match": "\\b\\d+\\b"
         }
       ]
