@@ -25,6 +25,8 @@ class ParseResult:
     automaton: Automaton | None
     status: ParseResultStatus
     msg: str
+    costs: Dict[str, int]
+    pddl_import: str | None
 
     @classmethod
     def instance(cls) -> ParseResult:
@@ -41,6 +43,8 @@ class ParseResult:
         self.status = ParseResultStatus.SUCCESS
         self.msg = ""
         self.automaton = None
+        self.costs = {}
+        self.pddl_import = None
 
     # Common parser errors below
     def add_obj_not_found_error(self, name, lineno) -> None:
@@ -66,6 +70,8 @@ tokens = (
     'ENDMODULE',
     'OPTIONS',
     'ENDOPTIONS',
+    'COST',
+    'ENDCOST',
     'ACTION',
     'PREDICATE',
     'PARAMS',
@@ -102,6 +108,8 @@ reserved = {
     'endmodule': 'ENDMODULE',
     'options': 'OPTIONS',
     'endoptions': 'ENDOPTIONS',
+    'cost': 'COST',
+    'endcost': 'ENDCOST',
 }
 
 t_ARROW = r'->'
@@ -125,6 +133,17 @@ def _assignment_node(p) -> Tuple | None:
     if len(p) == 6:
         return _node('assgs', p[1], p[3], p[5])
     return p[1]
+
+
+def _cost_assignments_from_entry_ast(ast: Tuple | None) -> Dict[str, int]:
+    costs: Dict[str, int] = {}
+    while ast is not None:
+        expect_ast(ast, 'cost_entry', 'cost_entries', context="AST")
+        assignment = ast[1]
+        expect_ast(assignment, 'cost_assignment', context="AST")
+        costs[str(assignment[1])] = int(assignment[2])
+        ast = ast[2] if ast[0] == 'cost_entries' else None
+    return costs
 
 
 def t_NEWLINE(t):
@@ -157,8 +176,12 @@ def t_error(t):
 def p_program(p):
     """
     program : import labels module options
+            | import labels cost module options
     """
-    p[0] = _node('program', p[1], p[2], p[3])
+    if len(p) == 5:
+        p[0] = _node('program', p[1], p[2], p[3])
+    else:
+        p[0] = _node('program', p[1], p[2], p[4])
 
 
 def p_nil(p):
@@ -177,12 +200,21 @@ def p_import(p):
 
 def p_path(p):
     """
-    path : ID path
+    path : path_segment path
          | DOT path
          | nil
     """
     if len(p) == 3:
         p[0] = p[1] + (p[2] or "")
+
+
+def p_path_segment(p):
+    """
+    path_segment : ID
+                 | COST
+                 | ENDCOST
+    """
+    p[0] = p[1]
 
 
 def p_labels(p):
@@ -205,6 +237,36 @@ def p_options(p):
             | nil
     """
     pass
+
+
+def p_cost(p):
+    """
+    cost : COST cost_entries ENDCOST
+         | nil
+    """
+    if len(p) == 4:
+        ParseResult.instance().costs = _cost_assignments_from_entry_ast(p[2])
+        p[0] = _node('cost', p[2])
+    else:
+        p[0] = p[1]
+
+
+def p_cost_entries(p):
+    """
+    cost_entries : cost_entry cost_entries
+                 | cost_entry
+    """
+    if len(p) == 3:
+        p[0] = _node('cost_entries', p[1], p[2])
+    else:
+        p[0] = _node('cost_entry', p[1])
+
+
+def p_cost_entry(p):
+    """
+    cost_entry : ID COLON INT
+    """
+    p[0] = _node('cost_assignment', p[1], p[3])
 
 
 def p_labellist(p):
@@ -356,15 +418,33 @@ def parse_file(aut_filename: str) -> ParseResult:
 
 
 def parse_string(to_parse: str) -> ParseResult:
-    lexer = lex()
-    lexer.input(to_parse)
-    parser = yacc()
-    ParseResult.instance().reset()
-    ast = parser.parse(to_parse, tracking=True)
+    ast = _parse_ast(to_parse)
     parse_result: ParseResult = parse_program(ast)
     if parse_result.status == ParseResultStatus.SUCCESS:
         parse_result.build()
     return parse_result
+
+
+def _parse_ast(to_parse: str):
+    lexer = lex()
+    lexer.input(to_parse)
+    parser = yacc()
+    ParseResult.instance().reset()
+    return parser.parse(to_parse, tracking=True)
+
+
+def parse_metadata_file(aut_filename: str) -> Tuple[str | None, Dict[str, int]]:
+    with open(aut_filename) as infile:
+        return parse_metadata_string(infile.read())
+
+
+def parse_metadata_string(to_parse: str) -> Tuple[str | None, Dict[str, int]]:
+    ast = _parse_ast(to_parse)
+    if ast is None:
+        return None, {}
+    assert ast[0] == 'program', "AST error at root."
+    _, pddl_import, _, _ = ast
+    return pddl_import, dict(ParseResult.instance().costs)
 
 
 def parse_program(ast: Tuple) -> ParseResult:
@@ -374,6 +454,7 @@ def parse_program(ast: Tuple) -> ParseResult:
     _, pddl_import, label_list_ast, automata_ast = ast
     labeled_formulae: List[LabeledFormula] = []
     problem: ISLProblem = ISLProblemFactory.make()
+    ParseResult.instance().pddl_import = pddl_import
     pddl_path: str = pddl_import.replace(".", "/")
     problem.add_pddl("islparser/{}/domain.pddl".format(pddl_path),
                      "islparser/{}/problem.pddl".format(pddl_path))
@@ -385,6 +466,8 @@ def parse_program(ast: Tuple) -> ParseResult:
     if automata_ast is not None:
         parse_automata(automata_ast, labeled_formulae, automaton)
     return ParseResult.instance()
+
+
 
 
 def expect_ast(ast: Tuple, *tags: str, context: str = "AST") -> None:

@@ -61,7 +61,7 @@ class ISLProblem:
         """Get problem fluent matching name."""
         to_return = None
         for fluent in self.problem._fluents:
-            if fluent.name == name:
+            if fluent.name == name or fluent.name.lower() == name.lower():
                 to_return = fluent
                 break
         return to_return
@@ -70,13 +70,13 @@ class ISLProblem:
         """Get problem object matching the name."""
         for _type in self.problem.user_types:
             for obj in self.problem.objects(_type):
-                if obj.name == name:
+                if obj.name == name or obj.name.lower() == name.lower():
                     return obj
 
     def get_action(self, name) -> Action:
         """Get problem action matching the name."""
         for action in self.problem.actions:
-            if action.name == name:
+            if action.name == name or action.name.lower() == name.lower():
                 return action
 
     def action_nl(self, action: ActionInstance) -> str:

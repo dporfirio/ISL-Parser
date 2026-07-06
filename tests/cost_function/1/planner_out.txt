@@ -3,16 +3,16 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  move LOCATIONA LOCATIONC
+    -->  move2 LOCATIONA LOCATIONC
 
   state "step_2":
-    -->  grab BREAD LOCATIONC
+    -->  grab2 BREAD LOCATIONC
 
   state "step_3":
-    -->  move LOCATIONC LOCATIONE
+    -->  move2 LOCATIONC LOCATIONE
 
   state "one":
-    -->  put BREAD LOCATIONE
+    -->  put2 BREAD LOCATIONE
 
   t: 0 -> 1
   t: 1 -> 2

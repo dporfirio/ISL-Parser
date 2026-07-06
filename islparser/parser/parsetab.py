@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ACTION AND ARROW CLOSELIST COLON COMMA DOT ENDLABELS ENDMODULE ENDOPTIONS EQUAL GUARD ID IMPORT INIT INT LABELS MODULE NOT OPENLIST OPTIONS PARAMS PREDICATE SEMICOLON ST\nprogram : import labels module options\n\nnil :\n\nimport : IMPORT path\n\npath : ID path\n     | DOT path\n     | nil\n\nlabels : LABELS labellist ENDLABELS\n\nmodule : MODULE automata ENDMODULE\n\noptions : OPTIONS ENDOPTIONS\n        | nil\n\nlabellist : label\n          | label COMMA labellist\n          | nil\n\nlabel : ID COLON OPENLIST act_or_pred_list CLOSELIST\n\nact_or_pred_list : act_or_pred\n                 | act_or_pred AND act_or_pred_list\n\nact_or_pred : ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST\n            | PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST\n            | PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST\n            | nil\n\nparam_dec : ID\n          | ID COMMA param_dec\n          | nil\n\nautomata : state_dec_wrapper cond_dec_wrapper trel\n         | state_dec_wrapper trel\n         | nil\n\ncond_dec_wrapper : GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON\n\ncond_dec : INT COLON ID\n         | INT COLON INIT\n         | INT COLON ID COMMA cond_dec\n         | INT COLON INIT COMMA cond_dec\n         | nil\n\nstate_dec_wrapper : ST COLON OPENLIST state_dec CLOSELIST SEMICOLON\n\nstate_dec : INT COLON ID\n          | INT COLON INIT\n          | INT COLON ID COMMA state_dec\n          | INT COLON INIT COMMA state_dec\n          | nil\n\ntrel : event boolexp ARROW INT SEMICOLON trel\n     | nil\n\nevent : OPENLIST CLOSELIST\n      | OPENLIST ID CLOSELIST\n\nboolexp : INT AND GUARD EQUAL ID\n        | INT AND GUARD EQUAL INT\n        | INT\n'
+_lr_signature = 'ACTION AND ARROW CLOSELIST COLON COMMA COST DOT ENDCOST ENDLABELS ENDMODULE ENDOPTIONS EQUAL GUARD ID IMPORT INIT INT LABELS MODULE NOT OPENLIST OPTIONS PARAMS PREDICATE SEMICOLON ST\n    program : import labels module options\n            | import labels cost module options\n    \n    nil :\n    \n    import : IMPORT path\n    \n    path : path_segment path\n         | DOT path\n         | nil\n    \n    path_segment : ID\n                 | COST\n                 | ENDCOST\n    \n    labels : LABELS labellist ENDLABELS\n    \n    module : MODULE automata ENDMODULE\n    \n    options : OPTIONS ENDOPTIONS\n            | nil\n    \n    cost : COST cost_entries ENDCOST\n         | nil\n    \n    cost_entries : cost_entry cost_entries\n                 | cost_entry\n    \n    cost_entry : ID COLON INT\n    \n    labellist : label\n              | label COMMA labellist\n              | nil\n    \n    label : ID COLON OPENLIST act_or_pred_list CLOSELIST\n    \n    act_or_pred_list : act_or_pred\n                     | act_or_pred AND act_or_pred_list\n    \n    act_or_pred : ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST\n                | PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST\n                | PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST\n                | nil\n    \n    param_dec : ID\n              | ID COMMA param_dec\n              | nil\n    \n    automata : state_dec_wrapper cond_dec_wrapper trel\n             | state_dec_wrapper trel\n             | nil\n    \n    cond_dec_wrapper : GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON\n    \n    cond_dec : INT COLON ID\n             | INT COLON INIT\n             | INT COLON ID COMMA cond_dec\n             | INT COLON INIT COMMA cond_dec\n             | nil\n    \n    state_dec_wrapper : ST COLON OPENLIST state_dec CLOSELIST SEMICOLON\n    \n    state_dec : INT COLON ID\n              | INT COLON INIT\n              | INT COLON ID COMMA state_dec\n              | INT COLON INIT COMMA state_dec\n              | nil\n    \n    trel : event boolexp ARROW INT SEMICOLON trel\n         | nil\n    \n    event : OPENLIST CLOSELIST\n          | OPENLIST ID CLOSELIST\n    \n    boolexp : INT AND GUARD EQUAL ID\n            | INT AND GUARD EQUAL INT\n            | INT\n    '
     
-_lr_action_items = {'IMPORT':([0,],[3,]),'$end':([1,10,18,20,28,29,],[0,-2,-1,-10,-9,-8,]),'LABELS':([2,3,6,7,8,9,16,17,],[5,-2,-3,-2,-2,-6,-4,-5,]),'ID':([3,5,7,8,26,33,60,61,68,72,74,76,103,104,110,111,],[7,15,7,7,15,42,70,71,78,82,84,88,106,106,106,106,]),'DOT':([3,7,8,],[8,8,8,]),'MODULE':([4,25,],[11,-7,]),'ENDLABELS':([5,12,13,14,26,37,58,],[-2,25,-11,-13,-2,-12,-14,]),'OPTIONS':([10,29,],[19,-8,]),'ST':([11,],[24,]),'ENDMODULE':([11,21,22,23,30,31,35,39,75,77,83,86,],[-2,29,-2,-26,-2,-25,-40,-24,-2,-33,-27,-39,]),'COMMA':([13,58,70,71,78,79,82,84,85,106,],[26,-14,80,81,89,90,93,94,95,111,]),'COLON':([15,24,32,48,49,56,63,91,92,100,],[27,36,40,60,61,68,74,98,99,105,]),'ENDOPTIONS':([19,],[28,]),'GUARD':([22,54,77,],[32,66,-33,]),'OPENLIST':([22,27,30,36,40,75,77,83,98,99,105,],[33,38,33,45,51,33,-33,-27,103,104,110,]),'CLOSELIST':([33,38,42,45,46,47,50,51,55,57,59,62,64,69,78,79,84,85,89,90,94,95,96,97,101,102,103,104,106,107,108,109,110,111,112,113,114,115,116,],[41,-2,52,-2,58,-15,-20,-2,67,-38,-2,73,-32,-16,-34,-35,-28,-29,-2,-2,-2,-2,-36,-37,-30,-31,-2,-2,-21,112,-23,113,-2,-2,-17,-18,116,-22,-19,]),'INT':([34,41,45,51,52,53,76,89,90,94,95,],[44,-41,56,63,-42,65,87,56,56,63,63,]),'ACTION':([38,59,],[48,48,]),'PREDICATE':([38,59,],[49,49,]),'AND':([38,44,47,50,59,112,113,116,],[-2,54,59,-20,-2,-17,-18,-19,]),'ARROW':([43,44,87,88,],[53,-45,-44,-43,]),'NOT':([61,],[72,]),'SEMICOLON':([65,67,73,],[75,77,83,]),'EQUAL':([66,],[76,]),'INIT':([68,74,],[79,85,]),'PARAMS':([80,81,93,],[91,92,100,]),}
+_lr_action_items = {'IMPORT':([0,],[3,]),'$end':([1,13,24,26,27,38,39,40,],[0,-3,-1,-14,-3,-13,-2,-12,]),'LABELS':([2,3,6,7,8,9,10,11,12,22,23,],[5,-3,-4,-3,-3,-7,-8,-9,-10,-5,-6,]),'DOT':([3,7,8,10,11,12,],[8,8,8,-8,-9,-10,]),'ID':([3,5,7,8,10,11,12,16,33,36,44,60,75,76,83,87,89,91,118,119,125,126,],[10,21,10,10,-8,-9,-10,34,34,21,56,-19,85,86,93,97,99,103,121,121,121,121,]),'COST':([3,4,7,8,10,11,12,35,],[11,16,11,11,-8,-9,-10,-11,]),'ENDCOST':([3,7,8,10,11,12,32,33,49,60,],[12,12,12,-8,-9,-10,48,-18,-17,-19,]),'MODULE':([4,14,17,35,48,],[15,15,-16,-11,-15,]),'ENDLABELS':([5,18,19,20,36,51,73,],[-3,35,-20,-22,-3,-21,-23,]),'OPTIONS':([13,27,40,],[25,25,-12,]),'ST':([15,],[31,]),'ENDMODULE':([15,28,29,30,41,42,46,53,90,92,98,101,],[-3,40,-3,-35,-3,-34,-49,-33,-3,-42,-36,-48,]),'COMMA':([19,73,85,86,93,94,97,99,100,121,],[36,-23,95,96,104,105,108,109,110,126,]),'COLON':([21,31,34,43,63,64,71,78,106,107,115,],[37,47,50,54,75,76,83,89,113,114,120,]),'ENDOPTIONS':([25,],[38,]),'GUARD':([29,69,92,],[43,81,-42,]),'OPENLIST':([29,37,41,47,54,90,92,98,113,114,120,],[44,52,44,59,66,44,-42,-36,118,119,125,]),'CLOSELIST':([44,52,56,59,61,62,65,66,70,72,74,77,79,84,93,94,99,100,104,105,109,110,111,112,116,117,118,119,121,122,123,124,125,126,127,128,129,130,131,],[55,-3,67,-3,73,-24,-29,-3,82,-47,-3,88,-41,-25,-43,-44,-37,-38,-3,-3,-3,-3,-45,-46,-39,-40,-3,-3,-30,127,-32,128,-3,-3,-26,-27,131,-31,-28,]),'INT':([45,50,55,59,66,67,68,91,104,105,109,110,],[58,60,-50,71,78,-51,80,102,71,71,78,78,]),'ACTION':([52,74,],[63,63,]),'PREDICATE':([52,74,],[64,64,]),'AND':([52,58,62,65,74,127,128,131,],[-3,69,74,-29,-3,-26,-27,-28,]),'ARROW':([57,58,102,103,],[68,-54,-53,-52,]),'NOT':([76,],[87,]),'SEMICOLON':([80,82,88,],[90,92,98,]),'EQUAL':([81,],[91,]),'INIT':([83,89,],[94,100,]),'PARAMS':([95,96,108,],[106,107,115,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'import':([0,],[2,]),'labels':([2,],[4,]),'path':([3,7,8,],[6,16,17,]),'nil':([3,5,7,8,10,11,22,26,30,38,45,51,59,75,89,90,94,95,103,104,110,111,],[9,14,9,9,20,23,35,14,35,50,57,64,50,35,57,57,64,64,108,108,108,108,]),'module':([4,],[10,]),'labellist':([5,26,],[12,37,]),'label':([5,26,],[13,13,]),'options':([10,],[18,]),'automata':([11,],[21,]),'state_dec_wrapper':([11,],[22,]),'cond_dec_wrapper':([22,],[30,]),'trel':([22,30,75,],[31,39,86,]),'event':([22,30,75,],[34,34,34,]),'boolexp':([34,],[43,]),'act_or_pred_list':([38,59,],[46,69,]),'act_or_pred':([38,59,],[47,47,]),'state_dec':([45,89,90,],[55,96,97,]),'cond_dec':([51,94,95,],[62,101,102,]),'param_dec':([103,104,110,111,],[107,109,114,115,]),}
+_lr_goto_items = {'program':([0,],[1,]),'import':([0,],[2,]),'labels':([2,],[4,]),'path':([3,7,8,],[6,22,23,]),'path_segment':([3,7,8,],[7,7,7,]),'nil':([3,4,5,7,8,13,15,27,29,36,41,52,59,66,74,90,104,105,109,110,118,119,125,126,],[9,17,20,9,9,26,30,26,46,20,46,65,72,79,65,46,72,72,79,79,123,123,123,123,]),'module':([4,14,],[13,27,]),'cost':([4,],[14,]),'labellist':([5,36,],[18,51,]),'label':([5,36,],[19,19,]),'options':([13,27,],[24,39,]),'automata':([15,],[28,]),'state_dec_wrapper':([15,],[29,]),'cost_entries':([16,33,],[32,49,]),'cost_entry':([16,33,],[33,33,]),'cond_dec_wrapper':([29,],[41,]),'trel':([29,41,90,],[42,53,101,]),'event':([29,41,90,],[45,45,45,]),'boolexp':([45,],[57,]),'act_or_pred_list':([52,74,],[61,84,]),'act_or_pred':([52,74,],[62,62,]),'state_dec':([59,104,105,],[70,111,112,]),'cond_dec':([66,109,110,],[77,116,117,]),'param_dec':([118,119,125,126,],[122,124,129,130,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,49 +27,58 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> import labels module options','program',4,'p_program','lexer_and_parser.py',159),
-  ('nil -> <empty>','nil',0,'p_nil','lexer_and_parser.py',166),
-  ('import -> IMPORT path','import',2,'p_import','lexer_and_parser.py',173),
-  ('path -> ID path','path',2,'p_path','lexer_and_parser.py',180),
-  ('path -> DOT path','path',2,'p_path','lexer_and_parser.py',181),
-  ('path -> nil','path',1,'p_path','lexer_and_parser.py',182),
-  ('labels -> LABELS labellist ENDLABELS','labels',3,'p_labels','lexer_and_parser.py',190),
-  ('module -> MODULE automata ENDMODULE','module',3,'p_module','lexer_and_parser.py',197),
-  ('options -> OPTIONS ENDOPTIONS','options',2,'p_options','lexer_and_parser.py',204),
-  ('options -> nil','options',1,'p_options','lexer_and_parser.py',205),
-  ('labellist -> label','labellist',1,'p_labellist','lexer_and_parser.py',212),
-  ('labellist -> label COMMA labellist','labellist',3,'p_labellist','lexer_and_parser.py',213),
-  ('labellist -> nil','labellist',1,'p_labellist','lexer_and_parser.py',214),
-  ('label -> ID COLON OPENLIST act_or_pred_list CLOSELIST','label',5,'p_label','lexer_and_parser.py',224),
-  ('act_or_pred_list -> act_or_pred','act_or_pred_list',1,'p_act_or_pred_list','lexer_and_parser.py',231),
-  ('act_or_pred_list -> act_or_pred AND act_or_pred_list','act_or_pred_list',3,'p_act_or_pred_list','lexer_and_parser.py',232),
-  ('act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST','act_or_pred',9,'p_act_or_pred','lexer_and_parser.py',242),
-  ('act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST','act_or_pred',9,'p_act_or_pred','lexer_and_parser.py',243),
-  ('act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST','act_or_pred',10,'p_act_or_pred','lexer_and_parser.py',244),
-  ('act_or_pred -> nil','act_or_pred',1,'p_act_or_pred','lexer_and_parser.py',245),
-  ('param_dec -> ID','param_dec',1,'p_param_dec','lexer_and_parser.py',253),
-  ('param_dec -> ID COMMA param_dec','param_dec',3,'p_param_dec','lexer_and_parser.py',254),
-  ('param_dec -> nil','param_dec',1,'p_param_dec','lexer_and_parser.py',255),
-  ('automata -> state_dec_wrapper cond_dec_wrapper trel','automata',3,'p_automata','lexer_and_parser.py',265),
-  ('automata -> state_dec_wrapper trel','automata',2,'p_automata','lexer_and_parser.py',266),
-  ('automata -> nil','automata',1,'p_automata','lexer_and_parser.py',267),
-  ('cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON','cond_dec_wrapper',6,'p_cond_dec_wrapper','lexer_and_parser.py',279),
-  ('cond_dec -> INT COLON ID','cond_dec',3,'p_cond_dec','lexer_and_parser.py',286),
-  ('cond_dec -> INT COLON INIT','cond_dec',3,'p_cond_dec','lexer_and_parser.py',287),
-  ('cond_dec -> INT COLON ID COMMA cond_dec','cond_dec',5,'p_cond_dec','lexer_and_parser.py',288),
-  ('cond_dec -> INT COLON INIT COMMA cond_dec','cond_dec',5,'p_cond_dec','lexer_and_parser.py',289),
-  ('cond_dec -> nil','cond_dec',1,'p_cond_dec','lexer_and_parser.py',290),
-  ('state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON','state_dec_wrapper',6,'p_state_dec_wrapper','lexer_and_parser.py',297),
-  ('state_dec -> INT COLON ID','state_dec',3,'p_state_dec','lexer_and_parser.py',304),
-  ('state_dec -> INT COLON INIT','state_dec',3,'p_state_dec','lexer_and_parser.py',305),
-  ('state_dec -> INT COLON ID COMMA state_dec','state_dec',5,'p_state_dec','lexer_and_parser.py',306),
-  ('state_dec -> INT COLON INIT COMMA state_dec','state_dec',5,'p_state_dec','lexer_and_parser.py',307),
-  ('state_dec -> nil','state_dec',1,'p_state_dec','lexer_and_parser.py',308),
-  ('trel -> event boolexp ARROW INT SEMICOLON trel','trel',6,'p_trel','lexer_and_parser.py',315),
-  ('trel -> nil','trel',1,'p_trel','lexer_and_parser.py',316),
-  ('event -> OPENLIST CLOSELIST','event',2,'p_event','lexer_and_parser.py',329),
-  ('event -> OPENLIST ID CLOSELIST','event',3,'p_event','lexer_and_parser.py',330),
-  ('boolexp -> INT AND GUARD EQUAL ID','boolexp',5,'p_boolexp_wrapper','lexer_and_parser.py',337),
-  ('boolexp -> INT AND GUARD EQUAL INT','boolexp',5,'p_boolexp_wrapper','lexer_and_parser.py',338),
-  ('boolexp -> INT','boolexp',1,'p_boolexp_wrapper','lexer_and_parser.py',339),
+  ('program -> import labels module options','program',4,'p_program','lexer_and_parser.py',167),
+  ('program -> import labels cost module options','program',5,'p_program','lexer_and_parser.py',168),
+  ('nil -> <empty>','nil',0,'p_nil','lexer_and_parser.py',178),
+  ('import -> IMPORT path','import',2,'p_import','lexer_and_parser.py',185),
+  ('path -> path_segment path','path',2,'p_path','lexer_and_parser.py',192),
+  ('path -> DOT path','path',2,'p_path','lexer_and_parser.py',193),
+  ('path -> nil','path',1,'p_path','lexer_and_parser.py',194),
+  ('path_segment -> ID','path_segment',1,'p_path_segment','lexer_and_parser.py',202),
+  ('path_segment -> COST','path_segment',1,'p_path_segment','lexer_and_parser.py',203),
+  ('path_segment -> ENDCOST','path_segment',1,'p_path_segment','lexer_and_parser.py',204),
+  ('labels -> LABELS labellist ENDLABELS','labels',3,'p_labels','lexer_and_parser.py',211),
+  ('module -> MODULE automata ENDMODULE','module',3,'p_module','lexer_and_parser.py',218),
+  ('options -> OPTIONS ENDOPTIONS','options',2,'p_options','lexer_and_parser.py',225),
+  ('options -> nil','options',1,'p_options','lexer_and_parser.py',226),
+  ('cost -> COST cost_entries ENDCOST','cost',3,'p_cost','lexer_and_parser.py',233),
+  ('cost -> nil','cost',1,'p_cost','lexer_and_parser.py',234),
+  ('cost_entries -> cost_entry cost_entries','cost_entries',2,'p_cost_entries','lexer_and_parser.py',244),
+  ('cost_entries -> cost_entry','cost_entries',1,'p_cost_entries','lexer_and_parser.py',245),
+  ('cost_entry -> ID COLON INT','cost_entry',3,'p_cost_entry','lexer_and_parser.py',255),
+  ('labellist -> label','labellist',1,'p_labellist','lexer_and_parser.py',262),
+  ('labellist -> label COMMA labellist','labellist',3,'p_labellist','lexer_and_parser.py',263),
+  ('labellist -> nil','labellist',1,'p_labellist','lexer_and_parser.py',264),
+  ('label -> ID COLON OPENLIST act_or_pred_list CLOSELIST','label',5,'p_label','lexer_and_parser.py',274),
+  ('act_or_pred_list -> act_or_pred','act_or_pred_list',1,'p_act_or_pred_list','lexer_and_parser.py',281),
+  ('act_or_pred_list -> act_or_pred AND act_or_pred_list','act_or_pred_list',3,'p_act_or_pred_list','lexer_and_parser.py',282),
+  ('act_or_pred -> ACTION COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST','act_or_pred',9,'p_act_or_pred','lexer_and_parser.py',292),
+  ('act_or_pred -> PREDICATE COLON ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST','act_or_pred',9,'p_act_or_pred','lexer_and_parser.py',293),
+  ('act_or_pred -> PREDICATE COLON NOT ID COMMA PARAMS COLON OPENLIST param_dec CLOSELIST','act_or_pred',10,'p_act_or_pred','lexer_and_parser.py',294),
+  ('act_or_pred -> nil','act_or_pred',1,'p_act_or_pred','lexer_and_parser.py',295),
+  ('param_dec -> ID','param_dec',1,'p_param_dec','lexer_and_parser.py',303),
+  ('param_dec -> ID COMMA param_dec','param_dec',3,'p_param_dec','lexer_and_parser.py',304),
+  ('param_dec -> nil','param_dec',1,'p_param_dec','lexer_and_parser.py',305),
+  ('automata -> state_dec_wrapper cond_dec_wrapper trel','automata',3,'p_automata','lexer_and_parser.py',315),
+  ('automata -> state_dec_wrapper trel','automata',2,'p_automata','lexer_and_parser.py',316),
+  ('automata -> nil','automata',1,'p_automata','lexer_and_parser.py',317),
+  ('cond_dec_wrapper -> GUARD COLON OPENLIST cond_dec CLOSELIST SEMICOLON','cond_dec_wrapper',6,'p_cond_dec_wrapper','lexer_and_parser.py',329),
+  ('cond_dec -> INT COLON ID','cond_dec',3,'p_cond_dec','lexer_and_parser.py',336),
+  ('cond_dec -> INT COLON INIT','cond_dec',3,'p_cond_dec','lexer_and_parser.py',337),
+  ('cond_dec -> INT COLON ID COMMA cond_dec','cond_dec',5,'p_cond_dec','lexer_and_parser.py',338),
+  ('cond_dec -> INT COLON INIT COMMA cond_dec','cond_dec',5,'p_cond_dec','lexer_and_parser.py',339),
+  ('cond_dec -> nil','cond_dec',1,'p_cond_dec','lexer_and_parser.py',340),
+  ('state_dec_wrapper -> ST COLON OPENLIST state_dec CLOSELIST SEMICOLON','state_dec_wrapper',6,'p_state_dec_wrapper','lexer_and_parser.py',347),
+  ('state_dec -> INT COLON ID','state_dec',3,'p_state_dec','lexer_and_parser.py',354),
+  ('state_dec -> INT COLON INIT','state_dec',3,'p_state_dec','lexer_and_parser.py',355),
+  ('state_dec -> INT COLON ID COMMA state_dec','state_dec',5,'p_state_dec','lexer_and_parser.py',356),
+  ('state_dec -> INT COLON INIT COMMA state_dec','state_dec',5,'p_state_dec','lexer_and_parser.py',357),
+  ('state_dec -> nil','state_dec',1,'p_state_dec','lexer_and_parser.py',358),
+  ('trel -> event boolexp ARROW INT SEMICOLON trel','trel',6,'p_trel','lexer_and_parser.py',365),
+  ('trel -> nil','trel',1,'p_trel','lexer_and_parser.py',366),
+  ('event -> OPENLIST CLOSELIST','event',2,'p_event','lexer_and_parser.py',379),
+  ('event -> OPENLIST ID CLOSELIST','event',3,'p_event','lexer_and_parser.py',380),
+  ('boolexp -> INT AND GUARD EQUAL ID','boolexp',5,'p_boolexp_wrapper','lexer_and_parser.py',387),
+  ('boolexp -> INT AND GUARD EQUAL INT','boolexp',5,'p_boolexp_wrapper','lexer_and_parser.py',388),
+  ('boolexp -> INT','boolexp',1,'p_boolexp_wrapper','lexer_and_parser.py',389),
 ]

@@ -1,6 +1,6 @@
 # Simple test with one goal.
 
-import pddl.stretch_demo
+import pddl.cost_function
 
 labels
 
@@ -15,10 +15,10 @@ endlabels
 cost
 	move1: 1
 	move2: 2
-	grab1: 2
-	grab2: 1
-	put1: 2
-	put2: 1
+	grab1: 1
+	grab2: 2
+	put1: 1
+	put2: 2
 endcost
 
 module
