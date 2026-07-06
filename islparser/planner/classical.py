@@ -102,6 +102,9 @@ def _solve_problem(problem: up.model.Problem, planner_name: str):
 
     up.shortcuts.get_environment().credits_stream = None
     with OneshotPlanner(**planner_kwargs) as planner:
+        # UP can be conservative about backend support checks even when the
+        # problem is already in a planner-friendly action-cost form.
+        planner.skip_checks = True
         return planner.solve(problem)
 
 
