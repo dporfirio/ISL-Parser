@@ -10,11 +10,11 @@ from unified_planning.shortcuts import (  # type: ignore
     BoolType,
     SequentialSimulator
 )
+from unified_planning.engines import OptimalityGuarantee  # type: ignore
 from unified_planning.engines.compilers import (  # type: ignore
     Grounder,
     GrounderHelper
 )
-from unified_planning.engines.factory import DEFAULT_ENGINES  # type: ignore
 from typing import List
 
 
@@ -94,17 +94,15 @@ def get_planner_name(problem: up.model.Problem) -> str:
     return planner_name
 
 
-def ensure_planner_registered(planner_name: str) -> None:
-    """Register a UP default planner if the package is available."""
-    factory = up.shortcuts.get_environment().factory
-    if planner_name in factory.engines or planner_name not in DEFAULT_ENGINES:
-        return
+def _solve_problem(problem: up.model.Problem, planner_name: str):
+    planner_kwargs = {"name": planner_name}
+    quality_metrics = getattr(problem, "quality_metrics", None) or []
+    if len(quality_metrics) > 0:
+        planner_kwargs["optimality_guarantee"] = OptimalityGuarantee.SOLVED_OPTIMALLY
 
-    module_name, class_name = DEFAULT_ENGINES[planner_name]
-    try:
-        factory.add_engine(planner_name, module_name, class_name)
-    except ImportError:
-        pass
+    up.shortcuts.get_environment().credits_stream = None
+    with OneshotPlanner(**planner_kwargs) as planner:
+        return planner.solve(problem)
 
 
 def create_trace(plan, chkpts) -> None:
@@ -188,14 +186,11 @@ def plan(aut: Automaton, cache=False) -> PlanResult:
         # invoke the planner
         pr = PlanResult()
         planner_name = get_planner_name(problem)
-        ensure_planner_registered(planner_name)
         key = _make_problem_key(aut.problem.problem)
         if cache and key in _planner_cache:
             result = _planner_cache[key]
         else:
-            up.shortcuts.get_environment().credits_stream = None
-            with OneshotPlanner(name=planner_name) as planner:
-                result = planner.solve(aut.problem.problem)
+            result = _solve_problem(aut.problem.problem, planner_name)
             _planner_cache[key] = result
             if len(result.plan.actions) == 0:
                 return PlanResult.nosat()
@@ -230,15 +225,12 @@ def plan(aut: Automaton, cache=False) -> PlanResult:
             for pred in curr.predicates:
                 problem.add_goal(pred.fnode)
             planner_name = get_planner_name(problem)
-            ensure_planner_registered(planner_name)
             pr = PlanResult()
             key = _make_problem_key(aut.problem.problem)
             if cache and key in _planner_cache:
                 result = _planner_cache[key]
             else:
-                up.shortcuts.get_environment().credits_stream = None
-                with OneshotPlanner(name=planner_name) as planner:
-                    result = planner.solve(aut.problem.problem)
+                result = _solve_problem(aut.problem.problem, planner_name)
                 _planner_cache[key] = result
                 if result.plan is None or len(result.plan.actions) == 0:
                     return PlanResult.nosat()
