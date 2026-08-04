@@ -3,12 +3,12 @@ import pddl.delegation_weight
 
 labels
 
-    requester_has_both: [
+    recipient_has_both: [
           predicate: agent_has,
-          params: [requester1, package_item1]
+          params: [recipient, package1]
           &
           predicate: agent_has,
-          params: [requester1, package_item2]
+          params: [recipient, package2]
     ]
 
 endlabels
@@ -21,7 +21,7 @@ endcost
 
 module
 
-    st: [0: init, 1: requester_has_both];
+    st: [0: init, 1: recipient_has_both];
 
     [] 0 -> 1;
 

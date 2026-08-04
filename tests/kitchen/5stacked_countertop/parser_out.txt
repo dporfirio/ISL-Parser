@@ -1,0 +1,11 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (stacked_on_countertop):
+         <<item_on_item mug plate>>
+         <<object_at plate kitchen_countertop>>
+         
+
+  t: 0 -> 1
+

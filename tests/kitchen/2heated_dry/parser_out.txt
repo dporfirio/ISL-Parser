@@ -1,0 +1,13 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (heated):
+         <<is_clean plate>>
+         <<is_clean mug>>
+         <<item_inside plate dishwasher>>
+         <<item_inside mug dishwasher>>
+         <<button_pressed wash_heated_dry>>
+
+  t: 0 -> 1
+

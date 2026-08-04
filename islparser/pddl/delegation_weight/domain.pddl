@@ -18,7 +18,7 @@
 
         agent inanimate - entity
         person robot - agent
-        requester staff - person
+        requester staff_member - person
 
         item surface - inanimate
         message - bookkeeping
@@ -37,14 +37,14 @@
 
         (can_move ?agent - agent)
         (said ?speaker - agent ?listener - person ?message - message)
-        (delegated ?robot - robot ?staff - staff ?message - message)
-        (task_assigned ?staff - staff ?message - message)
+        (delegated ?robot - robot ?staff - staff_member ?message - message)
+        (task_assigned ?staff - staff_member ?message - message)
         (requested_item ?message - message ?item - item)
         (robot_basket_empty ?robot - robot)
         (region_connected ?from - region ?to - region)
     )
 
-    (:action robot_move_from_reg_to
+    (:action robot_move_from_reg_to  ; NL: [0] moves to [2]
         :parameters (?agent - robot ?from - region ?to - region)
         :precondition (and
             (can_move ?agent)
@@ -58,7 +58,7 @@
         )
     )
 
-    (:action robot_move_from_ent_to
+    (:action robot_move_from_ent_to  ; NL: [0] moves to [3]
         :parameters (?agent - robot ?from - entity ?in - region ?to - region)
         :precondition (and
             (can_move ?agent)
@@ -76,8 +76,8 @@
         )
     )
 
-    (:action staff_move_from_reg_to
-        :parameters (?agent - staff ?from - region ?to - region)
+    (:action staff_move_from_reg_to  ; NL: [0] moves to [2]
+        :parameters (?agent - staff_member ?from - region ?to - region)
         :precondition (and
             (can_move ?agent)
             (entity_in ?agent ?from)
@@ -90,8 +90,8 @@
         )
     )
 
-    (:action staff_move_from_ent_to
-        :parameters (?agent - staff ?from - entity ?in - region ?to - region)
+    (:action staff_move_from_ent_to  ; NL: [0] moves from [1] to [3]
+        :parameters (?agent - staff_member ?from - entity ?in - region ?to - region)
         :precondition (and
             (can_move ?agent)
             (entity_in ?agent ?in)
@@ -108,7 +108,7 @@
         )
     )
 
-    (:action approach_from_region
+    (:action approach_from_region  ; NL: [0] approaches [1]
         :parameters (?agent - agent ?to - entity ?in - region)
         :precondition (and
             (entity_in ?to ?in)
@@ -121,7 +121,7 @@
         )
     )
 
-    (:action approach_from_entity
+    (:action approach_from_entity  ; NL: [0] approaches [2]
         :parameters (?agent - agent ?from - entity ?to - entity ?in - region)
         :precondition (and
             (entity_in ?from ?in)
@@ -136,8 +136,24 @@
         )
     )
 
-    (:action say
-        :parameters (?robot - robot ?staff - staff ?message - message ?region - region)
+    (:action staff_approach_from_entity  ; NL: [0] approaches [2]
+        :parameters (?staff - staff_member ?from - entity ?to - entity ?in - region ?message - message)
+        :precondition (and
+            (task_assigned ?staff ?message)
+            (entity_in ?from ?in)
+            (entity_in ?to ?in)
+            (entity_in ?staff ?in)
+            (agent_near ?staff ?from)
+            (agent_is_near_something ?staff)
+        )
+        :effect (and
+            (not (agent_near ?staff ?from))
+            (agent_near ?staff ?to)
+        )
+    )
+
+    (:action say  ; NL: [0] asks [1], "[2]"
+        :parameters (?robot - robot ?staff - staff_member ?message - message ?region - region)
         :precondition (and
             (entity_in ?robot ?region)
             (entity_in ?staff ?region)
@@ -148,8 +164,8 @@
         )
     )
 
-    (:action delegate_task
-        :parameters (?robot - robot ?staff - staff ?message - message ?region - region)
+    (:action delegate_task  ; NL: [0] delegates the task "[2]" to [1]
+        :parameters (?robot - robot ?staff - staff_member ?message - message ?region - region)
         :precondition (and
             (entity_in ?robot ?region)
             (entity_in ?staff ?region)
@@ -165,8 +181,8 @@
 
     ; Staff loads the requested item directly into the robot basket. This is
     ; only possible before the task is formally delegated away.
-    (:action robot_receive
-        :parameters (?robot - robot ?staff - staff ?item - item ?surface - surface ?region - region ?message - message)
+    (:action robot_receive  ; NL: [0] receives [2] from [1]
+        :parameters (?robot - robot ?staff - staff_member ?item - item ?surface - surface ?region - region ?message - message)
         :precondition (and
             (said ?robot ?staff ?message)
             (not (delegated ?robot ?staff ?message))
@@ -191,8 +207,8 @@
     )
 
     ; Staff can hold multiple items at a time.
-    (:action staff_grab
-        :parameters (?staff - staff ?item - item ?surface - surface ?region - region ?message - message)
+    (:action staff_grab  ; NL: [0] grabs [1]
+        :parameters (?staff - staff_member ?item - item ?surface - surface ?region - region ?message - message)
         :precondition (and
             (task_assigned ?staff ?message)
             (requested_item ?message ?item)
@@ -211,7 +227,7 @@
         )
     )
 
-    (:action robot_deliver
+    (:action robot_deliver  ; NL: [0] delivers [2] to [1]
         :parameters (?robot - robot ?requester - requester ?item - item ?region - region)
         :precondition (and
             (entity_in ?robot ?region)
@@ -226,8 +242,8 @@
         )
     )
 
-    (:action staff_deliver
-        :parameters (?staff - staff ?requester - requester ?item - item ?region - region ?message - message)
+    (:action staff_deliver  ; NL: [0] delivers [2] to [1]
+        :parameters (?staff - staff_member ?requester - requester ?item - item ?region - region ?message - message)
         :precondition (and
             (task_assigned ?staff ?message)
             (requested_item ?message ?item)

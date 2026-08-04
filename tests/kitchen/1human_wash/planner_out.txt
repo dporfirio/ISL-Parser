@@ -1,0 +1,45 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH approaches TABLE
+
+  state "step_2":
+    -->  STRETCH grabs MUG
+
+  state "step_3":
+    -->  STRETCH approaches SINK
+
+  state "step_4":
+    -->  STRETCH puts MUG inside SINK
+
+  state "step_5":
+    -->  a human washes MUG
+
+  state "step_6":
+    -->  STRETCH approaches TABLE
+
+  state "step_7":
+    -->  STRETCH grabs PLATE
+
+  state "step_8":
+    -->  STRETCH approaches SINK
+
+  state "step_9":
+    -->  STRETCH puts PLATE inside SINK
+
+  state "washed":
+    -->  a human washes PLATE
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+

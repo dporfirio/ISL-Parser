@@ -1,0 +1,10 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (placed_separately):
+         <<object_at plate kitchen_countertop>>
+         <<object_at mug kitchen_countertop>>
+
+  t: 0 -> 1
+

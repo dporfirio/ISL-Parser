@@ -1,0 +1,13 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (manually_dried):
+         <<is_clean plate>>
+         <<is_clean mug>>
+         <<object_at plate dish_rack>>
+         <<object_at mug dish_rack>>
+         <<button_pressed wash_manual_dry>>
+
+  t: 0 -> 1
+

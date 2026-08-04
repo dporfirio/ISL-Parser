@@ -1,0 +1,29 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH approaches TABLE
+
+  state "step_2":
+    -->  STRETCH grabs MUG
+
+  state "step_3":
+    -->  STRETCH puts MUG on PLATE
+
+  state "step_4":
+    -->  STRETCH grabs PLATE
+
+  state "step_5":
+    -->  STRETCH approaches SINK
+
+  state "stacked_in_sink":
+    -->  STRETCH puts PLATE inside SINK
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+

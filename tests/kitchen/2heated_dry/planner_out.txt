@@ -1,0 +1,57 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH approaches TABLE
+
+  state "step_2":
+    -->  STRETCH grabs MUG
+
+  state "step_3":
+    -->  STRETCH approaches DISHWASHER
+
+  state "step_4":
+    -->  STRETCH opens DISHWASHER
+
+  state "step_5":
+    -->  STRETCH puts MUG inside DISHWASHER
+
+  state "step_6":
+    -->  STRETCH approaches TABLE
+
+  state "step_7":
+    -->  STRETCH grabs PLATE
+
+  state "step_8":
+    -->  STRETCH approaches DISHWASHER
+
+  state "step_9":
+    -->  STRETCH puts PLATE inside DISHWASHER
+
+  state "step_10":
+    -->  STRETCH closes DISHWASHER
+
+  state "step_11":
+    -->  STRETCH presses the heated-dry button
+
+  state "step_12":
+    -->  MUG heated clean
+
+  state "heated":
+    -->  PLATE heated clean
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13
+

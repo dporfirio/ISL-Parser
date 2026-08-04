@@ -1,0 +1,10 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (stacked_in_sink):
+         <<item_on_item mug plate>>
+         <<item_inside plate sink>>
+
+  t: 0 -> 1
+

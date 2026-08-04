@@ -3,34 +3,34 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  approach_from_entity TEMI OFFICE_DESK MAILROOM_STAFF1 LEVEL1
+    -->  approach_from_entity TEMI OFFICEDESK STAFF LEVEL1
 
   state "step_2":
-    -->  say TEMI MAILROOM_STAFF1 FETCH_PACKAGES_MSG LEVEL1
+    -->  say TEMI STAFF FETCH_PACKAGES_MSG LEVEL1
 
   state "step_3":
-    -->  delegate_task TEMI MAILROOM_STAFF1 FETCH_PACKAGES_MSG LEVEL1
+    -->  delegate_task TEMI STAFF FETCH_PACKAGES_MSG LEVEL1
 
   state "step_4":
-    -->  approach_from_entity MAILROOM_STAFF1 MAILROOM_COUNTER PACKAGE_ITEM1 LEVEL1
+    -->  approach_from_entity STAFF FRONTDESK PACKAGE_ITEM1 LEVEL1
 
   state "step_5":
-    -->  staff_grab MAILROOM_STAFF1 PACKAGE_ITEM1 MAILROOM_COUNTER LEVEL1 FETCH_PACKAGES_MSG
+    -->  staff_grab STAFF PACKAGE_ITEM1 FRONTDESK LEVEL1 FETCH_PACKAGES_MSG
 
   state "step_6":
-    -->  approach_from_entity MAILROOM_STAFF1 MAILROOM_COUNTER PACKAGE_ITEM2 LEVEL1
+    -->  approach_from_entity STAFF FRONTDESK PACKAGE_ITEM2 LEVEL1
 
   state "step_7":
-    -->  staff_grab MAILROOM_STAFF1 PACKAGE_ITEM2 MAILROOM_COUNTER LEVEL1 FETCH_PACKAGES_MSG
+    -->  staff_grab STAFF PACKAGE_ITEM2 FRONTDESK LEVEL1 FETCH_PACKAGES_MSG
 
   state "step_8":
-    -->  approach_from_entity MAILROOM_STAFF1 MAILROOM_COUNTER REQUESTER1 LEVEL1
+    -->  approach_from_entity STAFF FRONTDESK REQUESTOR LEVEL1
 
   state "step_9":
-    -->  staff_deliver MAILROOM_STAFF1 REQUESTER1 PACKAGE_ITEM1 LEVEL1 FETCH_PACKAGES_MSG
+    -->  staff_deliver STAFF REQUESTOR PACKAGE_ITEM1 LEVEL1 FETCH_PACKAGES_MSG
 
   state "requester_has_both":
-    -->  staff_deliver MAILROOM_STAFF1 REQUESTER1 PACKAGE_ITEM2 LEVEL1 FETCH_PACKAGES_MSG
+    -->  staff_deliver STAFF REQUESTOR PACKAGE_ITEM2 LEVEL1 FETCH_PACKAGES_MSG
 
   t: 0 -> 1
   t: 1 -> 2

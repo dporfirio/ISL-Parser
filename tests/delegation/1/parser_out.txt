@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (requester_has_both):
-         <<agent_has requester1 package_item1>>
-         <<agent_has requester1 package_item2>>
+         <<agent_has requestor package_item1>>
+         <<agent_has requestor package_item2>>
 
   t: 0 -> 1

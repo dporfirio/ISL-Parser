@@ -1,0 +1,37 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  STRETCH approaches TABLE
+
+  state "step_2":
+    -->  STRETCH grabs MUG
+
+  state "step_3":
+    -->  STRETCH approaches KITCHEN_COUNTERTOP
+
+  state "step_4":
+    -->  STRETCH puts MUG on KITCHEN_COUNTERTOP
+
+  state "step_5":
+    -->  STRETCH approaches TABLE
+
+  state "step_6":
+    -->  STRETCH grabs PLATE
+
+  state "step_7":
+    -->  STRETCH approaches KITCHEN_COUNTERTOP
+
+  state "placed_separately":
+    -->  STRETCH puts PLATE on KITCHEN_COUNTERTOP
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+
