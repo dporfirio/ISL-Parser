@@ -6,7 +6,7 @@ Automata.
     -->  STRETCH approaches TABLE
 
   state "step_2":
-    -->  STRETCH grabs MUG
+    -->  STRETCH grabs PLATE
 
   state "step_3":
     -->  STRETCH approaches DISHWASHER
@@ -15,19 +15,19 @@ Automata.
     -->  STRETCH opens DISHWASHER
 
   state "step_5":
-    -->  STRETCH puts MUG inside DISHWASHER
+    -->  STRETCH puts PLATE inside DISHWASHER
 
   state "step_6":
     -->  STRETCH approaches TABLE
 
   state "step_7":
-    -->  STRETCH grabs PLATE
+    -->  STRETCH grabs MUG
 
   state "step_8":
     -->  STRETCH approaches DISHWASHER
 
   state "step_9":
-    -->  STRETCH puts PLATE inside DISHWASHER
+    -->  STRETCH puts MUG inside DISHWASHER
 
   state "step_10":
     -->  STRETCH closes DISHWASHER
@@ -62,4 +62,3 @@ Automata.
   t: 12 -> 13
   t: 13 -> 14
   t: 14 -> 15
-

@@ -1,5 +1,5 @@
 (define (domain hri_kitchen)
-  (:requirements :strips :typing :negative-preconditions)
+  (:requirements :strips :typing :negative-preconditions :conditional-effects)
 
   (:types
     entity - object
@@ -28,6 +28,7 @@
     (button_pressed ?button - button)
     (waited_one_hour)
     (is_clean ?item - item)
+    (is_dry ?item - item)
   )
 
   (:action approach_from_entity ; NL: [0] approaches [2]
@@ -140,16 +141,17 @@
       (is_closed dishwasher)
       (not (is_empty dishwasher))
     )
-    :effect (button_pressed wash_heated_dry)
-  )
-
-  (:action heated_clean ; NL: [0] heated clean
-    :parameters (?item - item)
-    :precondition (and
+    :effect (and
       (button_pressed wash_heated_dry)
-      (item_inside ?item dishwasher)
+      (forall (?item - item)
+        (when (item_inside ?item dishwasher)
+          (and
+            (is_clean ?item)
+            (is_dry ?item)
+          )
+        )
+      )
     )
-    :effect (is_clean ?item)
   )
 
   (:action press_manual_dry ; NL: [0] presses the manual-dry button
@@ -159,7 +161,14 @@
       (is_closed dishwasher)
       (not (is_empty dishwasher))
     )
-    :effect (button_pressed wash_manual_dry)
+    :effect (and
+      (button_pressed wash_manual_dry)
+      (forall (?item - item)
+        (when (item_inside ?item dishwasher)
+          (is_clean ?item)
+        )
+      )
+    )
   )
 
   (:action wait_dishwasher ; NL: the dishwasher waits for one hour
@@ -194,7 +203,7 @@
     )
     :effect (and
       (object_at ?item dish_rack)
-      (is_clean ?item)
+      (is_dry ?item)
       (not (item_inside ?item dishwasher))
     )
   )
