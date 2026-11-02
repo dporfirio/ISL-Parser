@@ -1,0 +1,96 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  state "step_1":
+    -->  move_to KITCHEN BEANS_ST
+
+  state "step_2":
+    -->  grab COFFEE_BEANS BEANS_ST
+
+  state "step_3":
+    -->  move_to BEANS_ST GRINDER
+
+  state "step_4":
+    -->  place_beans_in_grinder
+
+  state "step_5":
+    -->  turn_on_grinder
+
+  state "step_6":
+    -->  grab GROUNDS GRINDER
+
+  state "step_7":
+    -->  move_to GRINDER COFFEE_MAKER
+
+  state "step_8":
+    -->  pour_grounds_into_filter
+
+  state "step_9":
+    -->  move_to COFFEE_MAKER POT_ST
+
+  state "step_10":
+    -->  grab POT POT_ST
+
+  state "step_11":
+    -->  move_to POT_ST SINK
+
+  state "step_12":
+    -->  fill_pot
+
+  state "step_13":
+    -->  move_to SINK COFFEE_MAKER
+
+  state "step_14":
+    -->  pour_water_into_maker
+
+  state "step_15":
+    -->  place POT COFFEE_MAKER
+
+  state "step_16":
+    -->  move_to COFFEE_MAKER MUG_ST
+
+  state "step_17":
+    -->  grab MUG MUG_ST
+
+  state "step_18":
+    -->  move_to MUG_ST COFFEE_MAKER
+
+  state "step_19":
+    -->  place MUG COFFEE_MAKER
+
+  state "step_20":
+    -->  turn_on_maker_with_filter
+
+  state "step_21":
+    -->  grab MUG COFFEE_MAKER
+
+  state "step_22":
+    -->  move_to COFFEE_MAKER SUGAR_ST
+
+  state "final_state":
+    -->  pour_sugar
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6
+  t: 6 -> 7
+  t: 7 -> 8
+  t: 8 -> 9
+  t: 9 -> 10
+  t: 10 -> 11
+  t: 11 -> 12
+  t: 12 -> 13
+  t: 13 -> 14
+  t: 14 -> 15
+  t: 15 -> 16
+  t: 16 -> 17
+  t: 17 -> 18
+  t: 18 -> 19
+  t: 19 -> 20
+  t: 20 -> 21
+  t: 21 -> 22
+  t: 22 -> 23
