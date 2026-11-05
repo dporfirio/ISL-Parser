@@ -12,7 +12,7 @@ Automata.
     -->  move_to BEANS_ST GRINDER
 
   state "step_4":
-    -->  place_beans_in_grinder
+    -->  place COFFEE_BEANS GRINDER
 
   state "step_5":
     -->  turn_on_grinder
@@ -23,7 +23,7 @@ Automata.
   state "step_7":
     -->  move_to GRINDER COFFEE_MAKER
 
-  state "step_8":
+  state "grounds_ready":
     -->  pour_grounds_into_filter
 
   state "step_9":
@@ -36,13 +36,13 @@ Automata.
     -->  move_to POT_ST SINK
 
   state "step_12":
-    -->  fill_pot
+    -->  fill POT
 
   state "step_13":
     -->  move_to SINK COFFEE_MAKER
 
-  state "step_14":
-    -->  pour_water_into_maker
+  state "water_ready":
+    -->  pour_water_into_maker POT
 
   state "step_15":
     -->  place POT COFFEE_MAKER
@@ -60,7 +60,7 @@ Automata.
     -->  place MUG COFFEE_MAKER
 
   state "coffee_made":
-    -->  turn_on_maker_with_filter
+    -->  turn_on_maker MUG
 
   state "step_21":
     -->  grab MUG COFFEE_MAKER

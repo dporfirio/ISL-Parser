@@ -2,11 +2,27 @@ Automata.
 
   checkpoint 0 (init):
 
-  checkpoint 1 (coffee_made):
+  checkpoint 1 (mug_placed):
+         <<item_on mug coffee_maker>>
+
+  checkpoint 2 (grounds_ready):
+         <<has_grounds filter>>
+
+  checkpoint 3 (water_ready):
+         <<has_water coffee_maker>>
+
+  checkpoint 4 (coffee_made):
          <<has_coffee mug>>
 
-  checkpoint 2 (topped):
-         <<has_sugar mug>>
+  checkpoint 5 (topped):
+         <<has_topping mug sugar>>
+
+  checkpoint 6 (delivered):
+         <<item_on mug person>>
 
   t: 0 -> 1
   t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
+  t: 5 -> 6

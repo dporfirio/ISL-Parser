@@ -2,11 +2,19 @@ Automata.
 
   checkpoint 0 (init):
 
-  checkpoint 1 (coffee_made):
+  checkpoint 1 (grounds_ready):
+         <<has_grounds filter>>
+
+  checkpoint 2 (water_ready):
+         <<has_water coffee_maker>>
+
+  checkpoint 3 (coffee_made):
          <<has_coffee mug>>
 
-  checkpoint 2 (delivered):
+  checkpoint 4 (delivered):
          <<item_on mug person>>
 
   t: 0 -> 1
   t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4

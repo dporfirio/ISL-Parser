@@ -5,8 +5,8 @@ import pddl.coffee_maker
 labels
 
 	creamed: [
-		  predicate: has_cream,
-		  params: [mug]
+		  predicate: has_topping,
+		  params: [mug, cream]
 		 ],
 
 	delivered: [

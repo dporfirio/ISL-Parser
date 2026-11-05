@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (creamed):
-         <<has_cream mug>>
+         <<has_topping mug cream>>
 
   checkpoint 2 (delivered):
          <<item_on mug person>>

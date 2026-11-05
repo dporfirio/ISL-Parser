@@ -5,8 +5,8 @@ import pddl.coffee_maker
 labels
 
 	final_state: [
-		  predicate: has_sugar,
-		  params: [mug]
+		  predicate: has_topping,
+		  params: [mug, sugar]
 		 ]
 
 

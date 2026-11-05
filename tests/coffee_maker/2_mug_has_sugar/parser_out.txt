@@ -3,6 +3,6 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (final_state):
-         <<has_sugar mug>>
+         <<has_topping mug sugar>>
 
   t: 0 -> 1

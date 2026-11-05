@@ -11,11 +11,15 @@
             region surface - location
             device - surface        ; grinder, coffee_maker
             grabbable - item
+            container - grabbable        ; can hold water (pot)
+            topping
     )
 
     (:constants grinder coffee_maker - device
                 sink person table cream_st sugar_st - surface
-                coffee_beans grounds filter pot mug - grabbable
+                cream sugar - topping
+                coffee_beans grounds filter mug - grabbable
+                pot - container
     )
 
     (:predicates
@@ -23,12 +27,11 @@
         (item_on ?item - grabbable ?loc - location)
         (robot_carrying ?item - grabbable)
         (gripper_free)
-        (contains ?dev - device ?item - grabbable)
         (has_water ?x - object)             ; pot or coffee_maker
         (has_grounds ?x - object)           ; filter
         (has_coffee ?x - grabbable)         ; mug
-        (has_cream ?mug - grabbable)
-        (has_sugar ?mug - grabbable)
+        (has_topping ?mug - grabbable ?top - topping)
+        (topping_at ?top - topping ?st - surface)
     )
 
     (:action move_to
@@ -64,55 +67,59 @@
                 )
     )
 
-    (:action place_beans_in_grinder
-        :parameters ()
-        :precondition (and (robot_carrying coffee_beans)
-                           (robot_at grinder)
+    (:action fill
+        :parameters (?container - container)
+        :precondition (and (robot_carrying ?container)
+                           (robot_at sink)
+                           (not (has_water ?container))
                       )
-        :effect (and (gripper_free)
-                     (not (robot_carrying coffee_beans))
-                     (contains grinder coffee_beans)
-                )
+        :effect (has_water ?container)
     )
-
+    
     (:action turn_on_grinder
         :parameters ()
         :precondition (and (robot_at grinder)
-                           (contains grinder coffee_beans)
+                           (item_on coffee_beans grinder)
                       )
-        :effect (and (not (contains grinder coffee_beans))
+        :effect (and (not (item_on coffee_beans grinder))
                      (item_on grounds grinder)
                 )
     )
-
-    (:action place_filter_in_maker
-        :parameters ()
-        :precondition (and (robot_carrying filter)
-                           (robot_at coffee_maker)
+    
+    (:action turn_on_maker
+        :parameters (?mug - grabbable)
+        :precondition (and (robot_at coffee_maker)
+                           (gripper_free)
+                           (has_water coffee_maker)
+                           (item_on filter coffee_maker)
+                           (has_grounds filter)
+                           (item_on ?mug coffee_maker)
                       )
-        :effect (and (gripper_free)
-                     (not (robot_carrying filter))
-                     (contains coffee_maker filter)
+        :effect (and (has_coffee ?mug)
+                     (not (has_water coffee_maker))
+                     (not (has_grounds filter))
                 )
     )
 
-    (:action fill_pot
-        :parameters ()
-        :precondition (and (robot_carrying pot)
-                           (robot_at sink)
-                           (not (has_water pot))
+
+    (:action pour
+        :parameters (?mug - grabbable ?top - topping ?st - surface)
+        :precondition (and (robot_carrying ?mug)
+                           (robot_at ?st)
+                           (topping_at ?top ?st)
+                           (has_coffee ?mug)
                       )
-        :effect (has_water pot)
+        :effect (has_topping ?mug ?top)
     )
 
     (:action pour_water_into_maker
-        :parameters ()
-        :precondition (and (robot_carrying pot)
-                           (has_water pot)
+        :parameters (?container - container)
+        :precondition (and (robot_carrying ?container)
+                           (has_water ?container)
                            (robot_at coffee_maker)
                            (not (has_water coffee_maker))
                       )
-        :effect (and (not (has_water pot))
+        :effect (and (not (has_water ?container))
                      (has_water coffee_maker)
                 )
     )
@@ -121,7 +128,7 @@
         :parameters ()
         :precondition (and (robot_carrying grounds)
                            (robot_at coffee_maker)
-                           (contains coffee_maker filter)
+                           (item_on filter coffee_maker)
                            (not (has_grounds filter))
                       )
         :effect (and (has_grounds filter)
@@ -130,36 +137,7 @@
                 )
     )
 
-    (:action turn_on_maker_with_filter
-        :parameters ()
-        :precondition (and (robot_at coffee_maker)
-                           (gripper_free)
-                           (has_water coffee_maker)
-                           (contains coffee_maker filter)
-                           (has_grounds filter)
-                           (item_on mug coffee_maker)
-                      )
-        :effect (and (has_coffee mug)
-                     (not (has_water coffee_maker))
-                     (not (has_grounds filter))
-                )
-    )
 
-    (:action pour_cream
-        :parameters ()
-        :precondition (and (robot_carrying mug)
-                           (robot_at cream_st)
-                           (has_coffee mug)
-                      )
-        :effect (has_cream mug)
-    )
 
-    (:action pour_sugar
-        :parameters ()
-        :precondition (and (robot_carrying mug)
-                           (robot_at sugar_st)
-                           (has_coffee mug)
-                      )
-        :effect (has_sugar mug)
-    )
+
 )

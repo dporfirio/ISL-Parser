@@ -1,0 +1,24 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (water_ready):
+         <<has_water coffee_maker>>
+
+  checkpoint 2 (grounds_ready):
+         <<has_grounds filter>>
+
+  checkpoint 3 (coffee_made):
+         <<has_coffee mug>>
+
+  checkpoint 4 (topped):
+         <<has_topping mug cream>>
+
+  checkpoint 5 (delivered):
+         <<item_on mug person>>
+
+  t: 0 -> 1
+  t: 1 -> 2
+  t: 2 -> 3
+  t: 3 -> 4
+  t: 4 -> 5
