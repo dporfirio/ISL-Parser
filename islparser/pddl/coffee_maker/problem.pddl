@@ -8,7 +8,6 @@
         (robot_at kitchen)
         (gripper_free)
         (item_on coffee_beans beans_st)
-        (uses_filter)
         (contains coffee_maker filter)
         (item_on pot pot_st)
         (item_on mug mug_st)

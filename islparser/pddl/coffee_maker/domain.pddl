@@ -24,9 +24,8 @@
         (robot_carrying ?item - grabbable)
         (gripper_free)
         (contains ?dev - device ?item - grabbable)
-        (uses_filter)                       ; fixed per variant: the filter is part of the recipe
         (has_water ?x - object)             ; pot or coffee_maker
-        (has_grounds ?x - object)           ; filter or coffee_maker
+        (has_grounds ?x - object)           ; filter
         (has_coffee ?x - grabbable)         ; mug
         (has_cream ?mug - grabbable)
         (has_sugar ?mug - grabbable)
@@ -88,8 +87,7 @@
 
     (:action place_filter_in_maker
         :parameters ()
-        :precondition (and (uses_filter)
-                           (robot_carrying filter)
+        :precondition (and (robot_carrying filter)
                            (robot_at coffee_maker)
                       )
         :effect (and (gripper_free)
@@ -121,8 +119,7 @@
 
     (:action pour_grounds_into_filter
         :parameters ()
-        :precondition (and (uses_filter)
-                           (robot_carrying grounds)
+        :precondition (and (robot_carrying grounds)
                            (robot_at coffee_maker)
                            (contains coffee_maker filter)
                            (not (has_grounds filter))
@@ -133,23 +130,9 @@
                 )
     )
 
-    (:action pour_grounds_into_maker
-        :parameters ()
-        :precondition (and (not (uses_filter))
-                           (robot_carrying grounds)
-                           (robot_at coffee_maker)
-                           (not (has_grounds coffee_maker))
-                      )
-        :effect (and (has_grounds coffee_maker)
-                     (not (robot_carrying grounds))
-                     (gripper_free)
-                )
-    )
-
     (:action turn_on_maker_with_filter
         :parameters ()
-        :precondition (and (uses_filter)
-                           (robot_at coffee_maker)
+        :precondition (and (robot_at coffee_maker)
                            (gripper_free)
                            (has_water coffee_maker)
                            (contains coffee_maker filter)
@@ -159,21 +142,6 @@
         :effect (and (has_coffee mug)
                      (not (has_water coffee_maker))
                      (not (has_grounds filter))
-                )
-    )
-
-    (:action turn_on_maker_no_filter
-        :parameters ()
-        :precondition (and (not (uses_filter))
-                           (robot_at coffee_maker)
-                           (gripper_free)
-                           (has_water coffee_maker)
-                           (has_grounds coffee_maker)
-                           (item_on mug coffee_maker)
-                      )
-        :effect (and (has_coffee mug)
-                     (not (has_water coffee_maker))
-                     (not (has_grounds coffee_maker))
                 )
     )
 

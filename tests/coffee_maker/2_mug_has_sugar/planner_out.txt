@@ -45,10 +45,10 @@ Automata.
     -->  pour_water_into_maker
 
   state "step_15":
-    -->  place POT COFFEE_MAKER
+    -->  move_to COFFEE_MAKER MUG_ST
 
   state "step_16":
-    -->  move_to COFFEE_MAKER MUG_ST
+    -->  place POT MUG_ST
 
   state "step_17":
     -->  grab MUG MUG_ST

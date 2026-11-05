@@ -1,0 +1,12 @@
+Automata.
+
+  checkpoint 0 (init):
+
+  checkpoint 1 (coffee_made):
+         <<has_coffee mug>>
+
+  checkpoint 2 (topped):
+         <<has_cream mug>>
+
+  t: 0 -> 1
+  t: 1 -> 2
