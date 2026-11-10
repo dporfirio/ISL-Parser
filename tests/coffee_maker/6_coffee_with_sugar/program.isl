@@ -6,7 +6,7 @@ labels
 
 	mug_placed: [
 		  predicate: item_on,
-		  params: [mug, coffee_maker]
+		  params: [mug, maker]
 		 ],
 
 	grounds_ready: [
@@ -16,7 +16,7 @@ labels
 
 	water_ready: [
 		  predicate: has_water,
-		  params: [coffee_maker]
+		  params: [maker]
 		 ],
 
 	coffee_made: [

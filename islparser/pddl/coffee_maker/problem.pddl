@@ -7,8 +7,8 @@
     (:init
         (robot_at kitchen)
         (gripper_free)
-        (item_on coffee_beans beans_st)
-        (item_on filter coffee_maker)
+        (item_on beans beans_st)
+        (item_on filter maker)
         (item_on pot pot_st)
         (item_on mug mug_st)
         (topping_at cream cream_st)

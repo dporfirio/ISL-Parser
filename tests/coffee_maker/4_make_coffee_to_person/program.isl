@@ -11,7 +11,7 @@ labels
 
 	water_ready: [
 		  predicate: has_water,
-		  params: [coffee_maker]
+		  params: [maker]
 		 ],
 
 	coffee_made: [
