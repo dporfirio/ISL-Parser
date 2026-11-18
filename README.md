@@ -54,6 +54,18 @@ python test.py
 
 For details about creating tests, visit the `tests` directory.
 
+## Python linting and type checking
+
+Install the development tools in the same Python environment as the project dependencies.
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m flake8 islparser test.py
+python -m mypy
+```
+
+In VS Code, open the repository root, install the recommended Flake8 and Mypy Type Checker extensions, and select that Python environment. Flake8 reports diagnostics for open Python files. Mypy checks the source and test runner configured in `mypy.ini`. It requires parameter and return annotations and checks function bodies even when annotations are missing.
+
 ## Editor Support
 
 A VS Code syntax highlighter for `.isl` files is available in

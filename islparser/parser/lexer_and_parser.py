@@ -33,8 +33,7 @@ class ParseResult:
         return cls._instance
 
     def build(self) -> None:
-        if self.status == ParseResultStatus.SUCCESS and\
-           self.automaton is not None:
+        if self.status == ParseResultStatus.SUCCESS and self.automaton is not None:
             self.automaton.build()
 
     def reset(self) -> None:
@@ -43,10 +42,9 @@ class ParseResult:
         self.automaton = None
 
     # Common parser errors below
-    def add_obj_not_found_error(self, name, lineno) -> None:
+    def add_obj_not_found_error(self, name: str, lineno: int) -> None:
         self.status = ParseResultStatus.SYNTAX_ERROR
-        self.msg += "line {}: ".format(lineno) + \
-                    "no such object named {}\n".format(name)
+        self.msg += f"line {lineno}: no such object named {name}\n"
 
 
 class ParseResultStatus(Enum):
@@ -150,7 +148,7 @@ def t_INT(t):
 
 
 def t_error(t):
-    print('line {}: Illegal character {}'.format(t.lineno, t.value[0]))
+    print(f'line {t.lineno}: Illegal character {t.value[0]}')
     t.lexer.skip(1)
 
 
@@ -165,7 +163,7 @@ def p_nil(p):
     """
     nil :
     """
-    pass
+    p[0] = None
 
 
 def p_import(p):
@@ -182,7 +180,8 @@ def p_path(p):
          | nil
     """
     if len(p) == 3:
-        p[0] = p[1] + (p[2] or "")
+        segment, suffix = p[1], p[2]
+        p[0] = segment + (suffix or "")
 
 
 def p_labels(p):
@@ -204,7 +203,7 @@ def p_options(p):
     options : OPTIONS ENDOPTIONS
             | nil
     """
-    pass
+    p[0] = None
 
 
 def p_labellist(p):
@@ -315,13 +314,15 @@ def p_trel(p):
     trel : event boolexp ARROW INT SEMICOLON trel
          | nil
     """
-    if len(p) == 7:
-        if p[6] is None:
-            p[0] = _node('trel', p[1], p[2], p[4])
-        else:
-            p[0] = _node('trels', p[1], p[2], p[4], p[6])
-    else:
+    if len(p) == 2:
         p[0] = p[1]
+        return
+
+    event, condition, target, remaining = p[1], p[2], p[4], p[6]
+    if remaining is None:
+        p[0] = _node('trel', event, condition, target)
+    else:
+        p[0] = _node('trels', event, condition, target, remaining)
 
 
 def p_event(p):
@@ -338,19 +339,18 @@ def p_boolexp_wrapper(p):
             | INT AND GUARD EQUAL INT
             | INT
     """
-    if len(p) == 6:
-        p[0] = (Eq('st', p[1]), p[5])
-    else:
-        p[0] = (Eq('st', p[1]),)
+    state_condition = Eq('st', p[1])
+    p[0] = (state_condition, p[5]) if len(p) == 6 else (state_condition,)
 
 
 def p_error(p):
-    ParseResult.instance().status = ParseResultStatus.SYNTAX_ERROR
-    ParseResult.instance().msg += "syntax error line {}: ".format(p.lineno) +\
-                                  "Unexpected token \'{}\'\n".format(p.value)
+    result = ParseResult.instance()
+    result.status = ParseResultStatus.SYNTAX_ERROR
+    result.msg += f"syntax error line {p.lineno}: Unexpected token '{p.value}'\n"
 
 
 def parse_file(aut_filename: str) -> ParseResult:
+    """Parse an ISL file and return its parse result."""
     with open(aut_filename) as infile:
         return parse_string(infile.read())
 
