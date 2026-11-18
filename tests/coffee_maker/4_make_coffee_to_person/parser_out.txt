@@ -6,7 +6,7 @@ Automata.
          <<has_grounds filter>>
 
   checkpoint 2 (water_ready):
-         <<has_water coffee_maker>>
+         <<has_water maker>>
 
   checkpoint 3 (coffee_made):
          <<has_coffee mug>>

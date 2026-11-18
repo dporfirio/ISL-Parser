@@ -3,13 +3,13 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (mug_placed):
-         <<item_on mug coffee_maker>>
+         <<item_on mug maker>>
 
   checkpoint 2 (grounds_ready):
          <<has_grounds filter>>
 
   checkpoint 3 (water_ready):
-         <<has_water coffee_maker>>
+         <<has_water maker>>
 
   checkpoint 4 (coffee_made):
          <<has_coffee mug>>

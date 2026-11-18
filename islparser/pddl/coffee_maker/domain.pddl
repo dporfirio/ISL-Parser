@@ -4,6 +4,7 @@
         ; General requirements - DO NOT
         ; MODIFY THE FOLLOWING LINE!
         :negative-preconditions :typing
+        :disjunctive-preconditions :equality :conditional-effects
     )
 
     (:types 
@@ -19,6 +20,7 @@
                 sink person table cream_st sugar_st - surface
                 cream sugar - topping
                 beans grounds filter mug - grabbable
+                water - object
                 pot - container
     )
 
@@ -60,6 +62,8 @@
         :parameters (?item - grabbable ?surface - surface)
         :precondition (and (robot_carrying ?item)
                            (robot_at ?surface)
+                           (or (and (= ?item pot) (= ?surface table))
+                               (not (= ?item pot)))
                       )
         :effect (and (gripper_free)
                      (item_on ?item ?surface)
@@ -67,38 +71,29 @@
                 )
     )
 
-    (:action fill
-        :parameters (?container - container)
-        :precondition (and (robot_carrying ?container)
-                           (robot_at sink)
-                           (not (has_water ?container))
-                      )
-        :effect (has_water ?container)
-    )
-    
-    (:action turn_on_grinder
-        :parameters ()
-        :precondition (and (robot_at grinder)
-                           (item_on beans grinder)
-                      )
-        :effect (and (not (item_on beans grinder))
-                     (item_on grounds grinder)
-                )
-    )
-    
-    (:action turn_on_maker
-        :parameters (?mug - grabbable)
-        :precondition (and (robot_at maker)
-                           (gripper_free)
-                           (has_water maker)
-                           (item_on filter maker)
-                           (has_grounds filter)
-                           (item_on ?mug maker)
-                      )
-        :effect (and (has_coffee ?mug)
+    (:action turn_on
+        :parameters (?device - device)
+        :precondition (or
+            (and (= ?device grinder)
+                 (robot_at grinder)
+                 (item_on beans grinder))
+            (and (= ?device maker)
+                 (robot_at maker)
+                 (gripper_free)
+                 (has_water maker)
+                 (item_on filter maker)
+                 (has_grounds filter)
+                 (item_on mug maker))
+        )
+        :effect (and
+            (when (= ?device grinder)
+                (and (not (item_on beans grinder))
+                     (item_on grounds grinder)))
+            (when (= ?device maker)
+                (and (has_coffee mug)
                      (not (has_water maker))
-                     (not (has_grounds filter))
-                )
+                     (not (has_grounds filter))))
+        )
     )
 
 
@@ -106,9 +101,12 @@
     ; Disjunctive preconditions select the valid source/target interaction;
     ; conditional effects apply only that interaction's state changes.
     (:action pour
-        :parameters (?object - grabbable ?target - object)
+        :parameters (?object - object ?target - object)
         :precondition (or
-            (and (= ?object pot) (= ?target maker)
+            (and (= ?object water) (= ?target pot)
+                 (robot_carrying pot) (robot_at sink)
+                 (not (has_water pot)))
+            (and (= ?object water) (= ?target maker)
                  (robot_carrying pot) (has_water pot)
                  (robot_at maker) (not (has_water maker)))
             (and (= ?object grounds) (= ?target filter)
@@ -122,6 +120,7 @@
                  (topping_at sugar sugar_st) (has_coffee mug))
         )
         :effect (and
+            (when (= ?target pot) (has_water pot))
             (when (= ?target maker)
                 (and (not (has_water pot)) (has_water maker)))
             (when (= ?target filter)

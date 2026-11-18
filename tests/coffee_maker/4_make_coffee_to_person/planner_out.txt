@@ -6,28 +6,28 @@ Automata.
     -->  move_to KITCHEN BEANS_ST
 
   state "step_2":
-    -->  grab COFFEE_BEANS BEANS_ST
+    -->  grab BEANS BEANS_ST
 
   state "step_3":
     -->  move_to BEANS_ST GRINDER
 
   state "step_4":
-    -->  place COFFEE_BEANS GRINDER
+    -->  place BEANS GRINDER
 
   state "step_5":
-    -->  turn_on_grinder
+    -->  turn_on GRINDER
 
   state "step_6":
     -->  grab GROUNDS GRINDER
 
   state "step_7":
-    -->  move_to GRINDER COFFEE_MAKER
+    -->  move_to GRINDER MAKER
 
   state "grounds_ready":
-    -->  pour_grounds_into_filter
+    -->  pour GROUNDS FILTER
 
   state "step_9":
-    -->  move_to COFFEE_MAKER POT_ST
+    -->  move_to MAKER POT_ST
 
   state "step_10":
     -->  grab POT POT_ST
@@ -36,37 +36,40 @@ Automata.
     -->  move_to POT_ST SINK
 
   state "step_12":
-    -->  fill POT
+    -->  pour WATER POT
 
   state "step_13":
-    -->  move_to SINK COFFEE_MAKER
+    -->  move_to SINK MAKER
 
   state "water_ready":
-    -->  pour_water_into_maker POT
+    -->  pour WATER MAKER
 
   state "step_15":
-    -->  place POT COFFEE_MAKER
+    -->  move_to MAKER TABLE
 
   state "step_16":
-    -->  move_to COFFEE_MAKER MUG_ST
+    -->  place POT TABLE
 
   state "step_17":
-    -->  grab MUG MUG_ST
+    -->  move_to TABLE MUG_ST
 
   state "step_18":
-    -->  move_to MUG_ST COFFEE_MAKER
+    -->  grab MUG MUG_ST
 
   state "step_19":
-    -->  place MUG COFFEE_MAKER
+    -->  move_to MUG_ST MAKER
+
+  state "step_20":
+    -->  place MUG MAKER
 
   state "coffee_made":
-    -->  turn_on_maker MUG
-
-  state "step_21":
-    -->  grab MUG COFFEE_MAKER
+    -->  turn_on MAKER
 
   state "step_22":
-    -->  move_to COFFEE_MAKER PERSON
+    -->  grab MUG MAKER
+
+  state "step_23":
+    -->  move_to MAKER PERSON
 
   state "delivered":
     -->  place MUG PERSON
@@ -94,3 +97,4 @@ Automata.
   t: 20 -> 21
   t: 21 -> 22
   t: 22 -> 23
+  t: 23 -> 24

@@ -3,73 +3,76 @@ Automata.
   checkpoint 0 (init):
 
   state "step_1":
-    -->  move_to KITCHEN BEANS_ST
+    -->  move_to KITCHEN POT_ST
 
   state "step_2":
-    -->  grab COFFEE_BEANS BEANS_ST
-
-  state "step_3":
-    -->  move_to BEANS_ST GRINDER
-
-  state "step_4":
-    -->  place COFFEE_BEANS GRINDER
-
-  state "step_5":
-    -->  turn_on_grinder
-
-  state "step_6":
-    -->  grab GROUNDS GRINDER
-
-  state "step_7":
-    -->  move_to GRINDER COFFEE_MAKER
-
-  state "step_8":
-    -->  pour_grounds_into_filter
-
-  state "step_9":
-    -->  move_to COFFEE_MAKER POT_ST
-
-  state "step_10":
     -->  grab POT POT_ST
 
-  state "step_11":
+  state "step_3":
     -->  move_to POT_ST SINK
 
-  state "step_12":
-    -->  fill POT
+  state "step_4":
+    -->  pour WATER POT
 
-  state "step_13":
-    -->  move_to SINK COFFEE_MAKER
+  state "step_5":
+    -->  move_to SINK MAKER
 
-  state "step_14":
-    -->  pour_water_into_maker POT
+  state "step_6":
+    -->  pour WATER MAKER
 
-  state "step_15":
-    -->  move_to COFFEE_MAKER MUG_ST
+  state "step_7":
+    -->  move_to MAKER TABLE
 
-  state "step_16":
-    -->  place POT MUG_ST
+  state "step_8":
+    -->  place POT TABLE
 
-  state "step_17":
+  state "step_9":
+    -->  move_to TABLE MUG_ST
+
+  state "step_10":
     -->  grab MUG MUG_ST
 
+  state "step_11":
+    -->  move_to MUG_ST MAKER
+
+  state "step_12":
+    -->  place MUG MAKER
+
+  state "step_13":
+    -->  move_to MAKER BEANS_ST
+
+  state "step_14":
+    -->  grab BEANS BEANS_ST
+
+  state "step_15":
+    -->  move_to BEANS_ST GRINDER
+
+  state "step_16":
+    -->  place BEANS GRINDER
+
+  state "step_17":
+    -->  turn_on GRINDER
+
   state "step_18":
-    -->  move_to MUG_ST COFFEE_MAKER
+    -->  grab GROUNDS GRINDER
 
   state "step_19":
-    -->  place MUG COFFEE_MAKER
+    -->  move_to GRINDER MAKER
 
   state "step_20":
-    -->  turn_on_maker MUG
+    -->  pour GROUNDS FILTER
 
   state "step_21":
-    -->  grab MUG COFFEE_MAKER
+    -->  turn_on MAKER
 
   state "step_22":
-    -->  move_to COFFEE_MAKER SUGAR_ST
+    -->  grab MUG MAKER
+
+  state "step_23":
+    -->  move_to MAKER SUGAR_ST
 
   state "final_state":
-    -->  pour MUG SUGAR SUGAR_ST
+    -->  pour MUG SUGAR
 
   t: 0 -> 1
   t: 1 -> 2
@@ -94,3 +97,4 @@ Automata.
   t: 20 -> 21
   t: 21 -> 22
   t: 22 -> 23
+  t: 23 -> 24

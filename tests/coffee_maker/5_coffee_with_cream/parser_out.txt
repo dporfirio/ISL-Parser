@@ -3,7 +3,7 @@ Automata.
   checkpoint 0 (init):
 
   checkpoint 1 (water_ready):
-         <<has_water coffee_maker>>
+         <<has_water maker>>
 
   checkpoint 2 (grounds_ready):
          <<has_grounds filter>>

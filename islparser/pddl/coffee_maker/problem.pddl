@@ -13,6 +13,7 @@
         (item_on mug mug_st)
         (topping_at cream cream_st)
         (topping_at sugar sugar_st)
+
     )
     (:goal (and (has_coffee mug)
                 (has_topping mug cream)
