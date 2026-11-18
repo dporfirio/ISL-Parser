@@ -111,7 +111,10 @@
                  (robot_at maker) (not (has_water maker)))
             (and (= ?object grounds) (= ?target filter)
                  (robot_carrying grounds) (robot_at maker)
-                 (item_on filter maker) (not (has_grounds filter)))
+                 (item_on filter maker) (not (has_grounds filter))
+                 ; the mug must already be on the maker, so equal-length
+                 ; plans can't swap the mug and grounds steps
+                 (item_on mug maker))
             (and (= ?object mug) (= ?target cream)
                  (robot_carrying mug) (robot_at cream_st)
                  (topping_at cream cream_st) (has_coffee mug))

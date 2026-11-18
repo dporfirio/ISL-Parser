@@ -27,40 +27,40 @@ Automata.
     -->  place POT TABLE
 
   state "step_9":
-    -->  move_to TABLE BEANS_ST
+    -->  move_to TABLE MUG_ST
 
   state "step_10":
-    -->  grab BEANS BEANS_ST
+    -->  grab MUG MUG_ST
 
   state "step_11":
-    -->  move_to BEANS_ST GRINDER
+    -->  move_to MUG_ST MAKER
 
   state "step_12":
-    -->  place BEANS GRINDER
+    -->  place MUG MAKER
 
   state "step_13":
-    -->  turn_on GRINDER
+    -->  move_to MAKER BEANS_ST
 
   state "step_14":
-    -->  grab GROUNDS GRINDER
+    -->  grab BEANS BEANS_ST
 
   state "step_15":
+    -->  move_to BEANS_ST GRINDER
+
+  state "step_16":
+    -->  place BEANS GRINDER
+
+  state "step_17":
+    -->  turn_on GRINDER
+
+  state "step_18":
+    -->  grab GROUNDS GRINDER
+
+  state "step_19":
     -->  move_to GRINDER MAKER
 
   state "grounds_ready":
     -->  pour GROUNDS FILTER
-
-  state "step_17":
-    -->  move_to MAKER MUG_ST
-
-  state "step_18":
-    -->  grab MUG MUG_ST
-
-  state "step_19":
-    -->  move_to MUG_ST MAKER
-
-  state "step_20":
-    -->  place MUG MAKER
 
   state "coffee_made":
     -->  turn_on MAKER
